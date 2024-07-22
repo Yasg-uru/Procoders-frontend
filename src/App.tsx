@@ -1,14 +1,16 @@
-import "./App.css";
-import { ModeToggle } from "./components/mode-toggle";
-import { Button } from "./components/ui/button";
-import { Navbar } from "./pages/mainpages/Navbar";
+import { Route, Routes } from "react-router-dom";
+import { Navbar } from "./pages/mainpages/Navbar.tsx";
+import { Fragment } from "react/jsx-runtime";
+import Login from "./pages/authpages/Login.tsx";
 
 function App() {
   return (
-    
-      <Navbar/>
-      // <button className="text-white bg-black">hi i am yash choudhary</button>
-    
+    <Fragment>
+      <Navbar />
+      <Routes>
+        <Route path="/Login" element={<Login />} />
+      </Routes>
+    </Fragment>
   );
 }
 
