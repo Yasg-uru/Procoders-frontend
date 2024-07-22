@@ -1,7 +1,3 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { LoginFormSchema } from "@/schema/authschema/LoginFormSchema";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -13,34 +9,32 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { SignUpSchema } from "@/schema/authschema/signUpFormSchema";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
+import { useForm } from "react-hook-form";
 import { useAppDispatch, useAppSelector } from "@/redux/hook";
-import { loginUser } from "@/redux/slices/authSlice";
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import { useToast } from "@/components/ui/use-toast";
+import { Link, useNavigate } from "react-router-dom";
+import { z } from "zod";
+import { registerUser } from "@/redux/slices/authSlice";
 
-const Login: React.FC = () => {
+const Signup: React.FC = () => {
   const dispatch = useAppDispatch();
-  const {toast}=useToast()
+const navigate=useNavigate();
   const { isLoading } = useAppSelector((state) => state.auth);
-
-  const form = useForm<z.infer<typeof LoginFormSchema>>({
-    resolver: zodResolver(LoginFormSchema),
+  const form = useForm<z.infer<typeof SignUpSchema>>({
+    resolver: zodResolver(SignUpSchema),
     defaultValues: {
+      username: "",
       email: "",
       password: "",
+      profileUrl: undefined,
     },
   });
-
-  const onSubmit = (data: z.infer<typeof LoginFormSchema>) => {
-    dispatch(loginUser(data));
-    toast({
-      title:"Logged in successfully",
-      description:"Logged in successfully"
-    })
+  const onSubmit = (data: z.infer<typeof SignUpSchema>) => {
+    dispatch(registerUser(data));
+    navigate("/verify");
   };
-
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900">
       <div className="w-full max-w-md p-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
@@ -51,6 +45,29 @@ const Login: React.FC = () => {
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             <FormField
               control={form.control}
+              name="username"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Username
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="jhondoe"
+                      type="text"
+                      className="border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-700 dark:focus:ring-indigo-400 dark:placeholder-gray-400"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormDescription className="text-xs text-gray-500 dark:text-gray-400">
+                    Your username.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
               name="email"
               render={({ field }) => (
                 <FormItem>
@@ -59,14 +76,14 @@ const Login: React.FC = () => {
                   </FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="you@example.com"
+                      placeholder="enter password"
                       type="email"
                       className="border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-700 dark:focus:ring-indigo-400 dark:placeholder-gray-400"
                       {...field}
                     />
                   </FormControl>
                   <FormDescription className="text-xs text-gray-500 dark:text-gray-400">
-                    Your email address or username.
+                    Your account password.
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -89,7 +106,7 @@ const Login: React.FC = () => {
                     />
                   </FormControl>
                   <FormDescription className="text-xs text-gray-500 dark:text-gray-400">
-                    Your account password.
+                    create password.
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -102,19 +119,19 @@ const Login: React.FC = () => {
               {isLoading ? (
                 <Loader2 className="h-6 w-6 animate-spin" />
               ) : (
-                "Login"
+                "Register"
               )}
             </Button>
           </form>
         </Form>
         <div className="mt-4 text-center">
           <span className="text-sm text-gray-600 dark:text-gray-300">
-            Don't have an account?{" "}
+            If have an account?{" "}
             <Link
-              to="/sign-up"
+              to="/Login"
               className="text-indigo-600 dark:text-indigo-400 hover:underline"
             >
-              Register here
+              Login here
             </Link>
           </span>
         </div>
@@ -122,5 +139,4 @@ const Login: React.FC = () => {
     </div>
   );
 };
-
-export default Login;
+export default Signup;
