@@ -6,6 +6,7 @@ import Signup from "./pages/authpages/Signup.tsx";
 import Verify from "@/pages/authpages/OtpVerify.tsx";
 import ForgotPassword from "./pages/authpages/ForgotPassword.tsx";
 import ResetPassword from "./pages/authpages/ResetPassword.tsx";
+import DetailPage from "./pages/coursepages/DetailPage.tsx";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Route path="/verify/:email" element={<Verify />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password/:token" element={<ResetPassword />} />
+        <Route path="/course/detail/:id" element={<DetailPage />} />
       </Routes>
     </Fragment>
   );

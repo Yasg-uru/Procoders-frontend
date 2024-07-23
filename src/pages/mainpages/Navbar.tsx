@@ -28,6 +28,8 @@ import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "@/redux/hook";
 import { Logout } from "@/redux/slices/authSlice";
 import { useToast } from "@/components/ui/use-toast";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import SearchBar from "../coursepages/SearchBar";
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
@@ -75,11 +77,7 @@ export function Navbar() {
                 >
                   Contact
                 </a>
-                <Input
-                  type="text"
-                  placeholder="Search Product by title"
-                  className="appearance-none bg-white border border-gray-300 rounded-md py-2 px-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 dark:bg-gray-800 dark:border-gray-600 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-400 dark:focus:ring-blue-400"
-                />
+                <SearchBar />
               </div>
             </div>
           </div>
