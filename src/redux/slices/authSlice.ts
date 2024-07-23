@@ -8,6 +8,7 @@ import { z } from "zod";
 import { SignUpSchema } from "@/schema/authschema/signUpFormSchema";
 import { VerifyFormSchema } from "@/pages/authpages/OtpVerify";
 import { ForgotPasswordSchema } from "@/schema/authschema/ForgotPasswordFormSchema";
+import { ResetPasswordSchema } from "@/schema/authschema/ResetpasswordFormSchema";
 
 const initialState: authState = {
   isAuthenticated: false,
@@ -62,7 +63,7 @@ export const verifyUser = createAsyncThunk(
 );
 export const forgotpassword = createAsyncThunk(
   "auth/forgot-password",
-  async (formdata:z.infer<typeof ForgotPasswordSchema>) => {
+  async (formdata: z.infer<typeof ForgotPasswordSchema>) => {
     try {
       const response = await axiosInstance.post(
         "/user/forgot-password",
@@ -77,13 +78,17 @@ export const forgotpassword = createAsyncThunk(
     }
   }
 );
-export const ResetPassword = createAsyncThunk(
+export const resetPassword = createAsyncThunk(
   "auth/reset-password",
-  async (formdata) => {
+  async (formdata: z.infer<typeof ResetPasswordSchema>) => {
     try {
+      const { token, password } = formdata;
+
       const response = await axiosInstance.put(
-        `/user/reset-password/${4}`,
-        formdata,
+        `/user/reset-password/${token}`,
+        {
+          password,
+        },
         {
           withCredentials: true,
         }
@@ -138,13 +143,13 @@ const authSlice = createSlice({
     builder.addCase(forgotpassword.pending, (state) => {
       state.isLoading = true;
     });
-    builder.addCase(ResetPassword.fulfilled, (state) => {
+    builder.addCase(resetPassword.fulfilled, (state) => {
       state.isLoading = false;
     });
-    builder.addCase(ResetPassword.pending, (state) => {
+    builder.addCase(resetPassword.pending, (state) => {
       state.isLoading = true;
     });
-    builder.addCase(ResetPassword.rejected, (state) => {
+    builder.addCase(resetPassword.rejected, (state) => {
       state.isLoading = false;
     });
   },
