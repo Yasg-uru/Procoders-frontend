@@ -1,20 +1,57 @@
 import { AsyncThunk, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axiosInstance from "@/helper/axiosInstance";
-
 import { authState } from "@/types/AuthTypes/authState";
 import { LoginFormSchema } from "@/schema/authschema/LoginFormSchema";
 import { z } from "zod";
-
 import { SignUpSchema } from "@/schema/authschema/signUpFormSchema";
 import { VerifyFormSchema } from "@/pages/authpages/OtpVerify";
 import { ForgotPasswordSchema } from "@/schema/authschema/ForgotPasswordFormSchema";
 import { ResetPasswordSchema } from "@/schema/authschema/ResetpasswordFormSchema";
+const saveData = (
+  token: string,
+  username: string,
+  email: string,
+  role: string,
+  profileUrl: string
+) => {
+  const expiryDate = new Date(Date.now() + 864000000);
+  localStorage.setItem("authToken", token);
+  localStorage.setItem("tokenExpiry", expiryDate.toString());
+  localStorage.setItem("username", username);
+  localStorage.setItem("email", email);
+  localStorage.setItem("role", role);
+  localStorage.setItem("profileurl", profileUrl);
+};
+const ClearState = () => {
+  localStorage.removeItem("authToken");
+  localStorage.removeItem("tokenExpiry");
+  localStorage.removeItem("username");
+  localStorage.removeItem("email");
+  localStorage.removeItem("role");
+  localStorage.removeItem("profileurl");
+};
+const isAuthenticated = (): boolean => {
+  const tokenExpiry = localStorage.getItem("tokenExpiry");
+  const token = localStorage.getItem("authToken");
+  if (!token || !tokenExpiry) {
+    return false;
+  }
+  const currentDate = new Date();
+  const expiryDate = new Date(tokenExpiry);
+  if (currentDate > expiryDate) {
+    ClearState();
+    return false;
+  }
 
+  return true;
+};
 const initialState: authState = {
-  isAuthenticated: false,
-  name: "",
-  email: "",
+  isAuthenticated: false || isAuthenticated(),
+  name: localStorage.getItem("username") || "",
+  email: localStorage.getItem("email") || "",
+  role: localStorage.getItem("role") || "",
   isLoading: false,
+  profileUrl: localStorage.getItem("profileurl") || "",
 };
 export const registerUser = createAsyncThunk(
   "auth/registerUser",
@@ -78,6 +115,18 @@ export const forgotpassword = createAsyncThunk(
     }
   }
 );
+export const Logout = createAsyncThunk("auth/Logout", async () => {
+  try {
+    const response = await axiosInstance.post(
+      "/user/logout",
+      {},
+      { withCredentials: true }
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+});
 export const resetPassword = createAsyncThunk(
   "auth/reset-password",
   async (formdata: z.infer<typeof ResetPasswordSchema>) => {
@@ -115,6 +164,10 @@ const authSlice = createSlice({
       state.isLoading = false;
       state.name = action.payload?.user.username;
       state.email = action.payload?.user.email;
+      state.role = action.payload?.user.Role;
+      state.profileUrl = action.payload?.user.profileUrl;
+      const token = action.payload?.token;
+      saveData(token, state.name, state.email, state.role, state.profileUrl);
     });
     builder.addCase(registerUser.pending, (state) => {
       state.isLoading = true;
@@ -122,7 +175,7 @@ const authSlice = createSlice({
     builder.addCase(registerUser.rejected, (state) => {
       state.isLoading = false;
     });
-    builder.addCase(registerUser.fulfilled, (state, action) => {
+    builder.addCase(registerUser.fulfilled, (state) => {
       state.isLoading = false;
     });
     builder.addCase(verifyUser.fulfilled, (state) => {
@@ -150,6 +203,21 @@ const authSlice = createSlice({
       state.isLoading = true;
     });
     builder.addCase(resetPassword.rejected, (state) => {
+      state.isLoading = false;
+    });
+    builder.addCase(Logout.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.isAuthenticated = false;
+      state.name = "";
+      state.email = "";
+      state.role = "";
+      state.profileUrl = "";
+      ClearState();
+    });
+    builder.addCase(Logout.pending, (state, action) => {
+      state.isLoading = true;
+    });
+    builder.addCase(Logout.rejected, (state, action) => {
       state.isLoading = false;
     });
   },

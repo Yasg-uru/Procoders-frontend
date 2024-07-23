@@ -3,4 +3,6 @@ export interface authState {
   name: string;
   email: string;
   isLoading:boolean;
+  role:string;
+  profileUrl:string;
 }
