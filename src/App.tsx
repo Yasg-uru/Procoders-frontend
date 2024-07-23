@@ -4,6 +4,7 @@ import { Fragment } from "react/jsx-runtime";
 import Login from "./pages/authpages/Login.tsx";
 import Signup from "./pages/authpages/Signup.tsx";
 import Verify from "@/pages/authpages/OtpVerify.tsx";
+import ForgotPassword from "./pages/authpages/ForgotPassword.tsx";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Route path="/Login" element={<Login />} />
         <Route path="/sign-up" element={<Signup/>} />
         <Route path="/verify/:email" element={<Verify/>} />
+        <Route path="/forgot-password" element={<ForgotPassword/>} />
       </Routes>
     </Fragment>
   );

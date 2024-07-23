@@ -50,7 +50,7 @@ const Login: React.FC = () => {
         toast({
           title: "Error user Login",
           description: "please Enter valid credentials",
-          variant:"destructive"
+          variant: "destructive",
         });
       });
   };
@@ -129,6 +129,16 @@ const Login: React.FC = () => {
               className="text-indigo-600 dark:text-indigo-400 hover:underline"
             >
               Register here
+            </Link>
+          </span>
+          <br />
+          <span className="text-sm text-gray-600 dark:text-gray-300">
+            If you forgot password?{" "}
+            <Link
+              to="/forgot-password"
+              className="text-indigo-600 dark:text-indigo-400 hover:underline"
+            >
+              click here
             </Link>
           </span>
         </div>
