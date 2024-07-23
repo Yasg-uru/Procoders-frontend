@@ -17,10 +17,12 @@ import { useAppDispatch, useAppSelector } from "@/redux/hook";
 import { Link, useNavigate } from "react-router-dom";
 import { z } from "zod";
 import { registerUser } from "@/redux/slices/authSlice";
+import { useToast } from "@/components/ui/use-toast";
 
 const Signup: React.FC = () => {
   const dispatch = useAppDispatch();
-const navigate=useNavigate();
+  const navigate = useNavigate();
+  const { toast } = useToast();
   const { isLoading } = useAppSelector((state) => state.auth);
   const form = useForm<z.infer<typeof SignUpSchema>>({
     resolver: zodResolver(SignUpSchema),
@@ -32,8 +34,23 @@ const navigate=useNavigate();
     },
   });
   const onSubmit = (data: z.infer<typeof SignUpSchema>) => {
-    dispatch(registerUser(data));
-    navigate("/verify");
+    dispatch(registerUser(data))
+      .unwrap()
+      .then(() => {
+        toast({
+          title:  "successfully created your account",
+          description: "Please verify your account with otp",
+        });
+        navigate(`/verify/${data.email}`);
+      })
+      .catch((error) => {
+        console.log("this is a error ", error);
+        toast({
+          title: "failed to created your account",
+          description: "try again latter",
+          variant: "destructive",
+        });
+      });
   };
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900">

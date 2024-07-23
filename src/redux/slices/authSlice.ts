@@ -1,11 +1,12 @@
 import { AsyncThunk, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axiosInstance from "@/helper/axiosInstance";
-import { useToast } from "@/components/ui/use-toast";
+
 import { authState } from "@/types/AuthTypes/authState";
 import { LoginFormSchema } from "@/schema/authschema/LoginFormSchema";
 import { z } from "zod";
-import { AxiosError } from "axios";
+
 import { SignUpSchema } from "@/schema/authschema/signUpFormSchema";
+import { VerifyFormSchema } from "@/pages/authpages/OtpVerify";
 
 const initialState: authState = {
   isAuthenticated: false,
@@ -13,13 +14,14 @@ const initialState: authState = {
   email: "",
   isLoading: false,
 };
-export const registerUser: AsyncThunk<any, any, {}> = createAsyncThunk(
-  "SIGN-UP",
+export const registerUser = createAsyncThunk(
+  "auth/registerUser",
   async (formData: z.infer<typeof SignUpSchema>) => {
     try {
-      const response = await axiosInstance.post("/user/sign-up", formData, {
+      const response = await axiosInstance.post("/user/register", formData, {
         withCredentials: true,
       });
+
       return response.data;
     } catch (error) {
       console.log("Error Registering user");
@@ -27,34 +29,32 @@ export const registerUser: AsyncThunk<any, any, {}> = createAsyncThunk(
     }
   }
 );
-export const loginUser: AsyncThunk<any, any, {}> = createAsyncThunk(
-  "SIGN-IN",
+export const userLogin = createAsyncThunk(
+  "auth/Login",
   async (formData: z.infer<typeof LoginFormSchema>) => {
-    const { toast } = useToast();
     try {
-      console.log("this is formdata", formData.email);
-      const response = await axiosInstance.post(
-        "/user/sign-in",
+      console.log("this is a formdata :", formData);
+      const response = await axiosInstance.post("/user/sign-in", formData, {
+        withCredentials: true,
+      });
 
-        formData,
-
-        {
-          withCredentials: true,
-        }
-      );
-      toast({
-        title: "Login successfull",
-        description: "You have Logged in.",
-        variant: "default",
+      return response.data;
+    } catch (error) {
+      console.log("error in user login", error);
+      throw error;
+    }
+  }
+);
+export const verifyUser = createAsyncThunk(
+  "auth/verifyUser",
+  async (formData: z.infer<typeof VerifyFormSchema>) => {
+    try {
+      const response = await axiosInstance.post("/user/verify-code", formData, {
+        withCredentials: true,
       });
       return response.data;
     } catch (error) {
-      const AxiosError: AxiosError = error as AxiosError;
-      toast({
-        title: "Login successfull",
-        description: "You have Logged in.",
-      });
-      console.log("Error in registering user ", AxiosError);
+      console.log("Error Verifying user", error);
       throw error;
     }
   }
@@ -64,13 +64,13 @@ const authSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers(builder) {
-    builder.addCase(loginUser.pending, (state) => {
+    builder.addCase(userLogin.pending, (state) => {
       state.isLoading = true;
     });
-    builder.addCase(loginUser.rejected, (state) => {
+    builder.addCase(userLogin.rejected, (state) => {
       state.isLoading = false;
     });
-    builder.addCase(loginUser.fulfilled, (state, action) => {
+    builder.addCase(userLogin.fulfilled, (state, action) => {
       state.isAuthenticated = true;
       state.isLoading = false;
       state.name = action.payload?.user.username;
@@ -83,10 +83,16 @@ const authSlice = createSlice({
       state.isLoading = false;
     });
     builder.addCase(registerUser.fulfilled, (state, action) => {
-      state.isAuthenticated = true;
       state.isLoading = false;
-      state.name = action.payload?.user.username;
-      state.email = action.payload?.user.email;
+    });
+    builder.addCase(verifyUser.fulfilled, (state) => {
+      state.isLoading = false;
+    });
+    builder.addCase(verifyUser.rejected, (state) => {
+      state.isLoading = false;
+    });
+    builder.addCase(verifyUser.pending, (state) => {
+      state.isLoading = true;
     });
   },
 });

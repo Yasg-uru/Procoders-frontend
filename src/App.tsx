@@ -12,7 +12,7 @@ function App() {
       <Routes>
         <Route path="/Login" element={<Login />} />
         <Route path="/sign-up" element={<Signup/>} />
-        <Route path="/verify" element={<Verify/>} />
+        <Route path="/verify/:email" element={<Verify/>} />
       </Routes>
     </Fragment>
   );

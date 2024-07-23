@@ -17,33 +17,53 @@ import {
   InputOTPGroup,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
-import { toast } from "@/components/ui/use-toast";
 
-const FormSchema = z.object({
-  pin: z.string().min(6, {
+import { useAppDispatch, useAppSelector } from "@/redux/hook";
+import { Loader2 } from "lucide-react";
+import { useNavigate, useParams } from "react-router-dom";
+import { verifyUser } from "@/redux/slices/authSlice";
+import { useToast } from "@/components/ui/use-toast";
+
+export const VerifyFormSchema = z.object({
+  code: z.string().min(6, {
     message: "Your one-time password must be 6 characters.",
   }),
+  email: z.string().email("invalid email"),
 });
 
 const Verify: React.FC = () => {
-  const form = useForm<z.infer<typeof FormSchema>>({
-    resolver: zodResolver(FormSchema),
+  const dispatch = useAppDispatch();
+  const { email } = useParams();
+  const { toast } = useToast();
+  const navigate = useNavigate();
+
+  const form = useForm<z.infer<typeof VerifyFormSchema>>({
+    resolver: zodResolver(VerifyFormSchema),
     defaultValues: {
-      pin: "",
+      code: "",
+      email: email,
     },
   });
 
-  function onSubmit(data: z.infer<typeof FormSchema>) {
-    toast({
-      title: "You submitted the following values:",
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
-    });
+  function onSubmit(data: z.infer<typeof VerifyFormSchema>) {
+    dispatch(verifyUser(data))
+      .unwrap()
+      .then(() => {
+        toast({
+          title: "verified successfully",
+          description: "Your Account has been verified successfully",
+        });
+        navigate("/home");
+      })
+      .catch((error) => {
+        toast({
+          title: "Incorrect code",
+          description: "Try again ,Please Enter correct OTP ",
+          variant: "destructive",
+        });
+      });
   }
-
+  const { isLoading } = useAppSelector((state) => state.auth);
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-black">
       <div className="w-full max-w-md p-8 bg-white rounded-lg shadow-md dark:bg-black dark:shadow-violet-800">
@@ -57,7 +77,7 @@ const Verify: React.FC = () => {
           >
             <FormField
               control={form.control}
-              name="pin"
+              name="code"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>One-Time Password</FormLabel>
@@ -81,7 +101,13 @@ const Verify: React.FC = () => {
               )}
             />
 
-            <Button type="submit">Submit</Button>
+            <Button type="submit">
+              {isLoading ? (
+                <Loader2 className="h-6 w-6 animate-spin" />
+              ) : (
+                "Verify"
+              )}
+            </Button>
           </form>
         </Form>
       </div>

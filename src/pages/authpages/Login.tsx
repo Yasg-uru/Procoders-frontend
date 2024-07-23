@@ -14,15 +14,17 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Loader2 } from "lucide-react";
-import { useAppDispatch, useAppSelector } from "@/redux/hook";
-import { loginUser } from "@/redux/slices/authSlice";
-import { useState } from "react";
+
+import { userLogin } from "@/redux/slices/authSlice";
+
 import { Link } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "@/redux/hook";
 import { useToast } from "@/components/ui/use-toast";
 
 const Login: React.FC = () => {
   const dispatch = useAppDispatch();
-  const {toast}=useToast()
+  const { toast } = useToast();
+
   const { isLoading } = useAppSelector((state) => state.auth);
 
   const form = useForm<z.infer<typeof LoginFormSchema>>({
@@ -34,11 +36,23 @@ const Login: React.FC = () => {
   });
 
   const onSubmit = (data: z.infer<typeof LoginFormSchema>) => {
-    dispatch(loginUser(data));
-    toast({
-      title:"Logged in successfully",
-      description:"Logged in successfully"
-    })
+    console.log("form submitted with data:", data);
+    dispatch(userLogin(data))
+      .unwrap()
+      .then(() => {
+        toast({
+          title: "Successfully Logged in ",
+          description: "Logged in successfully explore course and register",
+        });
+      })
+      .catch((error) => {
+        console.log("this is error", error);
+        toast({
+          title: "Error user Login",
+          description: "please Enter valid credentials",
+          variant:"destructive"
+        });
+      });
   };
 
   return (
