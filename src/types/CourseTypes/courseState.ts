@@ -29,9 +29,9 @@ export interface FilteredCourse {
   published: boolean;
   reviews: Review[];
   enrolledUsers: EnrolledUser[];
+  startingDate: string;
   createdAt: string;
   updatedAt: string;
-  
 }
 
 interface Review {
