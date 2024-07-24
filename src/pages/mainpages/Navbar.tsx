@@ -24,7 +24,7 @@ import {
 import { ModeToggle } from "@/components/mode-toggle";
 import procoders from "../../../public/procoders.jpg";
 import { Input } from "@/components/ui/input";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "@/redux/hook";
 import { Logout } from "@/redux/slices/authSlice";
 import { useToast } from "@/components/ui/use-toast";
@@ -98,7 +98,7 @@ export function Navbar() {
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <div className="avatar">
-                        <div className="ring-primary ring-offset-base-100 w-12 rounded-full ring ring-offset-1">
+                        <div className="ring-primary ring-offset-base-100 w-12 rounded-full ring-0 ring-offset-[0.2px]">
                           <img src={profileUrl} />
                         </div>
                       </div>
@@ -193,12 +193,12 @@ export function Navbar() {
         id="mobile-menu"
       >
         <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-          <a
-            href="#"
+          <Link
+            to="/"
             className="text-gray-900 dark:text-white hover:bg-gray-700 dark:hover:bg-gray-900 block px-3 py-2 rounded-md text-base font-medium"
           >
             Home
-          </a>
+          </Link>
           <a
             href="#"
             className="text-gray-900 dark:text-white hover:bg-gray-700 dark:hover:bg-gray-900 block px-3 py-2 rounded-md text-base font-medium"
