@@ -9,6 +9,7 @@ import ResetPassword from "./pages/authpages/ResetPassword.tsx";
 import DetailPage from "./pages/coursepages/DetailPage.tsx";
 import Homepage from "./pages/coursepages/Homepage.tsx";
 import CourseCategory from "./pages/coursepages/CourseCategory.tsx";
+import Footer from "./pages/mainpages/Footer.tsx";
 
 function App() {
   return (
@@ -21,9 +22,12 @@ function App() {
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password/:token" element={<ResetPassword />} />
         <Route path="/course/detail/:id" element={<DetailPage />} />
+
         <Route path="/" element={<Homepage />} />
         <Route path="/course-category" element={<CourseCategory />} />
+        <Route path="/explore" element={<DetailPage />} />
       </Routes>
+      <Footer />
     </Fragment>
   );
 }

@@ -13,11 +13,13 @@ export interface CategoryTypes {
   [key: string]: FilteredCourse;
 }
 export interface FilteredCourse {
-  map(arg0: (course: FilteredCourse) => import("react/jsx-runtime").JSX.Element): import("react").ReactNode;
+  // map(arg0: (course: FilteredCourse) => import("react/jsx-runtime").JSX.Element): import("react").ReactNode;
   _id: string;
   title: string;
   description: string;
   category: string;
+  thumbnailUrl:string;
+  learningOutcomes:string[];
   level: string;
   language: string;
   prerequisites: string[];
