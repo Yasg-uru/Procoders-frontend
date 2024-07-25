@@ -42,7 +42,6 @@ const CourseCard: React.FC<{ data: FilteredCourse }> = ({ data }) => {
           ) : (
             <span className="text-sm font-bold">Upcoming...</span>
           )}
-          {/* <span className="text-blue-500 text-sm">Starts on 27 Jul 2024</span> */}
         </div>
         <div className="w-full grid grid-cols-2 gap-2">
           <Button className="bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold py-3 px-6 rounded-lg shadow-lg transition-transform transform hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 dark:focus:ring-purple-300">
