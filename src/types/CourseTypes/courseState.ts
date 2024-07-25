@@ -1,6 +1,7 @@
 export interface courseState {
   searchResults: searchResult[];
   filteredResults: FilteredCourse[];
+  categoryWiseCourses: FilteredCourse[];
 }
 export interface searchResult {
   title: string;
@@ -8,7 +9,11 @@ export interface searchResult {
   thumbnailUrl: string;
   _id: string;
 }
+export interface CategoryTypes {
+  [key: string]: FilteredCourse;
+}
 export interface FilteredCourse {
+  map(arg0: (course: FilteredCourse) => import("react/jsx-runtime").JSX.Element): import("react").ReactNode;
   _id: string;
   title: string;
   description: string;

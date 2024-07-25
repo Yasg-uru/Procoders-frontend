@@ -13,9 +13,21 @@ function LoadFilteredData(): FilteredCourse[] {
   }
   return [];
 }
+function saveallcourseData(data: FilteredCourse[]): void {
+  sessionStorage.setItem("allcourse", JSON.stringify(data));
+}
+function LoadallcourseData(): FilteredCourse[] {
+  const data = sessionStorage.getItem("allcourse");
+  if (data) {
+    const parsedData = JSON.parse(data);
+    return parsedData;
+  }
+  return [];
+}
 const initialState: courseState = {
   searchResults: [],
   filteredResults: LoadFilteredData() || [],
+  categoryWiseCourses: LoadallcourseData() || [],
 };
 export const searchCourses = createAsyncThunk(
   "course/searchCourses",
@@ -37,6 +49,20 @@ export const FilterCourses = createAsyncThunk(
     try {
       const response = await axiosInstance.get("/course/filter", {
         params: filters,
+        withCredentials: true,
+      });
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+export const Getallcourses = createAsyncThunk(
+  "course/getallcourse",
+  async () => {
+    try {
+      const response = await axiosInstance.get("/course/filter", {
+        withCredentials: true,
       });
       return response.data;
     } catch (error) {
@@ -55,6 +81,10 @@ const courseSlice = createSlice({
     builder.addCase(FilterCourses.fulfilled, (state, action) => {
       state.filteredResults = action.payload?.courses;
       SaveFilteredData(state.filteredResults);
+    });
+    builder.addCase(Getallcourses.fulfilled, (state, action) => {
+      state.categoryWiseCourses = action.payload?.courses;
+      saveallcourseData(state.categoryWiseCourses);
     });
   },
 });

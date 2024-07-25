@@ -1,3 +1,12 @@
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 import CourseCard from "@/helper/CourseCard";
 import { useAppSelector } from "@/redux/hook";
 import React from "react";
@@ -12,6 +21,22 @@ const CourseCategory: React.FC = () => {
         </h1>
         <hr className="w-full border-t-2 border-gray-300 dark:border-gray-700" />
       </div>
+      <Carousel
+        opts={{
+          align: "start",
+        }}
+        className="w-full max-w-sm mx-auto mt-5 mb-8"
+      >
+        <CarouselContent>
+          {Array.from({ length: 5 }).map((_, index) => (
+            <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
+              <Button variant="destructive">Query</Button>
+            </CarouselItem>
+          ))}
+        </CarouselContent>
+        <CarouselPrevious />
+        <CarouselNext />
+      </Carousel>
       <div className="flex md:flex-wrap md:flex-row  flex-col gap-10 mx-auto">
         {filteredResults.length > 0 &&
           filteredResults.map((data) => (

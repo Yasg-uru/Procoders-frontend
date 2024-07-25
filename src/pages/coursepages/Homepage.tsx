@@ -1,18 +1,28 @@
 import { Button } from "@/components/ui/button";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 import { useToast } from "@/components/ui/use-toast";
 import { CategoryData } from "@/helper/categoryData";
-import { useAppDispatch } from "@/redux/hook";
-import { FilterCourses } from "@/redux/slices/courseSlice";
+import CourseCard from "@/helper/CourseCard";
+import { useAppDispatch, useAppSelector } from "@/redux/hook";
+import { FilterCourses, Getallcourses } from "@/redux/slices/courseSlice";
+import { CategoryTypes, FilteredCourse } from "@/types/CourseTypes/courseState";
 import { Filtertype } from "@/types/CourseTypes/FilterTypes";
 import { ArrowRight } from "lucide-react";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const Homepage: React.FC = () => {
   const dispatch = useAppDispatch();
   const { toast } = useToast();
   const navigate = useNavigate();
-
+  const { categoryWiseCourses } = useAppSelector((state) => state.course);
+  const [groupedCourses, setGroupedCourses] = useState<CategoryTypes>({});
   const handleClick = (category: string) => {
     const filterData: Filtertype = { category };
     dispatch(FilterCourses(filterData))
@@ -21,7 +31,7 @@ const Homepage: React.FC = () => {
         toast({
           title: "Successfully filtered course by category",
         });
-        navigate("/course-category")
+        navigate("/course-category");
       })
       .catch(() => {
         toast({
@@ -29,6 +39,24 @@ const Homepage: React.FC = () => {
         });
       });
   };
+  useEffect(() => {
+    dispatch(Getallcourses());
+  }, []);
+  useEffect(() => {
+    if (categoryWiseCourses.length > 0) {
+      console.log("this is a category wise course", categoryWiseCourses);
+      const groupedRes = categoryWiseCourses.reduce((acc: any, course) => {
+        const category = course.category;
+        if (!acc[category]) {
+          acc[category] = [];
+        }
+        acc[category].push(course);
+        return acc;
+      }, {});
+      setGroupedCourses(groupedRes);
+    }
+  }, [categoryWiseCourses]);
+
   return (
     <div className="min-h-screen flex flex-col p-10 justify-center bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
       <div className="container mx-auto">
@@ -104,6 +132,40 @@ const Homepage: React.FC = () => {
                 </div>
               ))}
           </div>
+        </div>
+        <div className="mt-16">
+          <h1 className="dark:text-white font-bold text-3xl text-center md:text-left">
+            Our Courses
+          </h1>
+          {Object.keys(groupedCourses)?.map((category) => (
+            <>
+              <p className="dark:text-white text-center md:text-left mt-12 mb-4 font-bold text-2xl text-green-500">
+                {category}
+              </p>
+
+              <Carousel>
+                <CarouselContent>
+                  {category.length > 0 &&
+                    groupedCourses[category].map((course) => (
+                      <div className="p-1">
+                        <CarouselItem key={course._id}>
+                          <CourseCard data={course} />
+                        </CarouselItem>
+                      </div>
+                    ))}
+                </CarouselContent>
+
+                {category.length > 1 ? (
+                  <>
+                    <CarouselPrevious />
+                    <CarouselNext />
+                  </>
+                ) : (
+                  ""
+                )}
+              </Carousel>
+            </>
+          ))}
         </div>
       </div>
     </div>
