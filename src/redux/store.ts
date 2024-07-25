@@ -1,10 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
 import authSlice from "./slices/authSlice";
 import courseSlice from "./slices/courseSlice";
+import EnrollSlice from "./slices/EnrollSlice";
 const store = configureStore({
   reducer: {
     auth: authSlice,
     course: courseSlice,
+    enrollment:EnrollSlice
   },
 });
 // Get the type of our store variable

@@ -7,10 +7,31 @@ import {
   CardContent,
   CardFooter,
 } from "@/components/ui/card";
+import { useToast } from "@/components/ui/use-toast";
+import { useAppDispatch } from "@/redux/hook";
+import { EnrollFree } from "@/redux/slices/EnrollSlice";
 import { FilteredCourse } from "@/types/CourseTypes/courseState";
 import React from "react";
 
 const CourseCard: React.FC<{ data: FilteredCourse }> = ({ data }) => {
+  const dispatch = useAppDispatch();
+  const { toast } = useToast();
+
+  const handleFreeEnrollment = (courseId: string) => {
+    dispatch(EnrollFree(courseId))
+      .unwrap()
+      .then(() => {
+        toast({
+          title: "Successfully enrolled to the course",
+        });
+      })
+      .catch(() => {
+        toast({
+          title: "Error in enrolling course",
+          variant: "destructive",
+        });
+      });
+  };
   console.log("this is data starting:", data.startingDate);
   return (
     <Card className="w-[400px] h-[500px] border-[0.5px] border-gray-300 dark:border-gray-700 rounded-md shadow-md hover:shadow-xl flex flex-col">
@@ -52,7 +73,10 @@ const CourseCard: React.FC<{ data: FilteredCourse }> = ({ data }) => {
               Buy Now
             </Button>
           ) : (
-            <Button className="bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold py-3 px-6 rounded-lg shadow-lg transition-transform transform hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 dark:focus:ring-purple-300">
+            <Button
+              onClick={() => handleFreeEnrollment(data._id)}
+              className="bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold py-3 px-6 rounded-lg shadow-lg transition-transform transform hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 dark:focus:ring-purple-300"
+            >
               Enroll Free
             </Button>
           )}
