@@ -32,7 +32,7 @@ const Homepage: React.FC = () => {
         toast({
           title: "Successfully filtered course by category",
         });
-        navigate("/course-category");
+        navigate("/course-category",{state:filterData});
       })
       .catch(() => {
         toast({
@@ -148,7 +148,8 @@ const Homepage: React.FC = () => {
                 <Carousel>
                   <CarouselContent>
                     {category.length > 0 &&
-                      groupedCourses[category].map((course) => (
+                      groupedCourses[category] &&
+                      groupedCourses[category].map((course: FilteredCourse) => (
                         <div className="p-1">
                           <CarouselItem key={course._id}>
                             <CourseCard data={course} />

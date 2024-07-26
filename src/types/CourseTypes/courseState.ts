@@ -18,8 +18,8 @@ export interface FilteredCourse {
   title: string;
   description: string;
   category: string;
-  thumbnailUrl:string;
-  learningOutcomes:string[];
+  thumbnailUrl: string;
+  learningOutcomes: string[];
   level: string;
   language: string;
   prerequisites: string[];
@@ -32,7 +32,7 @@ export interface FilteredCourse {
   duration: number;
   rating: number;
   isPaid: boolean;
-  instructorId: string[];
+  instructorId: Instructor[];
   published: boolean;
   reviews: Review[];
   enrolledUsers: EnrolledUser[];
@@ -41,7 +41,7 @@ export interface FilteredCourse {
   updatedAt: string;
 }
 
-interface Review {
+export interface Review {
   userId: string;
   rating: number;
   comment: string;
@@ -49,9 +49,32 @@ interface Review {
   _id: string;
 }
 
-interface EnrolledUser {
+export interface EnrolledUser {
   userId: string;
   paymentStatus: string;
   enrolledAt: string;
   _id: string;
+}
+
+export interface EnrolledCourse {
+  courseId: string;
+  Progress: number;
+  CompletionStatus: boolean;
+  _id: string;
+}
+
+export interface Instructor {
+  _id: string;
+  username: string;
+  email: string;
+  password: string;
+  profileUrl: string;
+  verifyCode: string;
+  isVerified: boolean;
+  verifyCodeExpiry: string; // This could also be Date, depending on how you handle dates
+  Role: string;
+  EnrolledCourses: EnrolledCourse[];
+  createdAt: string; // This could also be Date
+  updatedAt: string; // This could also be Date
+  __v: number;
 }

@@ -1,6 +1,6 @@
 import axiosInstance from "@/helper/axiosInstance";
 import { courseState, FilteredCourse } from "@/types/CourseTypes/courseState";
-import { Filtertype } from "@/types/CourseTypes/FilterTypes";
+import { Filter, Filtertype } from "@/types/CourseTypes/FilterTypes";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 function SaveFilteredData(data: FilteredCourse[]): void {
   sessionStorage.setItem("Filtered", JSON.stringify(data));
@@ -44,8 +44,22 @@ export const searchCourses = createAsyncThunk(
   }
 );
 export const FilterCourses = createAsyncThunk(
-  "course/filtercourse",
+  "course/filtercourses",
   async (filters: Filtertype) => {
+    try {
+      const response = await axiosInstance.get("/course/filter", {
+        params: filters,
+        withCredentials: true,
+      });
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+export const FilterCourse = createAsyncThunk(
+  "course/filtercourse",
+  async (filters: Filter | undefined) => {
     try {
       const response = await axiosInstance.get("/course/filter", {
         params: filters,
@@ -85,6 +99,10 @@ const courseSlice = createSlice({
     builder.addCase(Getallcourses.fulfilled, (state, action) => {
       state.categoryWiseCourses = action.payload?.courses;
       saveallcourseData(state.categoryWiseCourses);
+    });
+    builder.addCase(FilterCourse.fulfilled, (state, action) => {
+      state.filteredResults = action.payload?.courses;
+      SaveFilteredData(state.filteredResults);
     });
   },
 });
