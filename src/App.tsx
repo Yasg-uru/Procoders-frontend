@@ -30,7 +30,7 @@ function App() {
         <Route path="/course-category" element={<CourseCategory />} />
         <Route path="/explore" element={<DetailPage />} />
         <Route path="/mycourse" element={<MyCourse />} />
-        <Route path="/continue-course" element={<CourseContinue />} />
+        <Route path="/continue-course/:courseId" element={<CourseContinue />} />
         <Route path="/checkout/:courseId" element={<ChecKOut />} />
       </Routes>
       <Footer />

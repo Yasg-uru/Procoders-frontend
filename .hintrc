@@ -24,6 +24,12 @@
       {
         "duplicate-id-aria": "off"
       }
+    ],
+    "axe/structure": [
+      "default",
+      {
+        "listitem": "off"
+      }
     ]
   }
 }

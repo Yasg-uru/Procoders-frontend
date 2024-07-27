@@ -96,7 +96,7 @@ const CourseCard: React.FC<{ data: FilteredCourse }> = ({ data }) => {
               </Button>
             ) : (
               <Button
-                onClick={() => navigate("/continue-course")}
+                onClick={() => navigate(`/continue-course/${data._id}`)}
                 className="bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold py-3 px-6 rounded-lg shadow-lg transition-transform transform hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 dark:focus:ring-purple-300"
               >
                 Continue

@@ -5,6 +5,7 @@ function LoadData() {}
 function saveData() {}
 const initialState: moduleState = {
   modules: [],
+  fullAccessModules: [],
 };
 export const GetModules = createAsyncThunk(
   "module/getmodules",
@@ -19,6 +20,22 @@ export const GetModules = createAsyncThunk(
     }
   }
 );
+export const GetfullAccessModule = createAsyncThunk(
+  "module/getfullaccess",
+  async (courseId: string | undefined) => {
+    try {
+      const response = await axiosInstance.get(
+        `/course/module/fullaccess/${courseId}`,
+        {
+          withCredentials: true,
+        }
+      );
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+);
 const moduleSlice = createSlice({
   name: "module",
   initialState,
@@ -26,6 +43,9 @@ const moduleSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(GetModules.fulfilled, (state, action) => {
       state.modules = action.payload?.course;
+    });
+    builder.addCase(GetfullAccessModule.fulfilled, (state, action) => {
+      state.fullAccessModules = action.payload?.course.modules;
     });
   },
 });

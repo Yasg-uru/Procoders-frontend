@@ -15,7 +15,7 @@ import { useNavigate } from "react-router-dom";
 const MyCourse: React.FC = () => {
   const { Mycourses } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
-    const navigate=useNavigate();
+  const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(Mycourse());
@@ -48,7 +48,10 @@ const MyCourse: React.FC = () => {
                 {/* Content here, if needed */}
               </CardContent>
               <CardFooter className="mt-auto">
-                <Button onClick={()=>navigate("/continue-course")} className="bg-gradient-to-r from-pink-500 to-purple-500 text-white font-bold py-3 px-6 rounded-md shadow-md hover:scale-105 transition duration-300 w-full m-2">
+                <Button
+                  onClick={() => navigate(`/continue-course/${course._id}`)}
+                  className="bg-gradient-to-r from-pink-500 to-purple-500 text-white font-bold py-3 px-6 rounded-md shadow-md hover:scale-105 transition duration-300 w-full m-2"
+                >
                   Continue
                 </Button>
               </CardFooter>
