@@ -10,6 +10,9 @@ import DetailPage from "./pages/coursepages/DetailPage.tsx";
 import Homepage from "./pages/coursepages/Homepage.tsx";
 import CourseCategory from "./pages/coursepages/CourseCategory.tsx";
 import Footer from "./pages/mainpages/Footer.tsx";
+import MyCourse from "./pages/coursepages/MyCourse.tsx";
+import CourseContinue from "./pages/courseLecture/CourseContinue.tsx";
+import ChecKOut from "./pages/paymentPage/ChecKOut.js";
 
 function App() {
   return (
@@ -26,6 +29,9 @@ function App() {
         <Route path="/" element={<Homepage />} />
         <Route path="/course-category" element={<CourseCategory />} />
         <Route path="/explore" element={<DetailPage />} />
+        <Route path="/mycourse" element={<MyCourse />} />
+        <Route path="/continue-course" element={<CourseContinue />} />
+        <Route path="/checkout/:courseId" element={<ChecKOut />} />
       </Routes>
       <Footer />
     </Fragment>

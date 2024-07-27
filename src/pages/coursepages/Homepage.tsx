@@ -32,7 +32,7 @@ const Homepage: React.FC = () => {
         toast({
           title: "Successfully filtered course by category",
         });
-        navigate("/course-category",{state:filterData});
+        navigate("/course-category", { state: filterData });
       })
       .catch(() => {
         toast({
@@ -172,7 +172,6 @@ const Homepage: React.FC = () => {
           </div>
         </div>
       </div>
-      <Footer />
     </div>
   );
 };

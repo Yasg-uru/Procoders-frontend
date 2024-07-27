@@ -110,7 +110,7 @@ export function Navbar() {
                         </DropdownMenuItem>
                         <DropdownMenuItem>
                           <CreditCard className="mr-2 h-4 w-4" />
-                          <span>My Courses</span>
+                          <span onClick={()=>navigate("/mycourse")}>My Courses</span>
                           <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
                         </DropdownMenuItem>
                         <DropdownMenuItem>

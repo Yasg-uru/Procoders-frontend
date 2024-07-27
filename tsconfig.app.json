@@ -29,5 +29,5 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src", "src/redux/slices/EnrollmentSlice/.ts"]
+  "include": ["src", "src/redux/slices/EnrollmentSlice/.ts","src/types"]
 }

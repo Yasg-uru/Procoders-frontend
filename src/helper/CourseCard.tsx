@@ -8,17 +8,16 @@ import {
   CardFooter,
 } from "@/components/ui/card";
 import { useToast } from "@/components/ui/use-toast";
-import { useAppDispatch } from "@/redux/hook";
+import { useAppDispatch, useAppSelector } from "@/redux/hook";
 import { EnrollFree } from "@/redux/slices/EnrollSlice";
-import { FilteredCourse } from "@/types/CourseTypes/courseState";
+import { EnrolledUser, FilteredCourse } from "@/types/CourseTypes/courseState";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
 const CourseCard: React.FC<{ data: FilteredCourse }> = ({ data }) => {
   const dispatch = useAppDispatch();
   const { toast } = useToast();
-  const navigate=useNavigate();
-
+  const navigate = useNavigate();
 
   const handleFreeEnrollment = (courseId: string) => {
     dispatch(EnrollFree(courseId))
@@ -34,6 +33,17 @@ const CourseCard: React.FC<{ data: FilteredCourse }> = ({ data }) => {
           variant: "destructive",
         });
       });
+  };
+  const { user_id } = useAppSelector((state) => state.auth);
+
+  const isEnrolled = (enrolledUsers: EnrolledUser[]): boolean => {
+    const Enrolled = enrolledUsers.findIndex(
+      (enrollment) => enrollment.userId.toString() === user_id.toString()
+    );
+    if (Enrolled === -1) {
+      return false;
+    }
+    return true;
   };
   console.log("this is data starting:", data.startingDate);
   return (
@@ -68,13 +78,30 @@ const CourseCard: React.FC<{ data: FilteredCourse }> = ({ data }) => {
           )}
         </div>
         <div className="w-full grid grid-cols-2 gap-2">
-          <Button onClick={()=>navigate("/explore",{state:{courseId:data._id}})} className="bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold py-3 px-6 rounded-lg shadow-lg transition-transform transform hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 dark:focus:ring-purple-300">
+          <Button
+            onClick={() =>
+              navigate("/explore", { state: { courseId: data._id } })
+            }
+            className="bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold py-3 px-6 rounded-lg shadow-lg transition-transform transform hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 dark:focus:ring-purple-300"
+          >
             Explore
           </Button>
           {data.isPaid ? (
-            <Button className="bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold py-3 px-6 rounded-lg shadow-lg transition-transform transform hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 dark:focus:ring-purple-300">
-              Buy Now
-            </Button>
+            isEnrolled(data.enrolledUsers) ? (
+              <Button
+                onClick={() => navigate(`/checkout/${data._id}`)}
+                className="bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold py-3 px-6 rounded-lg shadow-lg transition-transform transform hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 dark:focus:ring-purple-300"
+              >
+                Buy Now
+              </Button>
+            ) : (
+              <Button
+                onClick={() => navigate("/continue-course")}
+                className="bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold py-3 px-6 rounded-lg shadow-lg transition-transform transform hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 dark:focus:ring-purple-300"
+              >
+                Continue
+              </Button>
+            )
           ) : (
             <Button
               onClick={() => handleFreeEnrollment(data._id)}

@@ -1,5 +1,12 @@
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import {
   Carousel,
   CarouselContent,
@@ -17,6 +24,7 @@ import { FcClearFilters } from "react-icons/fc";
 import { Instructor } from "@/types/CourseTypes/courseState";
 import FilterCompo from "./FilterCompo";
 import { useLocation } from "react-router-dom";
+import { User2, Users } from "lucide-react";
 
 const FilterQuery = [
   { level: "Intermediate" },
@@ -146,6 +154,47 @@ const CourseCategory: React.FC = () => {
         {filteredResults.length > 0 &&
           filteredResults.map((data) => (
             <CourseCard key={data._id} data={data} />
+          ))}
+      </div>
+      <div className="flex flex-col items-center mb-6 mt-9">
+        <h1 className="text-xl text-gray-900 dark:text-gray-100 mb-2">
+          Instructors
+        </h1>
+        <hr className="w-full border-t-2 border-gray-300 dark:border-gray-700" />
+      </div>
+      <div className="mx-auto">
+        {Instructors.length > 0 &&
+          Instructors.map((instructor) => (
+            <Card
+              key={instructor._id}
+              className="w-[350px]  flex flex-col border-[0.5px] dark:border-white shadow-lg rounded-md "
+            >
+              <CardHeader>
+                <img
+                  src={instructor.profileUrl}
+                  alt="Course"
+                  className="w-full h-[200px] object-cover rounded-t-md"
+                />
+
+                <CardTitle className="text-2xl font-bold mt-3 p-4">
+                  {instructor.username}
+                </CardTitle>
+                <CardDescription className="p-4">
+                  LinkedIn | Walmart | Amazon Oracle
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="flex-grow p-4">
+                <Users />
+                <p className="flex flex-col">
+                  <span>10+ Years</span>
+                  <span>Teaching Experience</span>
+                </p>
+              </CardContent>
+              <CardFooter className=" p-4">
+                Google Pay | Ex-LinkedIn Eng | GSoc Harward | 7 yrs teching |
+                Top Educator, FAANG Placements
+              </CardFooter>
+            </Card>
           ))}
       </div>
     </div>

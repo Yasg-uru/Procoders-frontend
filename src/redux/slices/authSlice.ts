@@ -12,7 +12,8 @@ const saveData = (
   username: string,
   email: string,
   role: string,
-  profileUrl: string
+  profileUrl: string,
+  user_id:string
 ) => {
   const expiryDate = new Date(Date.now() + 864000000);
   localStorage.setItem("authToken", token);
@@ -20,6 +21,7 @@ const saveData = (
   localStorage.setItem("username", username);
   localStorage.setItem("email", email);
   localStorage.setItem("role", role);
+  localStorage.setItem("user_id", role);
   localStorage.setItem("profileurl", profileUrl);
 };
 const ClearState = () => {
@@ -28,6 +30,7 @@ const ClearState = () => {
   localStorage.removeItem("username");
   localStorage.removeItem("email");
   localStorage.removeItem("role");
+  localStorage.removeItem("user_id");
   localStorage.removeItem("profileurl");
 };
 const isAuthenticated = (): boolean => {
@@ -50,8 +53,10 @@ const initialState: authState = {
   name: localStorage.getItem("username") || "",
   email: localStorage.getItem("email") || "",
   role: localStorage.getItem("role") || "",
+  user_id: localStorage.getItem("user_id") || "",
   isLoading: false,
   profileUrl: localStorage.getItem("profileurl") || "",
+  Mycourses: [],
 };
 export const registerUser = createAsyncThunk(
   "auth/registerUser",
@@ -148,6 +153,16 @@ export const resetPassword = createAsyncThunk(
     }
   }
 );
+export const Mycourse = createAsyncThunk("auth/mycourses", async () => {
+  try {
+    const response = await axiosInstance.get("/course/enrolled", {
+      withCredentials: true,
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+});
 const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -166,8 +181,9 @@ const authSlice = createSlice({
       state.email = action.payload?.user.email;
       state.role = action.payload?.user.Role;
       state.profileUrl = action.payload?.user.profileUrl;
+      state.user_id=action.payload?.user._id
       const token = action.payload?.token;
-      saveData(token, state.name, state.email, state.role, state.profileUrl);
+      saveData(token, state.name, state.email, state.role, state.profileUrl,state.user_id);
     });
     builder.addCase(registerUser.pending, (state) => {
       state.isLoading = true;
@@ -218,6 +234,16 @@ const authSlice = createSlice({
       state.isLoading = true;
     });
     builder.addCase(Logout.rejected, (state, action) => {
+      state.isLoading = false;
+    });
+    builder.addCase(Mycourse.fulfilled, (state, action) => {
+      state.Mycourses = action.payload?.courses;
+      state.isLoading = false;
+    });
+    builder.addCase(Mycourse.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(Mycourse.rejected, (state) => {
       state.isLoading = false;
     });
   },

@@ -18,6 +18,24 @@ export const EnrollFree = createAsyncThunk(
     }
   }
 );
+
+export const verifyPayment = createAsyncThunk(
+  "enrollment/verify",
+  async (formdata) => {
+    try {
+      const response = await axiosInstance.post(
+        "/payment/verify-payment",
+        formdata,
+        {
+          withCredentials: true,
+        }
+      );
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+);
 const EnrollmmentSlice = createSlice({
   name: "enrollment",
   initialState,
