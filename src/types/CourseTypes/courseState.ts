@@ -2,12 +2,21 @@ export interface courseState {
   searchResults: searchResult[];
   filteredResults: FilteredCourse[];
   categoryWiseCourses: FilteredCourse[];
+  Notes: NoteData[];
 }
 export interface searchResult {
   title: string;
   category: string;
   thumbnailUrl: string;
   _id: string;
+}
+export interface NoteData {
+  userId:string;
+  lessonName:string;
+  note:string;
+  NoteMakingTime:string;
+  _id:string;
+
 }
 export interface CategoryTypes {
   [key: string]: FilteredCourse;
@@ -32,6 +41,8 @@ export interface FilteredCourse {
   duration: number;
   rating: number;
   isPaid: boolean;
+  notes: notes[];
+
   instructorId: Instructor[];
   published: boolean;
   reviews: Review[];
@@ -47,6 +58,11 @@ export interface Review {
   comment: string;
   createdAt: string;
   _id: string;
+}
+export interface notes {
+  lessonName: string;
+  note: string;
+  NoteMakingTime: string;
 }
 
 export interface EnrolledUser {

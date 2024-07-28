@@ -1,5 +1,9 @@
 import axiosInstance from "@/helper/axiosInstance";
-import { courseState, FilteredCourse } from "@/types/CourseTypes/courseState";
+import {
+  courseState,
+  FilteredCourse,
+  notes,
+} from "@/types/CourseTypes/courseState";
 import { Filter, Filtertype } from "@/types/CourseTypes/FilterTypes";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 function SaveFilteredData(data: FilteredCourse[]): void {
@@ -28,6 +32,7 @@ const initialState: courseState = {
   searchResults: [],
   filteredResults: LoadFilteredData() || [],
   categoryWiseCourses: LoadallcourseData() || [],
+  Notes: [],
 };
 export const searchCourses = createAsyncThunk(
   "course/searchCourses",
@@ -84,6 +89,57 @@ export const Getallcourses = createAsyncThunk(
     }
   }
 );
+export const createNote = createAsyncThunk(
+  "course/addNote",
+  async (formdata: { courseId?: string; NoteData: notes }) => {
+    try {
+      console.log("this is a formdata:", formdata);
+      const response = await axiosInstance.post(
+        `/course/note/${formdata.courseId}`,
+        formdata.NoteData,
+        {
+          withCredentials: true,
+        }
+      );
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+export const deletenote = createAsyncThunk(
+  "course/deletenote",
+  async (formdata: { courseId?: string; noteId: string }) => {
+    try {
+      const response = await axiosInstance.delete(
+        `/course/note/${formdata.noteId}/${formdata.courseId}`,
+        {
+          withCredentials: true,
+        }
+      );
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+export const getNotes = createAsyncThunk(
+  "course/getnotes",
+  async (formdata: { courseId?: string; lessonName?: string }) => {
+    try {
+      const response = await axiosInstance.get(
+        `/course/usernote/${formdata.courseId}?lessonName=${formdata.lessonName}`,
+        {
+          withCredentials: true,
+        }
+      );
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+
 const courseSlice = createSlice({
   name: "course",
   initialState,
@@ -103,6 +159,9 @@ const courseSlice = createSlice({
     builder.addCase(FilterCourse.fulfilled, (state, action) => {
       state.filteredResults = action.payload?.courses;
       SaveFilteredData(state.filteredResults);
+    });
+    builder.addCase(getNotes.fulfilled, (state, action) => {
+      state.Notes = action.payload?.lessonNotes;
     });
   },
 });

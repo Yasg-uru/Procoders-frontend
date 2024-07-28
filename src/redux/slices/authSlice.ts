@@ -13,7 +13,7 @@ const saveData = (
   email: string,
   role: string,
   profileUrl: string,
-  user_id:string
+  user_id: string
 ) => {
   const expiryDate = new Date(Date.now() + 864000000);
   localStorage.setItem("authToken", token);
@@ -21,7 +21,7 @@ const saveData = (
   localStorage.setItem("username", username);
   localStorage.setItem("email", email);
   localStorage.setItem("role", role);
-  localStorage.setItem("user_id", role);
+  localStorage.setItem("user_id", user_id);
   localStorage.setItem("profileurl", profileUrl);
 };
 const ClearState = () => {
@@ -181,9 +181,16 @@ const authSlice = createSlice({
       state.email = action.payload?.user.email;
       state.role = action.payload?.user.Role;
       state.profileUrl = action.payload?.user.profileUrl;
-      state.user_id=action.payload?.user._id
+      state.user_id = action.payload?.user._id;
       const token = action.payload?.token;
-      saveData(token, state.name, state.email, state.role, state.profileUrl,state.user_id);
+      saveData(
+        token,
+        state.name,
+        state.email,
+        state.role,
+        state.profileUrl,
+        state.user_id
+      );
     });
     builder.addCase(registerUser.pending, (state) => {
       state.isLoading = true;
