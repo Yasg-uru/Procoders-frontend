@@ -140,6 +140,23 @@ export const getNotes = createAsyncThunk(
   }
 );
 
+export const RateCourse = createAsyncThunk(
+  "course/rating",
+  async (formdata: { courseId: string; rating: number; comment: string }) => {
+    try {
+      const response = await axiosInstance.post(
+        `/course/rate/${formdata.courseId}`,
+        {},
+        {
+          withCredentials: true,
+        }
+      );
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+);
 const courseSlice = createSlice({
   name: "course",
   initialState,

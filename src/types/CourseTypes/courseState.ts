@@ -22,6 +22,7 @@ export interface CategoryTypes {
   [key: string]: FilteredCourse;
 }
 export interface FilteredCourse {
+  map(arg0: (course: FilteredCourse, index: any) => import("react/jsx-runtime").JSX.Element): import("react").ReactNode;
   // map(arg0: (course: FilteredCourse) => import("react/jsx-runtime").JSX.Element): import("react").ReactNode;
   _id: string;
   title: string;

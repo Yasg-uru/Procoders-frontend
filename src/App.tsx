@@ -14,6 +14,8 @@ import MyCourse from "./pages/coursepages/MyCourse.tsx";
 import CourseContinue from "./pages/courseLecture/CourseContinue.tsx";
 import ChecKOut from "./pages/paymentPage/ChecKOut.js";
 
+import QuizTest from "./pages/courseLecture/Quiz.js";
+
 function App() {
   return (
     <Fragment>
@@ -32,6 +34,7 @@ function App() {
         <Route path="/mycourse" element={<MyCourse />} />
         <Route path="/continue-course/:courseId" element={<CourseContinue />} />
         <Route path="/checkout/:courseId" element={<ChecKOut />} />
+        <Route path="/quiz/:moduleId/:courseId" element={<QuizTest />} />
       </Routes>
       <Footer />
     </Fragment>

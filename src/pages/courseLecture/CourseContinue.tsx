@@ -20,6 +20,7 @@ import { GetfullAccessModule } from "@/redux/slices/moduleSlice";
 import { lesson, module } from "@/types/ModuleTypes/ModuleState";
 import { MdQuiz } from "react-icons/md";
 import { MdArticle } from "react-icons/md";
+
 import {
   ArrowBigRightDash,
   ArrowLeft,
@@ -30,7 +31,7 @@ import {
 import React, { useEffect, useState } from "react";
 import ReactPlayer from "react-player";
 
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { FcLightAtTheEndOfTunnel } from "react-icons/fc";
 import { useMediaQuery } from "@uidotdev/usehooks";
 import { FaPlay } from "react-icons/fa";
@@ -66,6 +67,8 @@ const CourseContinue = () => {
   const [selectedOption, setOption] = useState<string>("");
   const [contentType, setContentType] = useState<string>("");
   const [isMakingNote, setIsMakingNote] = useState<boolean>(false);
+  const navigate = useNavigate();
+
   const [NoteData, setNoteData] = useState<notes>({
     NoteMakingTime: "",
     note: "",
@@ -87,7 +90,7 @@ const CourseContinue = () => {
   //       });
   //   }
   // }, [createNote, deletenote]);
-  function handlevedioClick(
+  function handleClick(
     contentUrl: string,
     contentType: string,
     lesson: lesson
@@ -214,7 +217,7 @@ const CourseContinue = () => {
                           <div className="mb-4 relative">
                             <p
                               onClick={() =>
-                                handlevedioClick(
+                                handleClick(
                                   lesson.contentUrl,
                                   lesson.contentType,
                                   lesson
@@ -222,7 +225,7 @@ const CourseContinue = () => {
                               }
                               className="font-medium text-md mb-24"
                             >
-                              {lesson.contentType === "Vedio" && (
+                              {lesson.contentType === "Video" && (
                                 <span className=" flex gap-3 items-center">
                                   <FaPlay /> {lesson.title}
                                 </span>
@@ -247,11 +250,16 @@ const CourseContinue = () => {
                                 </span>
                               )}
                             </p>
-                            {index < module.lessons.length - 1 && (
-                              <div className="absolute top-full left-0 border-white border-1 h-6"></div>
-                            )}
                           </div>
                         ))}
+                       
+                          <Button
+                            onClick={()=>navigate(`/quiz/${module._id}/${courseId}`)}
+                            className="bg-gradient-to-r from-pink-500 to-purple-500 text-white font-bold py-3 px-6 rounded-md shadow-md hover:scale-105 transition duration-300"
+                          >
+                            Quiz
+                          </Button>
+                        
                       </AccordionContent>
                     </AccordionItem>
                   ))}
@@ -262,7 +270,7 @@ const CourseContinue = () => {
         <ResizableHandle />
         <ResizablePanel defaultSize={40}>
           <ScrollArea className="h-[100vh] overflow-auto">
-            {url && contentType === "Vedio" && (
+            {url && contentType === "Video" && (
               <div className="flex flex-col items-center  justify-center ">
                 <h1 className="text-2xl dark:text-white font-bold mt-3">
                   {selectedLesson?.title}
@@ -317,7 +325,7 @@ const CourseContinue = () => {
                               </div>
                             )}
                           {option === "Overview" && <p>No Overview </p>}
-                          {option === "Rating" && <p>gy</p>}
+                          {option === "Rating" && <p></p>}
                           {option === "Notes" && (
                             <div className="flex flex-col gap-2 items-center relative ">
                               {!isMakingNote ? (

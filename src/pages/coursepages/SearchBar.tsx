@@ -72,7 +72,7 @@ const SearchBar: React.FC = () => {
         onChange={handleInputChange}
       />
       {searchResults.length > 0 && isResulVisible ? (
-        <ul className="absolute mt-1 bg-white border border-gray-300 rounded shadow-lg w-96 dark:bg-gray-800 dark:border-gray-600 dark:shadow-gray-700">
+        <ul className="absolute mt-1 bg-white border border-gray-300 rounded shadow-lg w-96 dark:bg-gray-800 dark:border-gray-600 dark:shadow-gray-700 z-10">
           {searchResults.map((result) => (
             <li
               key={result._id}

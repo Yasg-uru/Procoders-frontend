@@ -36,7 +36,7 @@ export function Navbar() {
   const dispatch = useAppDispatch();
   const { toast } = useToast();
 
-  const { isAuthenticated, profileUrl, isLoading } = useAppSelector(
+  const { isAuthenticated, profileUrl, isLoading, name } = useAppSelector(
     (state) => state.auth
   );
   const toggleMenu = () => {
@@ -93,11 +93,15 @@ export function Navbar() {
                 ) : (
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <div className="avatar">
+                      {/* <div className="avatar">
                         <div className="ring-primary ring-offset-base-100 w-12 rounded-full ring-0 ring-offset-[0.2px]">
                           <img src={profileUrl} />
                         </div>
-                      </div>
+                      </div> */}
+                      <Avatar>
+                        <AvatarImage src={profileUrl} alt="@shadcn" />
+                        <AvatarFallback>{name.substring(1)}</AvatarFallback>
+                      </Avatar>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className="w-56">
                       <DropdownMenuLabel>My Account</DropdownMenuLabel>
@@ -110,7 +114,9 @@ export function Navbar() {
                         </DropdownMenuItem>
                         <DropdownMenuItem>
                           <CreditCard className="mr-2 h-4 w-4" />
-                          <span onClick={()=>navigate("/mycourse")}>My Courses</span>
+                          <span onClick={() => navigate("/mycourse")}>
+                            My Courses
+                          </span>
                           <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
                         </DropdownMenuItem>
                         <DropdownMenuItem>

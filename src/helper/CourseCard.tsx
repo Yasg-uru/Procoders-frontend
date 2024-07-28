@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/card";
 import { useToast } from "@/components/ui/use-toast";
 import { useAppDispatch, useAppSelector } from "@/redux/hook";
+import { Getallcourses } from "@/redux/slices/courseSlice";
 import { EnrollFree } from "@/redux/slices/EnrollSlice";
 import { EnrolledUser, FilteredCourse } from "@/types/CourseTypes/courseState";
 import React from "react";
@@ -27,6 +28,19 @@ const CourseCard: React.FC<{ data: FilteredCourse }> = ({ data }) => {
           title: "Successfully enrolled to the course",
         });
       })
+      // .then(() => {
+      //   dispatch(Getallcourses())
+      //     .then(() => {
+      //       toast({
+      //         title: "fetched updated course successsfully",
+      //       });
+      //     })
+      //     .catch(() => {
+      //       toast({
+      //         title: "Error in fetching updated course",
+      //       });
+      //     });
+      // })
       .catch(() => {
         toast({
           title: "Error in enrolling course",
@@ -37,10 +51,13 @@ const CourseCard: React.FC<{ data: FilteredCourse }> = ({ data }) => {
   const { user_id } = useAppSelector((state) => state.auth);
 
   const isEnrolled = (enrolledUsers: EnrolledUser[]): boolean => {
+    console.log("this is a user is :", user_id);
+    console.log("this is a enrolled course user id :", enrolledUsers);
     const Enrolled = enrolledUsers.findIndex(
-      (enrollment) => enrollment.userId.toString() === user_id.toString()
+      (enrollment) => enrollment.userId === user_id
     );
     if (Enrolled === -1) {
+      console.log("this is not enrolled for id :", Enrolled);
       return false;
     }
     return true;
@@ -87,7 +104,7 @@ const CourseCard: React.FC<{ data: FilteredCourse }> = ({ data }) => {
             Explore
           </Button>
           {data.isPaid ? (
-            isEnrolled(data.enrolledUsers) ? (
+            !isEnrolled(data.enrolledUsers) ? (
               <Button
                 onClick={() => navigate(`/checkout/${data._id}`)}
                 className="bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold py-3 px-6 rounded-lg shadow-lg transition-transform transform hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 dark:focus:ring-purple-300"
@@ -102,12 +119,19 @@ const CourseCard: React.FC<{ data: FilteredCourse }> = ({ data }) => {
                 Continue
               </Button>
             )
-          ) : (
+          ) : !isEnrolled(data.enrolledUsers) ? (
             <Button
               onClick={() => handleFreeEnrollment(data._id)}
               className="bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold py-3 px-6 rounded-lg shadow-lg transition-transform transform hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 dark:focus:ring-purple-300"
             >
               Enroll Free
+            </Button>
+          ) : (
+            <Button
+              onClick={() => navigate(`/continue-course/${data._id}`)}
+              className="bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold py-3 px-6 rounded-lg shadow-lg transition-transform transform hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 dark:focus:ring-purple-300"
+            >
+              Continue
             </Button>
           )}
         </div>
