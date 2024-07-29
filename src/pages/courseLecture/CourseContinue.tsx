@@ -39,7 +39,7 @@ import { Input } from "@/components/ui/input";
 import { NoteData, notes } from "@/types/CourseTypes/courseState";
 import { createNote, deletenote, getNotes } from "@/redux/slices/courseSlice";
 import { Card } from "@/components/ui/card";
-import { LoadCourseProgress } from "@/redux/slices/authSlice";
+import { completelesson, LoadCourseProgress } from "@/redux/slices/authSlice";
 const options = ["Attachments", "Overview", "Rating", "Notes"];
 const CourseContinue = () => {
   const dispatch = useAppDispatch();
@@ -107,10 +107,11 @@ const CourseContinue = () => {
   function handleClick(
     contentUrl: string,
     contentType: string,
-    lesson: lesson
+    lesson: lesson,
+    moduleId: string
   ): void {
     setSelecturl(contentUrl);
-    setSelectedLesson(lesson);
+    setSelectedLesson({ ...lesson, moduleId });
     setContentType(contentType);
     setNoteData({ ...NoteData, lessonName: lesson.title });
   }
@@ -218,8 +219,42 @@ const CourseContinue = () => {
     } else {
       progressClass = "progress progress-success";
     }
-    return progressClass;
+    return progressClass + " border-[0.1px] border-white";
   };
+
+  function MarkedAsCompleted(): void {
+    if (selectedLesson) {
+      dispatch(
+        completelesson({
+          courseId,
+          moduleId: selectedLesson.moduleId,
+          lessonId: selectedLesson._id,
+        })
+      )
+        .unwrap()
+        .then(() => {
+          toast({
+            title: "marked as completed",
+          });
+          dispatch(LoadCourseProgress(courseId))
+            .then(() => {
+              // toast({
+              //   title: "successfully fetched your progress",
+              // });
+            })
+            .catch(() => {
+              toast({
+                title: "failed to fetch your progress",
+              });
+            });
+        })
+        .catch(() => {
+          toast({
+            title: "Failed to complete the lesson",
+          });
+        });
+    }
+  }
 
   return (
     <div className=" relative min-h-screen  p-2 bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
@@ -232,7 +267,7 @@ const CourseContinue = () => {
                 className={ProgressBarclasss(
                   EnrolledCourseProgress.overallProgress
                 )}
-                value={EnrolledCourseProgress.overallProgress}
+                value={EnrolledCourseProgress?.overallProgress}
                 max="100"
               ></progress>
               {/* <Progress value={progress} className="w-[60" /> */}
@@ -251,11 +286,11 @@ const CourseContinue = () => {
                         <progress
                           className={ProgressBarclasss(
                             EnrolledCourseProgress.modulesProgress[index]
-                              .progress
+                              ?.progress
                           )}
                           value={
                             EnrolledCourseProgress.modulesProgress[index]
-                              .progress
+                              ?.progress
                           }
                           max="100"
                         ></progress>
@@ -266,7 +301,8 @@ const CourseContinue = () => {
                                 handleClick(
                                   lesson.contentUrl,
                                   lesson.contentType,
-                                  lesson
+                                  lesson,
+                                  module._id
                                 )
                               }
                               className="font-medium text-md mb-24"
@@ -329,6 +365,7 @@ const CourseContinue = () => {
                   width={"80%"}
                   height={"40%"}
                   onProgress={handleProgress}
+                  onEnded={MarkedAsCompleted}
                 />
                 <hr className="border border-white w-full" />
                 <div className="flex gap-7 h-32 p-4 w-full items-center justify-center">

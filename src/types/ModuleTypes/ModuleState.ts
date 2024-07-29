@@ -43,6 +43,7 @@ export interface lesson {
   contentType: string;
   duration: number;
   resources: resources[];
+  moduleId?:string;
   _id: string;
 }
 export interface resources {
