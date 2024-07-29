@@ -1,4 +1,5 @@
 import {
+  EnrolledCourse,
   EnrolledUser,
   FilteredCourse,
   Instructor,
@@ -14,7 +15,8 @@ export interface authState {
   role: string;
   profileUrl: string;
   Mycourses: mycourse[];
-  user_id:string;
+  user_id: string;
+  EnrolledCourseProgress: EnrolledCourse;
 }
 
 export interface mycourse {

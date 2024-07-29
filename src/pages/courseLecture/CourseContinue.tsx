@@ -39,12 +39,15 @@ import { Input } from "@/components/ui/input";
 import { NoteData, notes } from "@/types/CourseTypes/courseState";
 import { createNote, deletenote, getNotes } from "@/redux/slices/courseSlice";
 import { Card } from "@/components/ui/card";
+import { LoadCourseProgress } from "@/redux/slices/authSlice";
 const options = ["Attachments", "Overview", "Rating", "Notes"];
 const CourseContinue = () => {
   const dispatch = useAppDispatch();
 
   const { courseId } = useParams();
   const { toast } = useToast();
+  const { EnrolledCourseProgress } = useAppSelector((state) => state.auth);
+
   const { fullAccessModules } = useAppSelector((state) => state.module);
   const { Notes } = useAppSelector((state) => state.course);
   const isDesktop = useMediaQuery("(min-width: 768px)");
@@ -59,6 +62,17 @@ const CourseContinue = () => {
       .catch(() => {
         toast({
           title: "Error in fecthing course modules",
+        });
+      });
+    dispatch(LoadCourseProgress(courseId))
+      .then(() => {
+        toast({
+          title: "successfully fetched your progress",
+        });
+      })
+      .catch(() => {
+        toast({
+          title: "failed to fetch your progress",
         });
       });
   }, []);
@@ -193,6 +207,19 @@ const CourseContinue = () => {
         });
       });
   }
+  const ProgressBarclasss = (progress: number): string => {
+    let progressClass: string = "";
+    if (progress <= 25) {
+      progressClass = "progress progress-error";
+    } else if (progress <= 50) {
+      progressClass = "progress progress-warning";
+    } else if (progress <= 75) {
+      progressClass = "progress progress-info";
+    } else {
+      progressClass = "progress progress-success";
+    }
+    return progressClass;
+  };
 
   return (
     <div className=" relative min-h-screen  p-2 bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
@@ -201,6 +228,14 @@ const CourseContinue = () => {
           <ScrollArea className="h-[100vh] rounded-md border">
             <div className="p-4">
               <h4 className="mb-4 text-sm font-medium leading-none">Modules</h4>
+              <progress
+                className={ProgressBarclasss(
+                  EnrolledCourseProgress.overallProgress
+                )}
+                value={EnrolledCourseProgress.overallProgress}
+                max="100"
+              ></progress>
+              {/* <Progress value={progress} className="w-[60" /> */}
               <Accordion type="single" collapsible className="w-full">
                 {fullAccessModules.length > 0 &&
                   fullAccessModules.map((module: module, index) => (
@@ -213,6 +248,17 @@ const CourseContinue = () => {
                         module.title
                       }`}</AccordionTrigger>
                       <AccordionContent>
+                        <progress
+                          className={ProgressBarclasss(
+                            EnrolledCourseProgress.modulesProgress[index]
+                              .progress
+                          )}
+                          value={
+                            EnrolledCourseProgress.modulesProgress[index]
+                              .progress
+                          }
+                          max="100"
+                        ></progress>
                         {module.lessons.map((lesson) => (
                           <div className="mb-4 relative">
                             <p
@@ -252,14 +298,15 @@ const CourseContinue = () => {
                             </p>
                           </div>
                         ))}
-                       
-                          <Button
-                            onClick={()=>navigate(`/quiz/${module._id}/${courseId}`)}
-                            className="bg-gradient-to-r from-pink-500 to-purple-500 text-white font-bold py-3 px-6 rounded-md shadow-md hover:scale-105 transition duration-300"
-                          >
-                            Quiz
-                          </Button>
-                        
+
+                        <Button
+                          onClick={() =>
+                            navigate(`/quiz/${module._id}/${courseId}`)
+                          }
+                          className="bg-gradient-to-r from-pink-500 to-purple-500 text-white font-bold py-3 px-6 rounded-md shadow-md hover:scale-105 transition duration-300"
+                        >
+                          Quiz
+                        </Button>
                       </AccordionContent>
                     </AccordionItem>
                   ))}

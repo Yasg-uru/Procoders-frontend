@@ -49,7 +49,9 @@ const MyCourse: React.FC = () => {
               </CardContent>
               <CardFooter className="mt-auto">
                 <Button
-                  onClick={() => navigate(`/continue-course/${course._id}`)}
+                  onClick={() =>
+                    navigate(`/continue-course/${course.courseId._id}`)
+                  }
                   className="bg-gradient-to-r from-pink-500 to-purple-500 text-white font-bold py-3 px-6 rounded-md shadow-md hover:scale-105 transition duration-300 w-full m-2"
                 >
                   Continue

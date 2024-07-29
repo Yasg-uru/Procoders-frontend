@@ -22,9 +22,10 @@ const ChecKOut = () => {
       }
     );
     const { amount, id, currency } = response.data?.order;
+    console.log("this is a amount and id and currency :");
     const options = {
       key: "rzp_live_tK7jKIBkQuTeH7", // Enter the Key ID generated from the Dashboard
-      amount: amount.toString(),
+      amount: amount,
       currency: currency,
       name: "Procoders",
       description: "Procoders course payment",
@@ -32,9 +33,9 @@ const ChecKOut = () => {
         "https://res.cloudinary.com/duzmyzmpa/image/upload/v1721313988/x9nno0siixwdva4beymy.jpg",
       order_id: id,
       handler: async function (response: {
-        razorpay_payment_id: any;
-        razorpay_order_id: any;
-        razorpay_signature: any;
+        razorpay_payment_id: string;
+        razorpay_order_id: string;
+        razorpay_signature: string;
       }) {
         const data = {
           orderCreationId: id,
@@ -51,7 +52,9 @@ const ChecKOut = () => {
           }
         );
 
-        alert(result.data.msg);
+        toast({
+          title: result.data?.message,
+        });
       },
       prefill: {
         name: "Yash choudhary",

@@ -11,19 +11,23 @@ export interface searchResult {
   _id: string;
 }
 export interface NoteData {
-  userId:string;
-  lessonName:string;
-  note:string;
-  NoteMakingTime:string;
-  _id:string;
-
+  userId: string;
+  lessonName: string;
+  note: string;
+  NoteMakingTime: string;
+  _id: string;
 }
 export interface CategoryTypes {
   [key: string]: FilteredCourse;
 }
 export interface FilteredCourse {
-  map(arg0: (course: FilteredCourse, index: any) => import("react/jsx-runtime").JSX.Element): import("react").ReactNode;
-  // map(arg0: (course: FilteredCourse) => import("react/jsx-runtime").JSX.Element): import("react").ReactNode;
+  map(
+    arg0: (
+      course: FilteredCourse,
+      index: any
+    ) => import("react/jsx-runtime").JSX.Element
+  ): import("react").ReactNode;
+
   _id: string;
   title: string;
   description: string;
@@ -75,7 +79,13 @@ export interface EnrolledUser {
 
 export interface EnrolledCourse {
   courseId: string;
-  Progress: number;
+  modulesProgress: {
+    moduleId: string;
+    completedLessons: string[];
+    progress: number;
+    completionStatus: boolean;
+  }[];
+  overallProgress: number;
   CompletionStatus: boolean;
   _id: string;
 }

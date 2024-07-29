@@ -57,6 +57,13 @@ const initialState: authState = {
   isLoading: false,
   profileUrl: localStorage.getItem("profileurl") || "",
   Mycourses: [],
+  EnrolledCourseProgress: {
+    courseId: "",
+    modulesProgress: [],
+    overallProgress: 0,
+    CompletionStatus: false,
+    _id: "",
+  },
 };
 export const registerUser = createAsyncThunk(
   "auth/registerUser",
@@ -163,6 +170,44 @@ export const Mycourse = createAsyncThunk("auth/mycourses", async () => {
     throw error;
   }
 });
+export const completelesson = createAsyncThunk(
+  "auth/completlesson",
+  async (formdata: {
+    courseId?: string;
+    moduleId?: string;
+    lessonId: string;
+  }) => {
+    try {
+      const { courseId, moduleId, lessonId } = formdata;
+      const response = await axiosInstance.post(
+        `/user/lesson/complete/${courseId}/${moduleId}/${lessonId}`,
+        {},
+        {
+          withCredentials: true,
+        }
+      );
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+export const LoadCourseProgress = createAsyncThunk(
+  "auth/loadprogress",
+  async (courseId?: string) => {
+    try {
+      const response = await axiosInstance.get(
+        `user/enrolledcourse/progress/${courseId}`,
+        {
+          withCredentials: true,
+        }
+      );
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+);
 const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -252,6 +297,9 @@ const authSlice = createSlice({
     });
     builder.addCase(Mycourse.rejected, (state) => {
       state.isLoading = false;
+    });
+    builder.addCase(LoadCourseProgress.fulfilled, (state, action) => {
+      state.EnrolledCourseProgress = action.payload?.EnrolledCourse;
     });
   },
 });

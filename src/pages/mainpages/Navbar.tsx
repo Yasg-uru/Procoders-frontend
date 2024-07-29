@@ -100,7 +100,10 @@ export function Navbar() {
                       </div> */}
                       <Avatar>
                         <AvatarImage src={profileUrl} alt="@shadcn" />
-                        <AvatarFallback>{name.substring(1)}</AvatarFallback>
+                        <AvatarFallback className="font-bold text-xl dark:bg-black bg-red-400 cursor-pointer">
+                          {name.split(" ")[0][0].toUpperCase()}
+                          {name.split(" ")[1][0].toUpperCase()}
+                        </AvatarFallback>
                       </Avatar>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className="w-56">
