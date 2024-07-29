@@ -26,7 +26,7 @@ function App() {
         <Route path="/verify/:email" element={<Verify />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password/:token" element={<ResetPassword />} />
-        <Route path="/course/detail/:id" element={<DetailPage />} />
+        <Route path="/detail" element={<DetailPage />} />
 
         <Route path="/" element={<Homepage />} />
         <Route path="/course-category" element={<CourseCategory />} />

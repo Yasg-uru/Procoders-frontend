@@ -1,18 +1,22 @@
 import { Button } from "@/components/ui/button";
-import { useAppSelector } from "@/redux/hook";
-import { FilteredCourse } from "@/types/CourseTypes/courseState";
+import { useAppDispatch, useAppSelector } from "@/redux/hook";
+import { EnrolledUser, FilteredCourse } from "@/types/CourseTypes/courseState";
 import { Home, Share } from "lucide-react";
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { CiShare2 } from "react-icons/ci";
 import ModuleComponent from "./ModuleComponent";
+import { useToast } from "@/components/ui/use-toast";
+import { EnrollFree } from "@/redux/slices/EnrollSlice";
 
 const DetailPage: React.FC = () => {
   const location = useLocation();
   const { courseId } = location.state;
-
+  const navigate = useNavigate();
   const { categoryWiseCourses } = useAppSelector((state) => state.course);
   const [courseData, setCourseData] = useState<FilteredCourse>();
+  const dispatch = useAppDispatch();
+  const { toast } = useToast();
 
   useEffect(() => {
     if (categoryWiseCourses.length > 0 && courseId) {
@@ -52,7 +56,38 @@ const DetailPage: React.FC = () => {
     const date = courseData?.startingDate;
     return new Date() > new Date(date ?? Date.now());
   };
+  const { user_id } = useAppSelector((state) => state.auth);
+  const isEnrolled = (enrolledUsers?: EnrolledUser[]): boolean => {
+    console.log("this is a user is :", user_id);
+    console.log("this is a enrolled course user id :", enrolledUsers);
+    if (enrolledUsers) {
+      const Enrolled = enrolledUsers.findIndex(
+        (enrollment) => enrollment.userId === user_id
+      );
+      if (Enrolled === -1) {
+        console.log("this is not enrolled for id :", Enrolled);
+        return false;
+      }
+      return true;
+    }
+    return false;
+  };
+  const handleFreeEnrollment = (courseId: string) => {
+    dispatch(EnrollFree(courseId))
+      .unwrap()
+      .then(() => {
+        toast({
+          title: "Successfully enrolled to the course",
+        });
+      })
 
+      .catch(() => {
+        toast({
+          title: "Error in enrolling course",
+          variant: "destructive",
+        });
+      });
+  };
   return (
     <div className="min-h-screen flex flex-col p-10 bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
       <div className="w-full bg-gray-100 dark:bg-gray-900 grid md:grid-cols-2 gap-10 grid-flow-row">
@@ -76,7 +111,7 @@ const DetailPage: React.FC = () => {
           <p className="mb-4">{courseData?.description}</p>
           <p className="mb-4">
             {!courseData?.isPaid ? (
-              "Free"
+              <span className="font-bold text-2xl ">Free</span>
             ) : (
               <span>
                 <span className="font-bold text-xl">
@@ -99,9 +134,44 @@ const DetailPage: React.FC = () => {
               : "Classes Starting Soon! Enroll Now!"}
           </p>
           <div className="flex gap-3 mb-6">
-            <Button className="bg-gradient-to-r from-pink-500 to-purple-500 text-white font-bold py-3 px-12 rounded-md shadow-md hover:scale-105 transition duration-300">
+            {/* <Button className="bg-gradient-to-r from-pink-500 to-purple-500 text-white font-bold py-3 px-12 rounded-md shadow-md hover:scale-105 transition duration-300">
               Buy Now
-            </Button>
+            </Button> */}
+            {courseData?.isPaid ? (
+              !isEnrolled(courseData?.enrolledUsers) ? (
+                <Button
+                  onClick={() => navigate(`/checkout/${courseData?._id}`)}
+                  className="bg-gradient-to-r from-pink-500 to-purple-500 text-white font-bold py-3 px-12 rounded-md shadow-md hover:scale-105 transition duration-300"
+                >
+                  Buy Now
+                </Button>
+              ) : (
+                <Button
+                  onClick={() =>
+                    navigate(`/continue-course/${courseData?._id}`)
+                  }
+                  className="bg-gradient-to-r from-pink-500 to-purple-500 text-white font-bold py-3 px-12 rounded-md shadow-md hover:scale-105 transition duration-300"
+                >
+                  Continue
+                </Button>
+              )
+            ) : !isEnrolled(courseData?.enrolledUsers) ? (
+              <Button
+                onClick={() =>
+                  courseData?._id ? handleFreeEnrollment(courseData?._id) : null
+                }
+                className="bg-gradient-to-r from-pink-500 to-purple-500 text-white font-bold py-3 px-12 rounded-md shadow-md hover:scale-105 transition duration-300"
+              >
+                Enroll Free
+              </Button>
+            ) : (
+              <Button
+                onClick={() => navigate(`/continue-course/${courseData?._id}`)}
+                className="bg-gradient-to-r from-pink-500 to-purple-500 text-white font-bold py-3 px-12 rounded-md shadow-md hover:scale-105 transition duration-300"
+              >
+                Continue
+              </Button>
+            )}
             <Button
               className="bg-gradient-to-r from-pink-500 to-purple-500 text-white font-bold py-3 px-12 rounded-md shadow-md hover:scale-105 transition duration-300"
               onClick={handleShare}

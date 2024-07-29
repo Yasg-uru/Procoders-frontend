@@ -145,13 +145,14 @@ const QuizTest: React.FC = () => {
       >
         Check Results
       </Button>
-      
+
       <div className="flex flex-col gap-2">
-      <p className="font-bold text-xl ">ObtainedPoints : {ObtainedPoints}</p>
-      <p className="font-bold text-xl ">TotalPoints : {TotalPoints}</p>
-      <p className="font-bold text-xl ">scorePercentage : {Math.floor(scorePercentage)}%</p>
+        <p className="font-bold text-xl ">ObtainedPoints : {ObtainedPoints}</p>
+        <p className="font-bold text-xl ">TotalPoints : {TotalPoints}</p>
+        <p className="font-bold text-xl ">
+          scorePercentage : {Math.floor(scorePercentage)}%
+        </p>
       </div>
-      
     </div>
   );
 };

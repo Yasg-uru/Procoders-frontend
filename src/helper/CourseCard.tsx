@@ -28,19 +28,7 @@ const CourseCard: React.FC<{ data: FilteredCourse }> = ({ data }) => {
           title: "Successfully enrolled to the course",
         });
       })
-      // .then(() => {
-      //   dispatch(Getallcourses())
-      //     .then(() => {
-      //       toast({
-      //         title: "fetched updated course successsfully",
-      //       });
-      //     })
-      //     .catch(() => {
-      //       toast({
-      //         title: "Error in fetching updated course",
-      //       });
-      //     });
-      // })
+
       .catch(() => {
         toast({
           title: "Error in enrolling course",
