@@ -64,6 +64,7 @@ const initialState: authState = {
     CompletionStatus: false,
     _id: "",
   },
+  AllEnrolledCourseProgress: [],
 };
 export const registerUser = createAsyncThunk(
   "auth/registerUser",
@@ -208,6 +209,19 @@ export const LoadCourseProgress = createAsyncThunk(
     }
   }
 );
+export const GetAllEnrolledCourseProgress = createAsyncThunk(
+  "auth/allcourseprogress",
+  async () => {
+    try {
+      const response = await axiosInstance.get("/user/enrolled/progress", {
+        withCredentials: true,
+      });
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+);
 const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -300,6 +314,9 @@ const authSlice = createSlice({
     });
     builder.addCase(LoadCourseProgress.fulfilled, (state, action) => {
       state.EnrolledCourseProgress = action.payload?.EnrolledCourse;
+    });
+    builder.addCase(GetAllEnrolledCourseProgress.fulfilled, (state, action) => {
+      state.AllEnrolledCourseProgress = action.payload?.EnrolledCourses;
     });
   },
 });

@@ -1,8 +1,10 @@
+import { Quiz } from "../ModuleTypes/ModuleState";
 export interface courseState {
   searchResults: searchResult[];
   filteredResults: FilteredCourse[];
   categoryWiseCourses: FilteredCourse[];
   Notes: NoteData[];
+  CourseQuizzes:Quiz[]
 }
 export interface searchResult {
   title: string;
@@ -47,6 +49,7 @@ export interface FilteredCourse {
   rating: number;
   isPaid: boolean;
   notes: notes[];
+  quizzes: Quiz[];
 
   instructorId: Instructor[];
   published: boolean;

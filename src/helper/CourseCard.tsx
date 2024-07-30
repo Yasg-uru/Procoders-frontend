@@ -27,6 +27,7 @@ const CourseCard: React.FC<{ data: FilteredCourse }> = ({ data }) => {
         toast({
           title: "Successfully enrolled to the course",
         });
+        dispatch(Getallcourses());
       })
 
       .catch(() => {

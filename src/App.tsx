@@ -15,6 +15,7 @@ import CourseContinue from "./pages/courseLecture/CourseContinue.tsx";
 import ChecKOut from "./pages/paymentPage/ChecKOut.js";
 
 import QuizTest from "./pages/courseLecture/Quiz.js";
+import CourseQuiz from "./pages/courseLecture/CourseQuiz.tsx";
 
 function App() {
   return (
@@ -35,6 +36,7 @@ function App() {
         <Route path="/continue-course/:courseId" element={<CourseContinue />} />
         <Route path="/checkout/:courseId" element={<ChecKOut />} />
         <Route path="/quiz/:moduleId/:courseId" element={<QuizTest />} />
+        <Route path="/course/quiz" element={<CourseQuiz />} />
       </Routes>
       <Footer />
     </Fragment>

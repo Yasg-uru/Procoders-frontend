@@ -1,5 +1,7 @@
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "@/redux/hook";
+import { getAllCourseQuizes } from "@/redux/slices/courseSlice";
+import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import {
   Card,
   CardContent,
@@ -7,49 +9,32 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { useAppDispatch, useAppSelector } from "@/redux/hook";
-import { Quiz } from "@/types/ModuleTypes/ModuleState";
-import { FaCheck, FaTimes } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
+import { FaCheck, FaTimes } from "react-icons/fa";
+import { userAnswer } from "./Quiz";
+import { Quiz } from "@/types/ModuleTypes/ModuleState";
 import { getQuizResults } from "@/redux/slices/moduleSlice";
 import { useToast } from "@/components/ui/use-toast";
-import { Progress } from "@radix-ui/react-progress";
-export type userAnswer = {
-  questionIndex: number;
-  selectedAnswer: string;
-};
-const QuizTest: React.FC = () => {
-  const { fullAccessModules } = useAppSelector((state) => state.module);
-  const [userAnswers, setuserAnswer] = useState<userAnswer[]>([]);
+const CourseQuiz: React.FC = () => {
+  const location = useLocation();
+
   const dispatch = useAppDispatch();
-  const { toast } = useToast();
-  const {
-    QuizRes: { ObtainedPoints, TotalPoints, scorePercentage },
-  } = useAppSelector((state) => state.module);
-  const { moduleId, courseId } = useParams();
-  const [quiz, setQuiz] = useState<Quiz>({
-    title: "",
-    instructions: "",
-    questions: [],
-    createdAt: "",
-    updatedAt: "",
-  });
+  const { CourseQuizzes } = useAppSelector((state) => state.course);
   const [selectedOptions, setSelectedOptions] = useState<{
     [key: number]: number | null;
   }>({});
-
+  const [userAnswers, setuserAnswer] = useState<userAnswer[]>([]);
   useEffect(() => {
-    if (moduleId && fullAccessModules.length > 0) {
-      const module = fullAccessModules.find(
-        (module) => module._id.toString() === moduleId.toString()
-      );
-
-      if (module) {
-        setQuiz(module.quiz);
-      }
+    if (location.state && location.state?.courseId) {
+      const { courseId } = location.state;
+      dispatch(getAllCourseQuizes(courseId));
     }
-  }, [moduleId, fullAccessModules]);
-
+  }, []);
+  useEffect(() => {
+    if (CourseQuizzes.length > 0) {
+      setQuiz(CourseQuizzes[0]);
+    }
+  }, [CourseQuizzes]);
   const handleOptionClick = (
     questionIndex: number,
     optionIndex: number,
@@ -67,35 +52,36 @@ const QuizTest: React.FC = () => {
       }));
     }
   };
+  const { toast } = useToast();
 
   const isOptionSelected = (questionIndex: number, optionIndex: number) => {
     return selectedOptions[questionIndex] === optionIndex;
   };
-
   const isOptionCorrect = (questionIndex: number, optionIndex: number) => {
-    return quiz.questions[questionIndex].options[optionIndex].isCorrect;
+    return quiz?.questions[questionIndex].options[optionIndex].isCorrect;
   };
 
-  function handleCheckResults(): void {
-    dispatch(getQuizResults({ courseId, moduleId, userAnswers }))
-      .unwrap()
-      .then(() => {
-        toast({
-          title: "successfully fetched your results",
-        });
-      })
-      .catch(() => {
-        toast({
-          title: "Failed to fetch your results",
-        });
-      });
-  }
+  const [page, setPage] = useState<number>(0);
+  const [quiz, setQuiz] = useState<Quiz | null>(CourseQuizzes[0]);
+  const HandlePrevPage = () => {
+    if (page >= 1) {
+      setPage((page) => page - 1);
+      setQuiz(CourseQuizzes[page]);
+    }
+  };
+  const HandleNextPage = () => {
+    if (page < CourseQuizzes.length - 1) {
+      setPage((page) => page + 1);
+      setQuiz(CourseQuizzes[page]);
+    }
+  };
 
   return (
     <div className="min-h-screen flex flex-col gap-2 bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
       <h1 className="text-center mt-3 text-2xl font-bold">{quiz?.title}</h1>
       <div className="flex flex-col gap-5 relative mx-auto">
-        {quiz?.questions.length > 0 &&
+        {quiz &&
+          quiz?.questions.length > 0 &&
           quiz?.questions.map((question, qIndex) => (
             <Card key={qIndex} className=" relative">
               <CardHeader className="mx-auto">
@@ -139,22 +125,26 @@ const QuizTest: React.FC = () => {
             </Card>
           ))}
       </div>
-      <Button
-        onClick={handleCheckResults}
-        className="bg-gradient-to-r mx-auto from-pink-500 to-purple-500 text-white font-bold py-3 px-6 rounded-md shadow-md hover:scale-105 transition duration-300"
-      >
-        Check Results
-      </Button>
-
-      <div className="flex flex-col gap-2">
-        <p className="font-bold text-xl ">ObtainedPoints : {ObtainedPoints}</p>
-        <p className="font-bold text-xl ">TotalPoints : {TotalPoints}</p>
-        <p className="font-bold text-xl ">
-          scorePercentage : {Math.floor(scorePercentage)}%
-        </p>
+      <div className="join mx-auto">
+        <Button
+          type="button"
+          onClick={HandlePrevPage}
+          className="join-item btn"
+        >
+          «
+        </Button>
+        <Button type="button" className="join-item btn">
+          Page {page + 1}
+        </Button>
+        <Button
+          type="button"
+          onClick={HandleNextPage}
+          className="join-item btn"
+        >
+          »
+        </Button>
       </div>
     </div>
   );
 };
-
-export default QuizTest;
+export default CourseQuiz;

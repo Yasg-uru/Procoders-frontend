@@ -17,6 +17,8 @@ export interface authState {
   Mycourses: mycourse[];
   user_id: string;
   EnrolledCourseProgress: EnrolledCourse;
+  AllEnrolledCourseProgress:EnrolledCourse[];
+  
 }
 
 export interface mycourse {

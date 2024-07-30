@@ -139,8 +139,8 @@ const Homepage: React.FC = () => {
             <h1 className="dark:text-white font-bold text-3xl text-center md:text-left">
               Our Courses
             </h1>
-            {Object.keys(groupedCourses)?.map((category,index) => (
-              <Fragment  key={index}  >
+            {Object.keys(groupedCourses)?.map((category, index) => (
+              <Fragment key={index}>
                 <p className="dark:text-white text-center md:text-left mt-12 mb-4 font-bold text-2xl text-green-500">
                   {category}
                 </p>
@@ -149,7 +149,7 @@ const Homepage: React.FC = () => {
                   <CarouselContent>
                     {category.length > 0 &&
                       groupedCourses[category] &&
-                      groupedCourses[category].map((course:any,index) => (
+                      groupedCourses[category].map((course: any, index) => (
                         <div key={index} className="p-1">
                           <CarouselItem key={course._id}>
                             <CourseCard data={course} />

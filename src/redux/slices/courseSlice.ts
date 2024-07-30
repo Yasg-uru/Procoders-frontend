@@ -33,6 +33,7 @@ const initialState: courseState = {
   filteredResults: LoadFilteredData() || [],
   categoryWiseCourses: LoadallcourseData() || [],
   Notes: [],
+  CourseQuizzes: [],
 };
 export const searchCourses = createAsyncThunk(
   "course/searchCourses",
@@ -157,6 +158,22 @@ export const RateCourse = createAsyncThunk(
     }
   }
 );
+export const getAllCourseQuizes = createAsyncThunk(
+  "course/getallquiz",
+  async (courseId?: string) => {
+    try {
+      const response = await axiosInstance.get(
+        `/course/module/quiz/${courseId}`,
+        {
+          withCredentials: true,
+        }
+      );
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+);
 const courseSlice = createSlice({
   name: "course",
   initialState,
@@ -179,6 +196,9 @@ const courseSlice = createSlice({
     });
     builder.addCase(getNotes.fulfilled, (state, action) => {
       state.Notes = action.payload?.lessonNotes;
+    });
+    builder.addCase(getAllCourseQuizes.fulfilled, (state, action) => {
+      state.CourseQuizzes = action.payload?.Quizzes;
     });
   },
 });

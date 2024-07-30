@@ -40,7 +40,22 @@ import { NoteData, notes } from "@/types/CourseTypes/courseState";
 import { createNote, deletenote, getNotes } from "@/redux/slices/courseSlice";
 import { Card } from "@/components/ui/card";
 import { completelesson, LoadCourseProgress } from "@/redux/slices/authSlice";
+import { Checkbox } from "@/components/ui/checkbox";
 const options = ["Attachments", "Overview", "Rating", "Notes"];
+export const ProgressBarclasss = (progress: number): string => {
+  let progressClass: string = "";
+  if (progress <= 25) {
+    progressClass = "progress progress-error";
+  } else if (progress <= 50) {
+    progressClass = "progress progress-warning";
+  } else if (progress <= 75) {
+    progressClass = "progress progress-info";
+  } else {
+    progressClass = "progress progress-success";
+  }
+  return progressClass + " border-[0.1px] border-white";
+};
+
 const CourseContinue = () => {
   const dispatch = useAppDispatch();
 
@@ -208,19 +223,6 @@ const CourseContinue = () => {
         });
       });
   }
-  const ProgressBarclasss = (progress: number): string => {
-    let progressClass: string = "";
-    if (progress <= 25) {
-      progressClass = "progress progress-error";
-    } else if (progress <= 50) {
-      progressClass = "progress progress-warning";
-    } else if (progress <= 75) {
-      progressClass = "progress progress-info";
-    } else {
-      progressClass = "progress progress-success";
-    }
-    return progressClass + " border-[0.1px] border-white";
-  };
 
   function MarkedAsCompleted(): void {
     if (selectedLesson) {
@@ -253,6 +255,11 @@ const CourseContinue = () => {
             title: "Failed to complete the lesson",
           });
         });
+    } else {
+      toast({
+        title: "please select lesson first by clicking on the lesson",
+        variant: "destructive",
+      });
     }
   }
 
@@ -262,7 +269,24 @@ const CourseContinue = () => {
         <ResizablePanel defaultSize={20} minSize={20} maxSize={35}>
           <ScrollArea className="h-[100vh] rounded-md border">
             <div className="p-4">
-              <h4 className="mb-4 text-sm font-medium leading-none">Modules</h4>
+              <div className="flex items-center justify-between">
+                <h4 className="mb-4 text-sm font-medium leading-none">
+                  Modules
+                </h4>
+                {EnrolledCourseProgress.CompletionStatus && (
+                  <>
+                    <p className="font-semibold text-md text-green-500 italic">
+                      Completed
+                    </p>
+                    <Button
+                      onClick={() => navigate(`/course/quiz`,{state:{courseId}})}
+                      className="bg-gradient-to-r from-pink-500 to-purple-500 text-white font-bold h-auto rounded-md shadow-md hover:scale-105 transition duration-300"
+                    >
+                      Quiz
+                    </Button>
+                  </>
+                )}
+              </div>
               <progress
                 className={ProgressBarclasss(
                   EnrolledCourseProgress.overallProgress
@@ -270,7 +294,7 @@ const CourseContinue = () => {
                 value={EnrolledCourseProgress?.overallProgress}
                 max="100"
               ></progress>
-              {/* <Progress value={progress} className="w-[60" /> */}
+
               <Accordion type="single" collapsible className="w-full">
                 {fullAccessModules.length > 0 &&
                   fullAccessModules.map((module: module, index) => (
@@ -294,9 +318,9 @@ const CourseContinue = () => {
                           }
                           max="100"
                         ></progress>
-                        {module.lessons.map((lesson) => (
-                          <div className="mb-4 relative">
-                            <p
+                        {module.lessons.map((lesson, index) => (
+                          <div key={index} className="mb-4 relative">
+                            <div
                               onClick={() =>
                                 handleClick(
                                   lesson.contentUrl,
@@ -313,25 +337,100 @@ const CourseContinue = () => {
                                 </span>
                               )}
                               {lesson.contentType === "Article" && (
-                                <span className="flex gap-3 items-center">
-                                  <MdArticle />
-                                  {lesson.title}
-                                </span>
+                                <div className="flex items-center gap-3">
+                                  <span className="flex gap-3 items-center">
+                                    <MdArticle />
+                                    {lesson.title}{" "}
+                                  </span>
+                                  {selectedLesson?.title === lesson.title && (
+                                    <div className="form-control">
+                                      <label className="label cursor-pointer">
+                                        <span className="label-text dark:text-white ">
+                                          Mark as completed
+                                        </span>
+                                        <input
+                                          type="checkbox"
+                                          className="checkbox border-[0.5px] ml-1 checkbox-accent dark:border-white"
+                                          checked={
+                                            EnrolledCourseProgress.modulesProgress[
+                                              index
+                                            ]?.completedLessons.includes(
+                                              lesson._id
+                                            )
+                                              ? true
+                                              : false
+                                          }
+                                          onChange={MarkedAsCompleted}
+                                        />
+                                      </label>
+                                    </div>
+                                  )}
+                                </div>
                               )}
                               {lesson.contentType === "Quiz" && (
-                                <span className="flex gap-3 items-center">
-                                  <MdQuiz />
+                                <div className="flex items-center gap-3">
+                                  <span className="flex gap-3 items-center">
+                                    <MdQuiz />
 
-                                  {lesson.title}
-                                </span>
+                                    {lesson.title}
+                                  </span>
+                                  {selectedLesson?.title === lesson.title && (
+                                    <div className="form-control">
+                                      <label className="label cursor-pointer">
+                                        <span className="label-text dark:text-white ">
+                                          Mark as completed
+                                        </span>
+                                        <input
+                                          type="checkbox"
+                                          className="checkbox border-[0.5px] ml-1 checkbox-accent dark:border-white"
+                                          checked={
+                                            EnrolledCourseProgress.modulesProgress[
+                                              index
+                                            ]?.completedLessons.includes(
+                                              lesson._id
+                                            )
+                                              ? true
+                                              : false
+                                          }
+                                          onChange={MarkedAsCompleted}
+                                        />
+                                      </label>
+                                    </div>
+                                  )}
+                                </div>
                               )}
                               {lesson.contentType === "Assignment" && (
-                                <span className="flex gap-3 items-center">
-                                  <MdAssignment />
-                                  {lesson.title}
-                                </span>
+                                <div className="flex items-center gap-3">
+                                  <span className="flex gap-3 items-center">
+                                    <MdAssignment />
+                                    {lesson.title}
+                                  </span>
+                                  {selectedLesson?.title === lesson.title && (
+                                    <div className="form-control">
+                                      <label className="label cursor-pointer">
+                                        <span className="label-text dark:text-white ">
+                                          Mark as completed
+                                        </span>
+                                        <input
+                                          type="checkbox"
+                                          className="checkbox border-[0.5px] ml-1 checkbox-accent dark:border-white"
+                                          checked={
+                                            EnrolledCourseProgress.modulesProgress[
+                                              index
+                                            ]?.completedLessons.includes(
+                                              lesson._id
+                                            )
+                                              ? true
+                                              : false
+                                          }
+                                          onChange={MarkedAsCompleted}
+                                        />
+                                      </label>
+                                    </div>
+                                  )}
+                                </div>
                               )}
-                            </p>
+                            </div>
                           </div>
                         ))}
 
