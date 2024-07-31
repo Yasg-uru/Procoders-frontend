@@ -68,7 +68,7 @@ const SearchBar: React.FC = () => {
       <Input
         type="text"
         placeholder="Search Product by title"
-        className="appearance-none bg-white border w-96 border-gray-300 rounded-md py-2 px-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 dark:bg-gray-800 dark:border-gray-600 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-400 dark:focus:ring-blue-400"
+        className="appearance-none bg-white border md:w-96 w-64 border-gray-300 rounded-md py-2 px-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 dark:bg-gray-800 dark:border-gray-600 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-400 dark:focus:ring-blue-400"
         onChange={handleInputChange}
       />
       {searchResults.length > 0 && isResulVisible ? (
