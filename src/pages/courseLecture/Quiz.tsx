@@ -13,14 +13,14 @@ import { FaCheck, FaTimes } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
 import { getQuizResults } from "@/redux/slices/moduleSlice";
 import { useToast } from "@/components/ui/use-toast";
-import { Progress } from "@radix-ui/react-progress";
+// import { Progress } from "@radix-ui/react-progress";
 export type userAnswer = {
   questionIndex: number;
   selectedAnswer: string;
 };
 const QuizTest: React.FC = () => {
   const { fullAccessModules } = useAppSelector((state) => state.module);
-  const [userAnswers, setuserAnswer] = useState<userAnswer[]>([]);
+  const [userAnswers] = useState<userAnswer[]>([]);
   const dispatch = useAppDispatch();
   const { toast } = useToast();
   const {

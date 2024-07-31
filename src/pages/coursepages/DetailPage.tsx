@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { useAppDispatch, useAppSelector } from "@/redux/hook";
 import { EnrolledUser, FilteredCourse } from "@/types/CourseTypes/courseState";
-import { Home, Share } from "lucide-react";
+import { Home } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { CiShare2 } from "react-icons/ci";

@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import Razorpay from "razorpay";
+import  { useEffect } from "react";
+// import Razorpay from "razorpay";
 import { useAppDispatch, useAppSelector } from "@/redux/hook";
 import { Button } from "@/components/ui/button";
 import { useParams } from "react-router-dom";

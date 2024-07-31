@@ -11,8 +11,7 @@ import {
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Separator } from "@/components/ui/separator";
-import { ImAttachment } from "react-icons/im";
+
 import { useToast } from "@/components/ui/use-toast";
 import { MdAssignment } from "react-icons/md";
 import { useAppDispatch, useAppSelector } from "@/redux/hook";
@@ -21,26 +20,21 @@ import { lesson, module } from "@/types/ModuleTypes/ModuleState";
 import { MdQuiz } from "react-icons/md";
 import { MdArticle } from "react-icons/md";
 
-import {
-  ArrowBigRightDash,
-  ArrowLeft,
-  ArrowRight,
-  Option,
-  VideoIcon,
-} from "lucide-react";
-import React, { useEffect, useState } from "react";
+
+import  { useEffect, useState } from "react";
 import ReactPlayer from "react-player";
 
-import { Link, useNavigate, useParams } from "react-router-dom";
-import { FcLightAtTheEndOfTunnel } from "react-icons/fc";
-import { useMediaQuery } from "@uidotdev/usehooks";
+import { useNavigate, useParams } from "react-router-dom";
+
+// import { useMediaQuery } from "@uidotdev/usehooks";
 import { FaPlay } from "react-icons/fa";
 import { Input } from "@/components/ui/input";
 import { NoteData, notes } from "@/types/CourseTypes/courseState";
 import { createNote, deletenote, getNotes } from "@/redux/slices/courseSlice";
 import { Card } from "@/components/ui/card";
 import { completelesson, LoadCourseProgress } from "@/redux/slices/authSlice";
-import { Checkbox } from "@/components/ui/checkbox";
+import { ArrowRight } from "lucide-react";
+
 const options = ["Attachments", "Overview", "Rating", "Notes"];
 export const ProgressBarclasss = (progress: number): string => {
   let progressClass: string = "";
@@ -65,7 +59,7 @@ const CourseContinue = () => {
 
   const { fullAccessModules } = useAppSelector((state) => state.module);
   const { Notes } = useAppSelector((state) => state.course);
-  const isDesktop = useMediaQuery("(min-width: 768px)");
+  // const isDesktop = useMediaQuery("(min-width: 768px)");
   useEffect(() => {
     dispatch(GetfullAccessModule(courseId))
       .unwrap()

@@ -17,14 +17,14 @@ import {
 import { useToast } from "@/components/ui/use-toast";
 import CourseCard from "@/helper/CourseCard";
 import { useAppDispatch, useAppSelector } from "@/redux/hook";
-import courseSlice, { FilterCourses } from "@/redux/slices/courseSlice";
+import  { FilterCourses } from "@/redux/slices/courseSlice";
 import React, { useEffect, useState } from "react";
 import { FaFilter } from "react-icons/fa";
 import { FcClearFilters } from "react-icons/fc";
 import { Instructor } from "@/types/CourseTypes/courseState";
 import FilterCompo from "./FilterCompo";
 import { useLocation } from "react-router-dom";
-import { User2, Users } from "lucide-react";
+import {  Users } from "lucide-react";
 
 const FilterQuery = [
   { level: "Intermediate" },

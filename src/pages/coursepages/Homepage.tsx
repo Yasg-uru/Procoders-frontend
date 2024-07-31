@@ -11,12 +11,12 @@ import { CategoryData } from "@/helper/categoryData";
 import CourseCard from "@/helper/CourseCard";
 import { useAppDispatch, useAppSelector } from "@/redux/hook";
 import { FilterCourses, Getallcourses } from "@/redux/slices/courseSlice";
-import { CategoryTypes, FilteredCourse } from "@/types/CourseTypes/courseState";
+import { CategoryTypes } from "@/types/CourseTypes/courseState";
 import { Filtertype } from "@/types/CourseTypes/FilterTypes";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Loader2 } from "lucide-react";
 import React, { Fragment, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Footer from "../mainpages/Footer";
+// import Footer from "../mainpages/Footer";
 
 const Homepage: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -111,7 +111,7 @@ const Homepage: React.FC = () => {
               Discover Your Passion
             </p>
             <div className="w-full flex flex-wrap justify-center gap-6">
-              {CategoryData.length > 0 &&
+              {CategoryData.length > 0 ? (
                 CategoryData.map((category, index) => (
                   <div
                     onClick={() => handleClick(category.category)}
@@ -142,7 +142,10 @@ const Homepage: React.FC = () => {
                       </span>
                     </div>
                   </div>
-                ))}
+                ))
+              ) : (
+                <Loader2 className="animate-spin h-10 w-10" />
+              )}
             </div>
           </div>
           <div className="mt-16">

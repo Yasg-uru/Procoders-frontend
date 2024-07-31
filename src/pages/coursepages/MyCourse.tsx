@@ -6,12 +6,12 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
+// import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/components/ui/use-toast";
 import { useAppDispatch, useAppSelector } from "@/redux/hook";
 import {
   GetAllEnrolledCourseProgress,
-  LoadCourseProgress,
+  // LoadCourseProgress,
   Mycourse,
 } from "@/redux/slices/authSlice";
 import React, { useEffect } from "react";

@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/button";
 import { FaCheck, FaTimes } from "react-icons/fa";
 import { userAnswer } from "./Quiz";
 import { Quiz } from "@/types/ModuleTypes/ModuleState";
-import { getQuizResults } from "@/redux/slices/moduleSlice";
+// import { getQuizResults } from "@/redux/slices/moduleSlice";
 import { useToast } from "@/components/ui/use-toast";
 const CourseQuiz: React.FC = () => {
   const location = useLocation();
@@ -23,16 +23,18 @@ const CourseQuiz: React.FC = () => {
   const [selectedOptions, setSelectedOptions] = useState<{
     [key: number]: number | null;
   }>({});
-  const [userAnswers, setuserAnswer] = useState<userAnswer[]>([]);
+  const [userAnswers] = useState<userAnswer[]>([]);
   useEffect(() => {
     if (location.state && location.state?.courseId) {
       const { courseId } = location.state;
-      dispatch(getAllCourseQuizes({courseId})).unwrap().catch((error) => {
-        toast({
-          title: error,
-          variant:"destructive"
+      dispatch(getAllCourseQuizes({ courseId }))
+        .unwrap()
+        .catch((error) => {
+          toast({
+            title: error,
+            variant: "destructive",
+          });
         });
-      });;
     }
   }, []);
   useEffect(() => {
