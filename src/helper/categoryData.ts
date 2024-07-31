@@ -28,17 +28,16 @@ export const CategoryData = [
       "Learn how to use Docker for containerization and deployment. Understand the principles of continuous integration using Jenkins. Learn how to manage infrastructure using Terraform.",
   },
   {
-    category: "DevOps",
-    imageUrl:
-      "https://www.vlrtraining.in/wp-content/uploads/2020/10/logo-devops.png",
+    category: "Cybersecurity",
+    imageUrl: "https://example.com/cybersecurity.png",
     description:
-      "Learn how to use Docker for containerization and deployment. Understand the principles of continuous integration using Jenkins. Learn how to manage infrastructure using Terraform.",
+      "Protect systems, networks, and programs from digital attacks.",
   },
+
   {
-    category: "DevOps",
-    imageUrl:
-      "https://www.vlrtraining.in/wp-content/uploads/2020/10/logo-devops.png",
+    category: "Game Development",
+    imageUrl: "https://example.com/game-development.png",
     description:
-      "Learn how to use Docker for containerization and deployment. Understand the principles of continuous integration using Jenkins. Learn how to manage infrastructure using Terraform.",
+      "Design, develop, and test interactive games for computers, consoles, and mobile devices.",
   },
 ];

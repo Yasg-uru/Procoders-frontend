@@ -145,14 +145,20 @@ const DetailPage: React.FC = () => {
                 >
                   Buy Now
                 </Button>
-              ) : (
+              ) : new Date(courseData?.startingDate) <= new Date() ? (
                 <Button
                   onClick={() =>
-                    navigate(`/continue-course/${courseData?._id}`)
+                    navigate(`/continue-course/${courseData?._id}`, {
+                      state: { price: courseData?.price },
+                    })
                   }
-                  className="bg-gradient-to-r from-pink-500 to-purple-500 text-white font-bold py-3 px-12 rounded-md shadow-md hover:scale-105 transition duration-300"
+                  className="bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold py-3 px-6 rounded-lg shadow-lg transition-transform transform hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 dark:focus:ring-purple-300"
                 >
                   Continue
+                </Button>
+              ) : (
+                <Button className="bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold py-3 px-6 rounded-lg shadow-lg transition-transform transform hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 dark:focus:ring-purple-300">
+                  Starting Soon
                 </Button>
               )
             ) : !isEnrolled(courseData?.enrolledUsers) ? (
@@ -164,12 +170,22 @@ const DetailPage: React.FC = () => {
               >
                 Enroll Free
               </Button>
-            ) : (
+            ) : new Date(
+                courseData?.startingDate ? courseData?.startingDate : 0
+              ) <= new Date() ? (
               <Button
-                onClick={() => navigate(`/continue-course/${courseData?._id}`)}
-                className="bg-gradient-to-r from-pink-500 to-purple-500 text-white font-bold py-3 px-12 rounded-md shadow-md hover:scale-105 transition duration-300"
+                onClick={() =>
+                  navigate(`/continue-course/${courseData?._id}`, {
+                    state: { price: courseData?.price },
+                  })
+                }
+                className="bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold py-3 px-6 rounded-lg shadow-lg transition-transform transform hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 dark:focus:ring-purple-300"
               >
                 Continue
+              </Button>
+            ) : (
+              <Button className="bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold py-3 px-6 rounded-lg shadow-lg transition-transform transform hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 dark:focus:ring-purple-300">
+                Starting Soon
               </Button>
             )}
             <Button
