@@ -1,4 +1,4 @@
-import {  createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axiosInstance from "@/helper/axiosInstance";
 import { authState } from "@/types/AuthTypes/authState";
 import { LoginFormSchema } from "@/schema/authschema/LoginFormSchema";
@@ -77,7 +77,7 @@ export const registerUser = createAsyncThunk(
       return response.data;
     } catch (error: any) {
       console.log("Error Registering user");
-      return rejectWithValue(error.response.data.error || "Unkown Error");
+      return rejectWithValue("Error Registering User");
     }
   }
 );
@@ -228,7 +228,7 @@ export const GetAllEnrolledCourseProgress = createAsyncThunk(
       });
       return response.data;
     } catch (error: any) {
-     throw error;
+      throw error;
     }
   }
 );

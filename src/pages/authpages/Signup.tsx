@@ -38,7 +38,7 @@ const Signup: React.FC = () => {
       .unwrap()
       .then(() => {
         toast({
-          title:  "successfully created your account",
+          title: "successfully created your account",
           description: "Please verify your account with otp",
         });
         navigate(`/verify/${data.email}`);
@@ -47,7 +47,7 @@ const Signup: React.FC = () => {
         console.log("this is a error ", error);
         toast({
           title: error,
-          
+
           variant: "destructive",
         });
       });
