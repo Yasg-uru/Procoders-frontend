@@ -221,7 +221,7 @@ import { Filtertype } from "@/types/CourseTypes/FilterTypes";
 import { ArrowRight, Loader2 } from "lucide-react";
 import React, { Fragment, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useMediaQuery } from "@uidotdev/usehooks";
+// import { useMediaQuery } from "@uidotdev/usehooks";
 
 const Homepage: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -230,7 +230,7 @@ const Homepage: React.FC = () => {
   const { categoryWiseCourses } = useAppSelector((state) => state.course);
   const [groupedCourses, setGroupedCourses] = useState<CategoryTypes>({});
   const { isAuthenticated } = useAppSelector((state) => state.auth);
-  const isMobile = useMediaQuery("(max-width: 600px)");
+  // const isMobile = useMediaQuery("(max-width: 600px)");
   const coursesRef = useRef<HTMLDivElement>(null);
 
   const handleClick = (category: string) => {
