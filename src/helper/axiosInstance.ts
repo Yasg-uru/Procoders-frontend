@@ -1,5 +1,5 @@
 import axios from "axios";
 const axiosInstance = axios.create({
-  baseURL: "http://localhost:8000",
+  baseURL: "https://advance-online-learning-platform.vercel.app",
 });
 export default axiosInstance;
