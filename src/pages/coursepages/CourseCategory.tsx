@@ -25,6 +25,7 @@ import { Instructor } from "@/types/CourseTypes/courseState";
 import FilterCompo from "./FilterCompo";
 import { useLocation } from "react-router-dom";
 import { Users } from "lucide-react";
+import { useMediaQuery } from "@uidotdev/usehooks";
 
 const FilterQuery = [
   { level: "Intermediate" },
@@ -40,7 +41,7 @@ const CourseCategory: React.FC = () => {
   const { filterData } = location?.state || {};
   const { toast } = useToast();
   const [open, setOpen] = useState<boolean>(false);
-
+  const isMobile = useMediaQuery("(max-width: 600px)");
   const [Instructors, setInstructors] = useState<Instructor[]>([]);
   const [Languages, setLanguages] = useState<string[]>([]);
   const [isFree, setIsFree] = useState<boolean[]>([]);
@@ -147,8 +148,12 @@ const CourseCategory: React.FC = () => {
             </CarouselItem>
           ))}
         </CarouselContent>
-        <CarouselPrevious />
-        <CarouselNext />
+        {!isMobile && (
+          <>
+            <CarouselPrevious />
+            <CarouselNext />
+          </>
+        )}
       </Carousel>
 
       {!isFilterApplied ? (
