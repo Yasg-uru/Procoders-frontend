@@ -58,7 +58,7 @@ const CourseContinue = () => {
 
   const { fullAccessModules } = useAppSelector((state) => state.module);
   const { Notes } = useAppSelector((state) => state.course);
-  const isMobile = useMediaQuery("(max-width: 600)");
+  const isMobile = useMediaQuery("(max-width: 600px)");
   useEffect(() => {
     dispatch(GetfullAccessModule(courseId))
       .unwrap()
