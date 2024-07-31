@@ -17,14 +17,14 @@ import {
 import { useToast } from "@/components/ui/use-toast";
 import CourseCard from "@/helper/CourseCard";
 import { useAppDispatch, useAppSelector } from "@/redux/hook";
-import  { FilterCourses } from "@/redux/slices/courseSlice";
+import { FilterCourses } from "@/redux/slices/courseSlice";
 import React, { useEffect, useState } from "react";
 import { FaFilter } from "react-icons/fa";
 import { FcClearFilters } from "react-icons/fc";
 import { Instructor } from "@/types/CourseTypes/courseState";
 import FilterCompo from "./FilterCompo";
 import { useLocation } from "react-router-dom";
-import {  Users } from "lucide-react";
+import { Users } from "lucide-react";
 
 const FilterQuery = [
   { level: "Intermediate" },
@@ -112,7 +112,7 @@ const CourseCategory: React.FC = () => {
   }
 
   return (
-    <div className="relative min-h-screen flex flex-col p-10 justify-center bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
+    <div className="relative min-h-screen  justify-center bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
       <div className="flex flex-col items-center mb-6">
         <h1 className="text-xl text-gray-900 dark:text-gray-100 mb-2">
           Choose Your Program

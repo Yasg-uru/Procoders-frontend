@@ -212,9 +212,8 @@ export function Navbar() {
           >
             About
           </Link>
-           <Link
+          <Link
             to="/services"
-           
             className="text-gray-900 dark:text-white hover:bg-gray-700 dark:hover:bg-gray-900 block px-3 py-2 rounded-md text-base font-medium"
           >
             Services

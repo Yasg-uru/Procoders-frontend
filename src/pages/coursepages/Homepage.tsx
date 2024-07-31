@@ -92,7 +92,10 @@ const Homepage: React.FC = () => {
                 with our affordable, comprehensive programs.
               </p>
               <div className="text-center md:text-left">
-                <Button onClick={scrollToCourses} className="mt-6 w-auto bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold py-2 px-4 rounded-lg shadow-lg transform transition-transform hover:scale-105 hover:shadow-2xl focus:outline-none focus:ring-2 focus:ring-purple-300">
+                <Button
+                  onClick={scrollToCourses}
+                  className="mt-6 w-auto bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold py-2 px-4 rounded-lg shadow-lg transform transition-transform hover:scale-105 hover:shadow-2xl focus:outline-none focus:ring-2 focus:ring-purple-300"
+                >
                   Explore Courses
                 </Button>
               </div>
