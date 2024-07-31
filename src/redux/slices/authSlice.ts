@@ -76,8 +76,8 @@ export const registerUser = createAsyncThunk(
 
       return response.data;
     } catch (error: any) {
-      console.log("Error Registering user",error);
-      return rejectWithValue("Error Registering User");
+      console.log("Error Registering user", error);
+      return rejectWithValue(error.response.data.error || "Unkown Error");
     }
   }
 );
