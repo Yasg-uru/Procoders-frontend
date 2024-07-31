@@ -8,7 +8,6 @@ import {
   CardFooter,
 } from "@/components/ui/card";
 
-
 const services = [
   {
     title: "Course Development",

@@ -206,24 +206,25 @@ export function Navbar() {
           >
             Home
           </Link>
-          <a
-            href="#"
+          <Link
+            to="/about"
             className="text-gray-900 dark:text-white hover:bg-gray-700 dark:hover:bg-gray-900 block px-3 py-2 rounded-md text-base font-medium"
           >
             About
-          </a>
-          <a
-            href="#"
+          </Link>
+           <Link
+            to="/services"
+           
             className="text-gray-900 dark:text-white hover:bg-gray-700 dark:hover:bg-gray-900 block px-3 py-2 rounded-md text-base font-medium"
           >
             Services
-          </a>
-          <a
-            href="#"
+          </Link>
+          <Link
+            to="/contact"
             className="text-gray-900 dark:text-white hover:bg-gray-700 dark:hover:bg-gray-900 block px-3 py-2 rounded-md text-base font-medium"
           >
             Contact
-          </a>
+          </Link>
           {/* <div className="flex justify-center mt-4">
             <ModeToggle />
           </div> */}
