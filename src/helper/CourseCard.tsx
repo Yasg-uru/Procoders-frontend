@@ -65,7 +65,7 @@ const CourseCard: React.FC<{ data: FilteredCourse }> = ({ data }) => {
   };
   console.log("this is data starting:", data.startingDate);
   return (
-    <Card className="w-[400px] h-[500px] border-[0.5px] border-gray-300 dark:border-gray-700 rounded-md shadow-md hover:shadow-xl flex flex-col">
+    <Card className=" border-[0.5px] border-gray-300 dark:border-gray-700 rounded-md shadow-md hover:shadow-xl flex flex-col">
       <CardHeader className="flex-grow-0">
         <img
           src="https://images.shiksha.com/mediadata/ugcDocuments/images/wordpressImages/2022_08_MicrosoftTeams-image-13-2-1.jpg"
