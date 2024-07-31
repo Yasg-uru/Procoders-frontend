@@ -35,6 +35,7 @@ const initialState: courseState = {
   categoryWiseCourses: LoadallcourseData() || [],
   Notes: [],
   CourseQuizzes: [],
+  courseDetails: undefined,
 };
 export const searchCourses = createAsyncThunk(
   "course/searchCourses",
@@ -190,6 +191,20 @@ export const getAllCourseQuizes = createAsyncThunk(
     }
   }
 );
+export const getCourseDetail = createAsyncThunk(
+  "course/detail",
+  async (params: { courseId: string }, { rejectWithValue }) => {
+    try {
+      const { courseId } = params;
+      const response = await axiosInstance.get(`/course/detail/${courseId}`, {
+        withCredentials: true,
+      });
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data.error || "unkown error");
+    }
+  }
+);
 const courseSlice = createSlice({
   name: "course",
   initialState,
@@ -216,6 +231,10 @@ const courseSlice = createSlice({
     builder.addCase(getAllCourseQuizes.fulfilled, (state, action) => {
       state.CourseQuizzes = action.payload?.Quizzes;
     });
+    builder.addCase(getCourseDetail.fulfilled,(state,action)=>{
+      state.courseDetails=action.payload?.course;
+
+    })
   },
 });
 export const {} = courseSlice.actions;

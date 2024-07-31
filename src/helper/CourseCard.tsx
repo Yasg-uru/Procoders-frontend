@@ -107,7 +107,11 @@ const CourseCard: React.FC<{ data: FilteredCourse }> = ({ data }) => {
           {data.isPaid ? (
             !isEnrolled(data.enrolledUsers) ? (
               <Button
-                onClick={() => navigate(`/checkout/${data._id}`)}
+                onClick={() =>
+                  navigate(`/checkout/${data._id}`, {
+                    state: { data: data.price },
+                  })
+                }
                 className="bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold py-3 px-6 rounded-lg shadow-lg transition-transform transform hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 dark:focus:ring-purple-300"
               >
                 Buy Now

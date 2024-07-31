@@ -4,7 +4,8 @@ export interface courseState {
   filteredResults: FilteredCourse[];
   categoryWiseCourses: FilteredCourse[];
   Notes: NoteData[];
-  CourseQuizzes:Quiz[]
+  CourseQuizzes: Quiz[];
+  courseDetails: FilteredCourse | undefined;
 }
 export interface searchResult {
   title: string;
