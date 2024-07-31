@@ -14,7 +14,7 @@ import { FilterCourses, Getallcourses } from "@/redux/slices/courseSlice";
 import { CategoryTypes } from "@/types/CourseTypes/courseState";
 import { Filtertype } from "@/types/CourseTypes/FilterTypes";
 import { ArrowRight, Loader2 } from "lucide-react";
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useMediaQuery } from "@uidotdev/usehooks";
 // import Footer from "../mainpages/Footer";
@@ -27,6 +27,7 @@ const Homepage: React.FC = () => {
   const [groupedCourses, setGroupedCourses] = useState<CategoryTypes>({});
   const { isAuthenticated } = useAppSelector((state) => state.auth);
   const isMobile = useMediaQuery("(max-width: 600px)");
+  const coursesRef = useRef<HTMLDivElement>(null);
   const handleClick = (category: string) => {
     const filterData: Filtertype = { category };
     if (!isAuthenticated) {
@@ -69,11 +70,15 @@ const Homepage: React.FC = () => {
       setGroupedCourses(groupedRes);
     }
   }, [categoryWiseCourses]);
-
+  const scrollToCourses = () => {
+    if (coursesRef.current) {
+      coursesRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  };
   return (
     <div>
-      <div className="min-h-screen flex flex-col p-10 justify-center bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
-        <div className="container mx-auto">
+      <div className="min-h-screen flex flex-col justify-center bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
+        <div className="container md:mx-auto">
           <div className="grid md:grid-cols-2 gap-10">
             <div className="flex flex-col gap-6">
               <h1 className="text-center font-bold text-4xl md:text-left">
@@ -87,7 +92,7 @@ const Homepage: React.FC = () => {
                 with our affordable, comprehensive programs.
               </p>
               <div className="text-center md:text-left">
-                <Button className="mt-6 w-auto bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold py-2 px-4 rounded-lg shadow-lg transform transition-transform hover:scale-105 hover:shadow-2xl focus:outline-none focus:ring-2 focus:ring-purple-300">
+                <Button onClick={scrollToCourses} className="mt-6 w-auto bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold py-2 px-4 rounded-lg shadow-lg transform transition-transform hover:scale-105 hover:shadow-2xl focus:outline-none focus:ring-2 focus:ring-purple-300">
                   Explore Courses
                 </Button>
               </div>
@@ -150,7 +155,7 @@ const Homepage: React.FC = () => {
               )}
             </div>
           </div>
-          <div className="mt-16">
+          <div className="mt-16" ref={coursesRef}>
             <h1 className="dark:text-white font-bold text-3xl text-center md:text-left">
               Our Courses
             </h1>
@@ -161,7 +166,7 @@ const Homepage: React.FC = () => {
                 </p>
 
                 <Carousel className="max-w-sm">
-                  <CarouselContent>
+                  <CarouselContent className="max-w-sm">
                     {category.length > 0 &&
                       groupedCourses[category] &&
                       groupedCourses[category].map((course: any, index) => (

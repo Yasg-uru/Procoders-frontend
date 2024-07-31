@@ -102,7 +102,7 @@ export function Navbar() {
                         <AvatarImage src={profileUrl} alt="@shadcn" />
                         <AvatarFallback className="font-bold text-xl dark:bg-black bg-red-400 cursor-pointer">
                           {name.split(" ")[0][0].toUpperCase()}
-                          {name.split(" ")[1][0].toUpperCase()}
+                          {name.split(" ").length>=2?name.split(" ")[1][0].toUpperCase():""}
                         </AvatarFallback>
                       </Avatar>
                     </DropdownMenuTrigger>
@@ -249,7 +249,7 @@ export function Navbar() {
                         <AvatarImage src={profileUrl} alt="@shadcn" />
                         <AvatarFallback className="font-bold text-xl dark:bg-black bg-red-400 cursor-pointer">
                           {name.split(" ")[0][0].toUpperCase()}
-                          {name.split(" ")[1][0].toUpperCase()}
+                          {name.split(" ").length>=2?name.split(" ")[1][0].toUpperCase():""}
                         </AvatarFallback>
                       </Avatar>
                     </DropdownMenuTrigger>
