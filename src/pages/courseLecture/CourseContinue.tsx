@@ -98,8 +98,7 @@ const CourseContinue = () => {
     note: "",
     lessonName: "",
   });
-  
-  
+
   function timeAgo(date: string | number): string {
     const dateObject = new Date(date);
     const seconds: number = Math.floor(
@@ -129,10 +128,6 @@ const CourseContinue = () => {
     }
     return Math.floor(seconds) + " seconds";
   }
-
-  // Usage example:
-  // const pastDate = "2024-07-30T12:00:00";
-  // console.log(timeAgo(pastDate)); // Output will depend on the current date and time
 
   function handleClick(
     contentUrl: string,
@@ -618,7 +613,7 @@ const CourseContinue = () => {
                                       <p>{note.note}</p>
                                     </div>
                                     <p className="absolute right-2 bottom-2 dark:text-white">
-                                      {timeAgo(note.createdAt)+" "+"ago"}
+                                      {timeAgo(note.createdAt) + " " + "ago"}
                                     </p>
                                   </Card>
                                 ))}
