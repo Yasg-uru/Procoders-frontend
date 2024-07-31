@@ -98,22 +98,42 @@ const CourseContinue = () => {
     note: "",
     lessonName: "",
   });
-  // useEffect(() => {
-  //   if (selectedLesson !== null) {
-  //     dispatch(getNotes({ courseId, lessonName: selectedLesson.title }))
-  //       .unwrap()
-  //       .then(() => {
-  //         toast({
-  //           title: "successfully fetched notes",
-  //         });
-  //       })
-  //       .catch(() => {
-  //         toast({
-  //           title: "Failed to fetch notes",
-  //         });
-  //       });
-  //   }
-  // }, [createNote, deletenote]);
+  
+  
+  function timeAgo(date: string | number): string {
+    const dateObject = new Date(date);
+    const seconds: number = Math.floor(
+      (new Date().getTime() - dateObject.getTime()) / 1000
+    );
+
+    let interval = seconds / 31536000;
+
+    if (interval > 1) {
+      return Math.floor(interval) + " years";
+    }
+    interval = seconds / 2592000;
+    if (interval > 1) {
+      return Math.floor(interval) + " months";
+    }
+    interval = seconds / 86400;
+    if (interval > 1) {
+      return Math.floor(interval) + " days";
+    }
+    interval = seconds / 3600;
+    if (interval > 1) {
+      return Math.floor(interval) + " hours";
+    }
+    interval = seconds / 60;
+    if (interval > 1) {
+      return Math.floor(interval) + " minutes";
+    }
+    return Math.floor(seconds) + " seconds";
+  }
+
+  // Usage example:
+  // const pastDate = "2024-07-30T12:00:00";
+  // console.log(timeAgo(pastDate)); // Output will depend on the current date and time
+
   function handleClick(
     contentUrl: string,
     contentType: string,
@@ -559,7 +579,7 @@ const CourseContinue = () => {
                                   <div className="absolute right-1 flex gap-3">
                                     <Button
                                       onClick={() => setIsMakingNote(false)}
-                                      className="dark:bg-gray-600 shadow-2xl dark:shadow-slate-700 bg-white font-semibold shadow-white"
+                                      className="ml-2 dark:bg-gray-600 shadow-2xl dark:shadow-slate-700 bg-white font-semibold shadow-white"
                                       variant="secondary"
                                     >
                                       cancel
@@ -576,7 +596,7 @@ const CourseContinue = () => {
                               )}
                               <div className="flex flex-col mx-auto  w-full">
                                 {Notes.map((note: NoteData) => (
-                                  <Card className="w-full h-52 p-3 flex flex-col gap-10 border-[0.5px] dark:border-slate-700 border-white shadow-2xl dark:shadow-slate-700 shadow-slate-400 ">
+                                  <Card className="relative w-full h-52 p-3 flex flex-col gap-10 border-[0.5px] dark:border-slate-700 border-white shadow-2xl dark:shadow-slate-700 shadow-slate-400 ">
                                     <div className="flex  justify-between">
                                       <h1 className="font-bold text-2xl ">
                                         {note.lessonName}
@@ -597,6 +617,9 @@ const CourseContinue = () => {
                                       </Button>{" "}
                                       <p>{note.note}</p>
                                     </div>
+                                    <p className="absolute right-2 bottom-2 dark:text-white">
+                                      {timeAgo(note.createdAt)+" "+"ago"}
+                                    </p>
                                   </Card>
                                 ))}
                               </div>

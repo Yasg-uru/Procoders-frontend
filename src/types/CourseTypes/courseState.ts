@@ -19,6 +19,7 @@ export interface NoteData {
   note: string;
   NoteMakingTime: string;
   _id: string;
+  createdAt:string;
 }
 export interface CategoryTypes {
   [key: string]: FilteredCourse;
