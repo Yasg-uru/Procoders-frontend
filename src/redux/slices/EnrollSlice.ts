@@ -1,6 +1,6 @@
 import axiosInstance from "@/helper/axiosInstance";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { AxiosError } from "axios";
+
 const initialState = {};
 export const EnrollFree = createAsyncThunk(
   "enrollment/free",
@@ -42,7 +42,7 @@ const EnrollmmentSlice = createSlice({
   name: "enrollment",
   initialState,
   reducers: {},
-  extraReducers: (builder) => {},
+ 
 });
 
 export const {} = EnrollmmentSlice.actions;

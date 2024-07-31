@@ -1,7 +1,7 @@
 import {
   EnrolledCourse,
   EnrolledUser,
-  FilteredCourse,
+
   Instructor,
   Review,
 } from "../CourseTypes/courseState";

@@ -3,7 +3,7 @@ import authSlice from "./slices/authSlice";
 import courseSlice from "./slices/courseSlice";
 import EnrollSlice from "./slices/EnrollSlice";
 import moduleSlice from "./slices/moduleSlice";
-import thunk from "redux-thunk";
+// import thunk from "redux-thunk";
 const store = configureStore({
   reducer: {
     auth: authSlice,

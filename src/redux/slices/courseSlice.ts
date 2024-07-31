@@ -6,7 +6,7 @@ import {
 } from "@/types/CourseTypes/courseState";
 import { Filter, Filtertype } from "@/types/CourseTypes/FilterTypes";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { AxiosError } from "axios";
+
 function SaveFilteredData(data: FilteredCourse[]): void {
   sessionStorage.setItem("Filtered", JSON.stringify(data));
 }

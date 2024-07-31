@@ -1,4 +1,4 @@
-import { AsyncThunk, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import {  createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axiosInstance from "@/helper/axiosInstance";
 import { authState } from "@/types/AuthTypes/authState";
 import { LoginFormSchema } from "@/schema/authschema/LoginFormSchema";
@@ -297,7 +297,7 @@ const authSlice = createSlice({
     builder.addCase(resetPassword.rejected, (state) => {
       state.isLoading = false;
     });
-    builder.addCase(Logout.fulfilled, (state, action) => {
+    builder.addCase(Logout.fulfilled, (state) => {
       state.isLoading = false;
       state.isAuthenticated = false;
       state.name = "";
@@ -306,10 +306,10 @@ const authSlice = createSlice({
       state.profileUrl = "";
       ClearState();
     });
-    builder.addCase(Logout.pending, (state, action) => {
+    builder.addCase(Logout.pending, (state) => {
       state.isLoading = true;
     });
-    builder.addCase(Logout.rejected, (state, action) => {
+    builder.addCase(Logout.rejected, (state) => {
       state.isLoading = false;
     });
     builder.addCase(Mycourse.fulfilled, (state, action) => {
