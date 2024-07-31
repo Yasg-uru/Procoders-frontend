@@ -172,7 +172,7 @@ const Homepage: React.FC = () => {
                  opts={{
                   align: "start",
                 }} className="max-w-sm mx-auto w-full">
-                  <CarouselContent className="max-w-sm space-x-4" >
+                  <CarouselContent className="flexspace-x-4" >
                     {category.length > 0 &&
                       groupedCourses[category] &&
                       groupedCourses[category].map((course: any, index) => (
