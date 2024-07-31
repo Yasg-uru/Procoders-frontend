@@ -188,7 +188,7 @@ const CourseCategory: React.FC = () => {
           Instructors.map((instructor) => (
             <Card
               key={instructor._id}
-              className="w-[350px]  flex flex-col border-[0.5px] dark:border-white shadow-lg rounded-md "
+              className="max-w-sm flex flex-col border-[0.5px] dark:border-white shadow-lg rounded-md "
             >
               <CardHeader>
                 <img

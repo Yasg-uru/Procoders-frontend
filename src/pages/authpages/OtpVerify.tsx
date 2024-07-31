@@ -53,7 +53,7 @@ const Verify: React.FC = () => {
           title: "verified successfully",
           description: "Your Account has been verified successfully",
         });
-        navigate("/home");
+        navigate("/");
       })
       .catch((error) => {
         toast({
