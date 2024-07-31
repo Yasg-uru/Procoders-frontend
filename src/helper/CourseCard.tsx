@@ -119,7 +119,7 @@ const CourseCard: React.FC<{ data: FilteredCourse }> = ({ data }) => {
               >
                 Buy Now
               </Button>
-            ) : new Date(data.startingDate) < new Date() ? (
+            ) : new Date(data.startingDate) <= new Date() ? (
               <Button
                 onClick={() =>
                   navigate(`/continue-course/${data._id}`, {
@@ -142,12 +142,20 @@ const CourseCard: React.FC<{ data: FilteredCourse }> = ({ data }) => {
             >
               Enroll Free
             </Button>
-          ) : (
+          ) : new Date(data.startingDate) <= new Date() ? (
             <Button
-              onClick={() => navigate(`/continue-course/${data._id}`)}
+              onClick={() =>
+                navigate(`/continue-course/${data._id}`, {
+                  state: { price: data.price },
+                })
+              }
               className="bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold py-3 px-6 rounded-lg shadow-lg transition-transform transform hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 dark:focus:ring-purple-300"
             >
               Continue
+            </Button>
+          ) : (
+            <Button className="bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold py-3 px-6 rounded-lg shadow-lg transition-transform transform hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 dark:focus:ring-purple-300">
+              Starting Soon
             </Button>
           )}
         </div>
