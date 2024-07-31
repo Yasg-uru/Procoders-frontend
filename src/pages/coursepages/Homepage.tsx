@@ -16,6 +16,7 @@ import { Filtertype } from "@/types/CourseTypes/FilterTypes";
 import { ArrowRight, Loader2 } from "lucide-react";
 import React, { Fragment, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useMediaQuery } from "@uidotdev/usehooks";
 // import Footer from "../mainpages/Footer";
 
 const Homepage: React.FC = () => {
@@ -25,6 +26,7 @@ const Homepage: React.FC = () => {
   const { categoryWiseCourses } = useAppSelector((state) => state.course);
   const [groupedCourses, setGroupedCourses] = useState<CategoryTypes>({});
   const { isAuthenticated } = useAppSelector((state) => state.auth);
+  const isMobile = useMediaQuery("(max-width: 600px)");
   const handleClick = (category: string) => {
     const filterData: Filtertype = { category };
     if (!isAuthenticated) {
@@ -171,7 +173,7 @@ const Homepage: React.FC = () => {
                       ))}
                   </CarouselContent>
 
-                  {category.length > 1 ? (
+                  {category.length > 1 && !isMobile ? (
                     <>
                       <CarouselPrevious />
                       <CarouselNext />
