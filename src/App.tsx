@@ -17,6 +17,9 @@ import ChecKOut from "./pages/paymentPage/ChecKOut.js";
 import QuizTest from "./pages/courseLecture/Quiz.js";
 import CourseQuiz from "./pages/courseLecture/CourseQuiz.tsx";
 import RequireAuth from "./helper/RequireAuth.tsx";
+import AboutPage from "./pages/mainpages/About.tsx";
+import ServicesPage from "./pages/mainpages/Service.tsx";
+import ContactPage from "./pages/mainpages/Contact.tsx";
 
 function App() {
   return (
@@ -31,6 +34,9 @@ function App() {
         <Route path="/detail" element={<DetailPage />} />
         <Route path="/explore" element={<DetailPage />} />
         <Route path="/" element={<Homepage />} />
+        <Route path="/about" element={<AboutPage/>}/>
+        <Route path="/services" element={<ServicesPage/>}/>
+        <Route path="/contact" element={<ContactPage/>}/>
         <Route path="/course-category" element={<CourseCategory />} />
         <Route
           element={

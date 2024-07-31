@@ -55,24 +55,24 @@ export function Navbar() {
               <div className="ml-10 flex items-baseline space-x-4">
                 <Link to="/">Home</Link>
 
-                <a
-                  href="#"
+                <Link
+                  to="/about"
                   className="text-gray-900 dark:text-white hover:bg-gray-700 dark:hover:bg-gray-900 px-3 py-2 rounded-md text-sm font-medium"
                 >
                   About
-                </a>
-                <a
-                  href="#"
+                </Link>
+                <Link
+                  to="/services"
                   className="text-gray-900 dark:text-white hover:bg-gray-700 dark:hover:bg-gray-900 px-3 py-2 rounded-md text-sm font-medium"
                 >
                   Services
-                </a>
-                <a
-                  href="#"
+                </Link>
+                <Link
+                  to="/contact"
                   className="text-gray-900 dark:text-white hover:bg-gray-700 dark:hover:bg-gray-900 px-3 py-2 rounded-md text-sm font-medium"
                 >
                   Contact
-                </a>
+                </Link>
                 <SearchBar />
               </div>
             </div>
