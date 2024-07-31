@@ -88,7 +88,7 @@ export function Navbar() {
                     size="sm"
                     onClick={() => navigate("/Login")}
                   >
-                    Register
+                    Sign in 
                   </Button>
                 ) : (
                   <DropdownMenu>
@@ -237,7 +237,7 @@ export function Navbar() {
                   size="sm"
                   onClick={() => navigate("/Login")}
                 >
-                  Register
+                  Sign in 
                 </Button>
               ) : (
                 <DropdownMenu>
