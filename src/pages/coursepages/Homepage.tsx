@@ -24,8 +24,12 @@ const Homepage: React.FC = () => {
   const navigate = useNavigate();
   const { categoryWiseCourses } = useAppSelector((state) => state.course);
   const [groupedCourses, setGroupedCourses] = useState<CategoryTypes>({});
+  const { isAuthenticated } = useAppSelector((state) => state.auth);
   const handleClick = (category: string) => {
     const filterData: Filtertype = { category };
+    if (!isAuthenticated) {
+      navigate("/Login");
+    }
     dispatch(FilterCourses(filterData))
       .unwrap()
       .then(() => {
@@ -34,14 +38,20 @@ const Homepage: React.FC = () => {
         });
         navigate("/course-category", { state: filterData });
       })
-      .catch(() => {
+      .catch((error) => {
         toast({
-          title: "Error Filtering course by category",
+          title: error,
+          variant: "destructive",
         });
       });
   };
   useEffect(() => {
-    dispatch(Getallcourses());
+    dispatch(Getallcourses()).catch((error) => {
+      toast({
+        title: error,
+        variant: "destructive",
+      });
+    });
   }, []);
   useEffect(() => {
     if (categoryWiseCourses.length > 0) {

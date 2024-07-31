@@ -68,22 +68,22 @@ const initialState: authState = {
 };
 export const registerUser = createAsyncThunk(
   "auth/registerUser",
-  async (formData: z.infer<typeof SignUpSchema>) => {
+  async (formData: z.infer<typeof SignUpSchema>, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.post("/user/register", formData, {
         withCredentials: true,
       });
 
       return response.data;
-    } catch (error) {
+    } catch (error: any) {
       console.log("Error Registering user");
-      throw error;
+      return rejectWithValue(error.response.data.error || "Unkown Error");
     }
   }
 );
 export const userLogin = createAsyncThunk(
   "auth/Login",
-  async (formData: z.infer<typeof LoginFormSchema>) => {
+  async (formData: z.infer<typeof LoginFormSchema>, { rejectWithValue }) => {
     try {
       console.log("this is a formdata :", formData);
       const response = await axiosInstance.post("/user/sign-in", formData, {
@@ -91,29 +91,32 @@ export const userLogin = createAsyncThunk(
       });
 
       return response.data;
-    } catch (error) {
+    } catch (error: any) {
       console.log("error in user login", error);
-      throw error;
+      return rejectWithValue(error.response.data.error || "Unkown Error");
     }
   }
 );
 export const verifyUser = createAsyncThunk(
   "auth/verifyUser",
-  async (formData: z.infer<typeof VerifyFormSchema>) => {
+  async (formData: z.infer<typeof VerifyFormSchema>, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.post("/user/verify-code", formData, {
         withCredentials: true,
       });
       return response.data;
-    } catch (error) {
+    } catch (error: any) {
       console.log("Error Verifying user", error);
-      throw error;
+      return rejectWithValue(error.response.data.error || "Unkown Error");
     }
   }
 );
 export const forgotpassword = createAsyncThunk(
   "auth/forgot-password",
-  async (formdata: z.infer<typeof ForgotPasswordSchema>) => {
+  async (
+    formdata: z.infer<typeof ForgotPasswordSchema>,
+    { rejectWithValue }
+  ) => {
     try {
       const response = await axiosInstance.post(
         "/user/forgot-password",
@@ -123,8 +126,8 @@ export const forgotpassword = createAsyncThunk(
         }
       );
       return response.data;
-    } catch (error) {
-      throw error;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data.error || "Unkown Error");
     }
   }
 );
@@ -136,13 +139,16 @@ export const Logout = createAsyncThunk("auth/Logout", async () => {
       { withCredentials: true }
     );
     return response.data;
-  } catch (error) {
+  } catch (error: any) {
     throw error;
   }
 });
 export const resetPassword = createAsyncThunk(
   "auth/reset-password",
-  async (formdata: z.infer<typeof ResetPasswordSchema>) => {
+  async (
+    formdata: z.infer<typeof ResetPasswordSchema>,
+    { rejectWithValue }
+  ) => {
     try {
       const { token, password } = formdata;
 
@@ -156,8 +162,8 @@ export const resetPassword = createAsyncThunk(
         }
       );
       return response.data;
-    } catch (error) {
-      throw error;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data.error || "Unkown Error");
     }
   }
 );
@@ -167,17 +173,20 @@ export const Mycourse = createAsyncThunk("auth/mycourses", async () => {
       withCredentials: true,
     });
     return response.data;
-  } catch (error) {
+  } catch (error: any) {
     throw error;
   }
 });
 export const completelesson = createAsyncThunk(
   "auth/completlesson",
-  async (formdata: {
-    courseId?: string;
-    moduleId?: string;
-    lessonId: string;
-  }) => {
+  async (
+    formdata: {
+      courseId?: string;
+      moduleId?: string;
+      lessonId: string;
+    },
+    { rejectWithValue }
+  ) => {
     try {
       const { courseId, moduleId, lessonId } = formdata;
       const response = await axiosInstance.post(
@@ -188,15 +197,16 @@ export const completelesson = createAsyncThunk(
         }
       );
       return response.data;
-    } catch (error) {
-      throw error;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data.error || "Unkown Error");
     }
   }
 );
 export const LoadCourseProgress = createAsyncThunk(
   "auth/loadprogress",
-  async (courseId?: string) => {
+  async (params: { courseId?: string }, { rejectWithValue }) => {
     try {
+      const { courseId } = params;
       const response = await axiosInstance.get(
         `user/enrolledcourse/progress/${courseId}`,
         {
@@ -204,8 +214,8 @@ export const LoadCourseProgress = createAsyncThunk(
         }
       );
       return response.data;
-    } catch (error) {
-      throw error;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data.error || "Unkown Error");
     }
   }
 );
@@ -217,8 +227,8 @@ export const GetAllEnrolledCourseProgress = createAsyncThunk(
         withCredentials: true,
       });
       return response.data;
-    } catch (error) {
-      throw error;
+    } catch (error: any) {
+     throw error;
     }
   }
 );

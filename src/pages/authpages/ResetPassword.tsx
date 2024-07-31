@@ -48,10 +48,10 @@ const ResetPassword: React.FC = () => {
         });
         navigate(`/Login`);
       })
-      .catch(() => {
+      .catch((error) => {
         toast({
-          title: "Failed to reset password",
-          description: "Please,Try Again ",
+          title: error,
+          
           variant:"destructive"
         });
       });

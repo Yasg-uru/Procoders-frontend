@@ -74,20 +74,22 @@ const CourseContinue = () => {
           title: "Successfully Fetched modules",
         });
       })
-      .catch(() => {
+      .catch((error) => {
         toast({
-          title: "Error in fecthing course modules",
+          title: error,
+          variant:"destructive"
         });
       });
-    dispatch(LoadCourseProgress(courseId))
+    dispatch(LoadCourseProgress({ courseId }))
       .then(() => {
         toast({
           title: "successfully fetched your progress",
         });
       })
-      .catch(() => {
+      .catch((error) => {
         toast({
-          title: "failed to fetch your progress",
+          title: error,
+          variant:"destructive"
         });
       });
   }, []);
@@ -140,9 +142,10 @@ const CourseContinue = () => {
             title: "successfully fetched your notes",
           });
         })
-        .catch(() => {
+        .catch((error) => {
           toast({
-            title: "failed to fetch notes",
+            title: error,
+            variant:"destructive"
           });
         });
     }
@@ -181,16 +184,18 @@ const CourseContinue = () => {
                 title: "successfully fetched notes",
               });
             })
-            .catch(() => {
+            .catch((error) => {
               toast({
-                title: "Failed to fetch notes",
+                title: error,
+                variant:"destructive"
               });
             });
         }
       })
-      .catch(() => {
+      .catch((error) => {
         toast({
-          title: "Failed to create note ",
+          title: error,
+          variant:"destructive"
         });
       });
   };
@@ -210,16 +215,18 @@ const CourseContinue = () => {
                 title: "successfully fetched notes",
               });
             })
-            .catch(() => {
+            .catch((error) => {
               toast({
-                title: "Failed to fetch notes",
+                title: error,
+                variant:"destructive"
               });
             });
         }
       })
-      .catch(() => {
+      .catch((error) => {
         toast({
-          title: "Error in deleting",
+          title: error,
+          variant:"destructive"
         });
       });
   }
@@ -238,21 +245,23 @@ const CourseContinue = () => {
           toast({
             title: "marked as completed",
           });
-          dispatch(LoadCourseProgress(courseId))
+          dispatch(LoadCourseProgress({ courseId }))
             .then(() => {
               // toast({
               //   title: "successfully fetched your progress",
               // });
             })
-            .catch(() => {
+            .catch((error) => {
               toast({
-                title: "failed to fetch your progress",
+                title: error,
+                variant:"destructive"
               });
             });
         })
-        .catch(() => {
+        .catch((error) => {
           toast({
-            title: "Failed to complete the lesson",
+            title: error,
+            variant:"destructive"
           });
         });
     } else {
@@ -279,7 +288,9 @@ const CourseContinue = () => {
                       Completed
                     </p>
                     <Button
-                      onClick={() => navigate(`/course/quiz`,{state:{courseId}})}
+                      onClick={() =>
+                        navigate(`/course/quiz`, { state: { courseId } })
+                      }
                       className="bg-gradient-to-r from-pink-500 to-purple-500 text-white font-bold h-auto rounded-md shadow-md hover:scale-105 transition duration-300"
                     >
                       Quiz

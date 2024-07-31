@@ -24,20 +24,20 @@ const initialState: moduleState = {
 };
 export const GetModules = createAsyncThunk(
   "module/getmodules",
-  async (courseId: string) => {
+  async (courseId: string, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.get(`/course/module/${courseId}`, {
         withCredentials: true,
       });
       return response.data;
-    } catch (error) {
-      throw error;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data.error || "Unkown Error");
     }
   }
 );
 export const GetfullAccessModule = createAsyncThunk(
   "module/getfullaccess",
-  async (courseId: string | undefined) => {
+  async (courseId: string | undefined, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.get(
         `/course/module/fullaccess/${courseId}`,
@@ -46,18 +46,21 @@ export const GetfullAccessModule = createAsyncThunk(
         }
       );
       return response.data;
-    } catch (error) {
-      throw error;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data.error || "Unkown Error");
     }
   }
 );
 export const getQuizResults = createAsyncThunk(
   "module/checkanswer",
-  async (formdata: {
-    courseId?: string;
-    moduleId?: string;
-    userAnswers: userAnswer[];
-  }) => {
+  async (
+    formdata: {
+      courseId?: string;
+      moduleId?: string;
+      userAnswers: userAnswer[];
+    },
+    { rejectWithValue }
+  ) => {
     try {
       const response = await axiosInstance.post(
         `/course/module/quiz/check/${formdata.courseId}/${formdata.moduleId}`,
@@ -69,8 +72,8 @@ export const getQuizResults = createAsyncThunk(
         }
       );
       return response.data;
-    } catch (error) {
-      throw error;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data.error || "Unkown Error");
     }
   }
 );

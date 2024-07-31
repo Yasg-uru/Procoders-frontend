@@ -6,6 +6,7 @@ import {
 } from "@/types/CourseTypes/courseState";
 import { Filter, Filtertype } from "@/types/CourseTypes/FilterTypes";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { AxiosError } from "axios";
 function SaveFilteredData(data: FilteredCourse[]): void {
   sessionStorage.setItem("Filtered", JSON.stringify(data));
 }
@@ -37,43 +38,43 @@ const initialState: courseState = {
 };
 export const searchCourses = createAsyncThunk(
   "course/searchCourses",
-  async (searchQuery: string) => {
+  async (searchQuery: string, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.get(
         `/course?searchQuery=${searchQuery}`,
         { withCredentials: true }
       );
       return response.data;
-    } catch (error) {
-      throw error;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data.error || "Error Get courses");
     }
   }
 );
 export const FilterCourses = createAsyncThunk(
   "course/filtercourses",
-  async (filters: Filtertype) => {
+  async (filters: Filtertype, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.get("/course/filter", {
         params: filters,
         withCredentials: true,
       });
       return response.data;
-    } catch (error) {
-      throw error;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data.error || "Error Get courses");
     }
   }
 );
 export const FilterCourse = createAsyncThunk(
   "course/filtercourse",
-  async (filters: Filter | undefined) => {
+  async (filters: Filter | undefined, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.get("/course/filter", {
         params: filters,
         withCredentials: true,
       });
       return response.data;
-    } catch (error) {
-      throw error;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data.error || "Error Get courses");
     }
   }
 );
@@ -85,14 +86,17 @@ export const Getallcourses = createAsyncThunk(
         withCredentials: true,
       });
       return response.data;
-    } catch (error) {
+    } catch (error: any) {
       throw error;
     }
   }
 );
 export const createNote = createAsyncThunk(
   "course/addNote",
-  async (formdata: { courseId?: string; NoteData: notes }) => {
+  async (
+    formdata: { courseId?: string; NoteData: notes },
+    { rejectWithValue }
+  ) => {
     try {
       console.log("this is a formdata:", formdata);
       const response = await axiosInstance.post(
@@ -103,14 +107,17 @@ export const createNote = createAsyncThunk(
         }
       );
       return response.data;
-    } catch (error) {
-      throw error;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data.error || "Error Created Note");
     }
   }
 );
 export const deletenote = createAsyncThunk(
   "course/deletenote",
-  async (formdata: { courseId?: string; noteId: string }) => {
+  async (
+    formdata: { courseId?: string; noteId: string },
+    { rejectWithValue }
+  ) => {
     try {
       const response = await axiosInstance.delete(
         `/course/note/${formdata.noteId}/${formdata.courseId}`,
@@ -119,14 +126,17 @@ export const deletenote = createAsyncThunk(
         }
       );
       return response.data;
-    } catch (error) {
-      throw error;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data.error || "Error Delete Note");
     }
   }
 );
 export const getNotes = createAsyncThunk(
   "course/getnotes",
-  async (formdata: { courseId?: string; lessonName?: string }) => {
+  async (
+    formdata: { courseId?: string; lessonName?: string },
+    { rejectWithValue }
+  ) => {
     try {
       const response = await axiosInstance.get(
         `/course/usernote/${formdata.courseId}?lessonName=${formdata.lessonName}`,
@@ -135,15 +145,18 @@ export const getNotes = createAsyncThunk(
         }
       );
       return response.data;
-    } catch (error) {
-      throw error;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data.error || "Error in get notes");
     }
   }
 );
 
 export const RateCourse = createAsyncThunk(
   "course/rating",
-  async (formdata: { courseId: string; rating: number; comment: string }) => {
+  async (
+    formdata: { courseId: string; rating: number; comment: string },
+    { rejectWithValue }
+  ) => {
     try {
       const response = await axiosInstance.post(
         `/course/rate/${formdata.courseId}`,
@@ -153,15 +166,16 @@ export const RateCourse = createAsyncThunk(
         }
       );
       return response.data;
-    } catch (error) {
-      throw error;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data.error || "Error Rate course");
     }
   }
 );
 export const getAllCourseQuizes = createAsyncThunk(
   "course/getallquiz",
-  async (courseId?: string) => {
+  async (params: { courseId?: string }, { rejectWithValue }) => {
     try {
+      const { courseId } = params;
       const response = await axiosInstance.get(
         `/course/module/quiz/${courseId}`,
         {
@@ -169,8 +183,10 @@ export const getAllCourseQuizes = createAsyncThunk(
         }
       );
       return response.data;
-    } catch (error) {
-      throw error;
+    } catch (error: any) {
+      return rejectWithValue(
+        error.response.data.error || "Error in get all course quizes"
+      );
     }
   }
 );

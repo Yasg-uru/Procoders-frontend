@@ -37,7 +37,7 @@ const CourseCategory: React.FC = () => {
   const { filteredResults } = useAppSelector((state) => state.course);
   const dispatch = useAppDispatch();
   const location = useLocation();
-  const { filterData } = location?.state;
+  const { filterData } = location?.state || {};
   const { toast } = useToast();
   const [open, setOpen] = useState<boolean>(false);
 
@@ -46,17 +46,27 @@ const CourseCategory: React.FC = () => {
   const [isFree, setIsFree] = useState<boolean[]>([]);
   const [tags, setTags] = useState<string[]>([]);
   const [isFilterApplied, setIsFilterApplied] = useState<boolean>(false);
-
+  const uniqueById = (array: Instructor[]) => {
+    const seen = new Set();
+    return array.filter((item) => {
+      if (seen.has(item._id)) {
+        return false;
+      }
+      seen.add(item._id);
+      return true;
+    });
+  };
   useEffect(() => {
     if (filteredResults.length > 0) {
-      const Instructors = filteredResults.flatMap(
+      const instructorIds = filteredResults.flatMap(
         (course) => course.instructorId
       );
+      const uniqueInstructors = uniqueById(instructorIds);
       const languages = filteredResults.map((course) => course.language);
       const IsFree = filteredResults.map((course) => course.isPaid);
       const tags = filteredResults.flatMap((course) => course.tags);
 
-      setInstructors(Instructors);
+      setInstructors(uniqueInstructors);
       setLanguages(languages);
       setIsFree(IsFree);
       setTags(tags);
@@ -71,6 +81,16 @@ const CourseCategory: React.FC = () => {
         toast({
           title: "successfully filtered",
         });
+      })
+      .catch((error) => {
+        const errorMessage =
+          typeof error === "object" && error.message
+            ? error.message
+            : "An error occurred";
+        toast({
+          title: errorMessage,
+          variant: "destructive",
+        });
       });
   };
 
@@ -83,9 +103,10 @@ const CourseCategory: React.FC = () => {
         });
         setIsFilterApplied(false);
       })
-      .catch(() => {
+      .catch((error) => {
         toast({
-          title: "Error in Reseting filter",
+          title: error,
+          variant: "destructive",
         });
       });
   }

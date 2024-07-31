@@ -25,6 +25,7 @@ const MyCourse: React.FC = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const { AllEnrolledCourseProgress } = useAppSelector((state) => state.auth);
+  console.log("this is a my courses and all enrolled progress",Mycourses)
   useEffect(() => {
     dispatch(Mycourse()).then(() => {
       dispatch(GetAllEnrolledCourseProgress())
@@ -33,11 +34,17 @@ const MyCourse: React.FC = () => {
             title: "successfully fetched your progress",
           });
         })
-        .catch(() => {
+        .catch((error) => {
           toast({
-            title: "failed to fetch your progress",
+            title: error,
+            variant: "destructive",
           });
         });
+    }).catch((error)=>{
+      toast({
+        title: error,
+        variant: "destructive",
+      });
     });
   }, [dispatch]);
   if (AllEnrolledCourseProgress.length === 0) {

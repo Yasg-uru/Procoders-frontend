@@ -27,7 +27,12 @@ const CourseQuiz: React.FC = () => {
   useEffect(() => {
     if (location.state && location.state?.courseId) {
       const { courseId } = location.state;
-      dispatch(getAllCourseQuizes(courseId));
+      dispatch(getAllCourseQuizes({courseId})).unwrap().catch((error) => {
+        toast({
+          title: error,
+          variant:"destructive"
+        });
+      });;
     }
   }, []);
   useEffect(() => {

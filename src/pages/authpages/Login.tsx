@@ -17,13 +17,13 @@ import { Loader2 } from "lucide-react";
 
 import { userLogin } from "@/redux/slices/authSlice";
 
-import { Link } from "react-router-dom";
+import { Link,useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "@/redux/hook";
 import { useToast } from "@/components/ui/use-toast";
-
 const Login: React.FC = () => {
   const dispatch = useAppDispatch();
   const { toast } = useToast();
+const navigate=useNavigate();
 
   const { isLoading } = useAppSelector((state) => state.auth);
 
@@ -44,12 +44,13 @@ const Login: React.FC = () => {
           title: "Successfully Logged in ",
           description: "Logged in successfully explore course and register",
         });
+        navigate("/")
       })
       .catch((error) => {
         console.log("this is error", error);
         toast({
           title: "Error user Login",
-          description: "please Enter valid credentials",
+          description: error,
           variant: "destructive",
         });
       });

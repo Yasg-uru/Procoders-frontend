@@ -43,10 +43,10 @@ const ForgotPassword: React.FC = () => {
           description: "mail sent successfully go back to login ",
         });
       })
-      .catch(() =>
+      .catch((error) =>
         toast({
           title: "Please Enter valid mail ",
-          description: "enter a valid email to get forgot password link ",
+          description: error,
         })
       );
   };

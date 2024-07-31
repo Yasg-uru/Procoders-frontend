@@ -81,9 +81,9 @@ const DetailPage: React.FC = () => {
         });
       })
 
-      .catch(() => {
+      .catch((error) => {
         toast({
-          title: "Error in enrolling course",
+          title: error,
           variant: "destructive",
         });
       });

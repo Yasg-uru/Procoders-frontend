@@ -16,6 +16,7 @@ import ChecKOut from "./pages/paymentPage/ChecKOut.js";
 
 import QuizTest from "./pages/courseLecture/Quiz.js";
 import CourseQuiz from "./pages/courseLecture/CourseQuiz.tsx";
+import RequireAuth from "./helper/RequireAuth.tsx";
 
 function App() {
   return (
@@ -28,15 +29,23 @@ function App() {
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password/:token" element={<ResetPassword />} />
         <Route path="/detail" element={<DetailPage />} />
-
+        <Route path="/explore" element={<DetailPage />} />
         <Route path="/" element={<Homepage />} />
         <Route path="/course-category" element={<CourseCategory />} />
-        <Route path="/explore" element={<DetailPage />} />
-        <Route path="/mycourse" element={<MyCourse />} />
-        <Route path="/continue-course/:courseId" element={<CourseContinue />} />
-        <Route path="/checkout/:courseId" element={<ChecKOut />} />
-        <Route path="/quiz/:moduleId/:courseId" element={<QuizTest />} />
-        <Route path="/course/quiz" element={<CourseQuiz />} />
+        <Route
+          element={
+            <RequireAuth allowedRoles={["user", "admin", "instructor"]} />
+          }
+        >
+          <Route path="/mycourse" element={<MyCourse />} />
+          <Route
+            path="/continue-course/:courseId"
+            element={<CourseContinue />}
+          />
+          <Route path="/checkout/:courseId" element={<ChecKOut />} />
+          <Route path="/quiz/:moduleId/:courseId" element={<QuizTest />} />
+          <Route path="/course/quiz" element={<CourseQuiz />} />
+        </Route>
       </Routes>
       <Footer />
     </Fragment>

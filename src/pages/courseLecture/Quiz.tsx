@@ -84,9 +84,10 @@ const QuizTest: React.FC = () => {
           title: "successfully fetched your results",
         });
       })
-      .catch(() => {
+      .catch((error) => {
         toast({
-          title: "Failed to fetch your results",
+          title: error,
+          variant:"destructive"
         });
       });
   }

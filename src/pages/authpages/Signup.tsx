@@ -46,8 +46,8 @@ const Signup: React.FC = () => {
       .catch((error) => {
         console.log("this is a error ", error);
         toast({
-          title: "failed to created your account",
-          description: "try again latter",
+          title: error,
+          
           variant: "destructive",
         });
       });

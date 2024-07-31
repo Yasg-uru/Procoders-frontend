@@ -57,8 +57,8 @@ const Verify: React.FC = () => {
       })
       .catch((error) => {
         toast({
-          title: "Incorrect code",
-          description: "Try again ,Please Enter correct OTP ",
+          title: error,
+         
           variant: "destructive",
         });
       });
