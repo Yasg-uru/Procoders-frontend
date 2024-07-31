@@ -160,7 +160,7 @@ const Homepage: React.FC = () => {
                   {category}
                 </p>
 
-                <Carousel>
+                <Carousel className="max-w-sm">
                   <CarouselContent>
                     {category.length > 0 &&
                       groupedCourses[category] &&
