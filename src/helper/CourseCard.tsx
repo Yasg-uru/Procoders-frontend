@@ -24,6 +24,7 @@ const CourseCard: React.FC<{ data: FilteredCourse }> = ({ data }) => {
   const handleFreeEnrollment = (courseId: string) => {
     if (!isAuthenticated) {
       navigate("/Login");
+      return ;
     }
     dispatch(EnrollFree(courseId))
       .unwrap()
