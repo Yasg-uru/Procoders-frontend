@@ -20,13 +20,12 @@ import { lesson, module } from "@/types/ModuleTypes/ModuleState";
 import { MdQuiz } from "react-icons/md";
 import { MdArticle } from "react-icons/md";
 
-
-import  { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import ReactPlayer from "react-player";
 
 import { useNavigate, useParams } from "react-router-dom";
 
-// import { useMediaQuery } from "@uidotdev/usehooks";
+import { useMediaQuery } from "@uidotdev/usehooks";
 import { FaPlay } from "react-icons/fa";
 import { Input } from "@/components/ui/input";
 import { NoteData, notes } from "@/types/CourseTypes/courseState";
@@ -59,7 +58,7 @@ const CourseContinue = () => {
 
   const { fullAccessModules } = useAppSelector((state) => state.module);
   const { Notes } = useAppSelector((state) => state.course);
-  // const isDesktop = useMediaQuery("(min-width: 768px)");
+  const isMobile = useMediaQuery("(max-width: 600)");
   useEffect(() => {
     dispatch(GetfullAccessModule(courseId))
       .unwrap()
@@ -71,7 +70,7 @@ const CourseContinue = () => {
       .catch((error) => {
         toast({
           title: error,
-          variant:"destructive"
+          variant: "destructive",
         });
       });
     dispatch(LoadCourseProgress({ courseId }))
@@ -83,7 +82,7 @@ const CourseContinue = () => {
       .catch((error) => {
         toast({
           title: error,
-          variant:"destructive"
+          variant: "destructive",
         });
       });
   }, []);
@@ -139,7 +138,7 @@ const CourseContinue = () => {
         .catch((error) => {
           toast({
             title: error,
-            variant:"destructive"
+            variant: "destructive",
           });
         });
     }
@@ -181,7 +180,7 @@ const CourseContinue = () => {
             .catch((error) => {
               toast({
                 title: error,
-                variant:"destructive"
+                variant: "destructive",
               });
             });
         }
@@ -189,7 +188,7 @@ const CourseContinue = () => {
       .catch((error) => {
         toast({
           title: error,
-          variant:"destructive"
+          variant: "destructive",
         });
       });
   };
@@ -212,7 +211,7 @@ const CourseContinue = () => {
             .catch((error) => {
               toast({
                 title: error,
-                variant:"destructive"
+                variant: "destructive",
               });
             });
         }
@@ -220,7 +219,7 @@ const CourseContinue = () => {
       .catch((error) => {
         toast({
           title: error,
-          variant:"destructive"
+          variant: "destructive",
         });
       });
   }
@@ -248,14 +247,14 @@ const CourseContinue = () => {
             .catch((error) => {
               toast({
                 title: error,
-                variant:"destructive"
+                variant: "destructive",
               });
             });
         })
         .catch((error) => {
           toast({
             title: error,
-            variant:"destructive"
+            variant: "destructive",
           });
         });
     } else {
@@ -265,7 +264,14 @@ const CourseContinue = () => {
       });
     }
   }
-
+  if (isMobile) {
+    <div className=" relative min-h-screen  p-2 bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200 flex items-center justify-center">
+      <h1 className="text-2xl font-bold dark:text-white ">
+        This Page is not available for mobile site
+      </h1>
+      <p className="dark:text-white">Open in Desktop site</p>
+    </div>;
+  }
   return (
     <div className=" relative min-h-screen  p-2 bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
       <ResizablePanelGroup direction="horizontal">
