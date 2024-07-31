@@ -222,9 +222,105 @@ export function Navbar() {
           >
             Contact
           </a>
-          <div className="flex justify-center mt-4">
+          {/* <div className="flex justify-center mt-4">
             <ModeToggle />
-          </div>
+          </div> */}
+          <div className="mx-auto flex flex-col justify-center gap-2">
+              <>
+                <ModeToggle />
+
+                {!isAuthenticated ? (
+                  <Button
+                    className="bg-gradient-to-r from-pink-500 to-purple-500 text-white font-bold py-3 px-6 rounded-md shadow-md hover:scale-105 transition duration-300"
+                    size="sm"
+                    onClick={() => navigate("/Login")}
+                  >
+                    Register
+                  </Button>
+                ) : (
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      {/* <div className="avatar">
+                        <div className="ring-primary ring-offset-base-100 w-12 rounded-full ring-0 ring-offset-[0.2px]">
+                          <img src={profileUrl} />
+                        </div>
+                      </div> */}
+                      <Avatar>
+                        <AvatarImage src={profileUrl} alt="@shadcn" />
+                        <AvatarFallback className="font-bold text-xl dark:bg-black bg-red-400 cursor-pointer">
+                          {name.split(" ")[0][0].toUpperCase()}
+                          {name.split(" ")[1][0].toUpperCase()}
+                        </AvatarFallback>
+                      </Avatar>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="w-56">
+                      <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuGroup>
+                        <DropdownMenuItem>
+                          <User className="mr-2 h-4 w-4" />
+                          <span>Profile</span>
+                          <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem>
+                          <CreditCard className="mr-2 h-4 w-4" />
+                          <span onClick={() => navigate("/mycourse")}>
+                            My Courses
+                          </span>
+                          <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem>
+                          <Settings className="mr-2 h-4 w-4" />
+                          <span>Settings</span>
+                          <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
+                        </DropdownMenuItem>
+                      </DropdownMenuGroup>
+                      <DropdownMenuSeparator />
+
+                      <DropdownMenuSeparator />
+
+                      <DropdownMenuItem>
+                        <LifeBuoy className="mr-2 h-4 w-4" />
+                        <span>Support</span>
+                      </DropdownMenuItem>
+
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem>
+                        <LogOut className="mr-2 h-4 w-4" />
+                        <span
+                          onClick={() => {
+                            dispatch(Logout())
+                              .unwrap()
+                              .then(() => {
+                                toast({
+                                  title: "Logged out successfully",
+                                  variant: "default",
+                                });
+                                navigate("/Login");
+                              })
+                              .catch(() => {
+                                toast({
+                                  title: "Failed to Logout ",
+                                  description:
+                                    "Error , Please Try again latter",
+                                });
+                              });
+                          }}
+                        >
+                          {isLoading ? (
+                            <Loader2 className="h-6 w-6 animate-spin" />
+                          ) : (
+                            "Log out"
+                          )}
+                        </span>
+                        <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                )}
+              </>
+            </div>
+          <SearchBar />
         </div>
       </div>
     </nav>

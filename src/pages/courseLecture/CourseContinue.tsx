@@ -265,13 +265,17 @@ const CourseContinue = () => {
     }
   }
   if (isMobile) {
-    return <div className=" relative min-h-screen  p-2 bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200 flex flex-col items-center justify-center">
-      <h1 className="text-2xl font-bold dark:text-white ">
-        This Page is not available for mobile site
-      </h1>
-      <p className="dark:text-white">Open in Desktop site </p>
-      <p className="dark:text-white">Rotate your phone for batter experience</p>
-    </div>;
+    return (
+      <div className=" relative min-h-screen  p-2 bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200 flex flex-col items-center justify-center">
+        <h1 className="text-2xl font-bold dark:text-white ">
+          This Page is not available for mobile site
+        </h1>
+        <p className="dark:text-white">Open in Desktop site </p>
+        <p className="dark:text-white">
+          Rotate your phone for batter experience
+        </p>
+      </div>
+    );
   }
   return (
     <div className=" relative min-h-screen  p-2 bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
