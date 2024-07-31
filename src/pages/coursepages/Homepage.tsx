@@ -168,9 +168,10 @@ const Homepage: React.FC = () => {
                   {category}
                 </p>
 
-                <Carousel  opts={{
-        align: "start",
-      }} className="max-w-sm mx-auto">
+                <Carousel 
+                 opts={{
+                  align: "start",
+                }} className="max-w-sm mx-auto w-full">
                   <CarouselContent className="max-w-sm">
                     {category.length > 0 &&
                       groupedCourses[category] &&
