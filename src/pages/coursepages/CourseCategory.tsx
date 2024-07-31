@@ -182,12 +182,14 @@ const CourseCategory: React.FC = () => {
             <CourseCard key={data._id} data={data} />
           ))}
       </div>
-      <div className="flex flex-col items-center mb-6 mt-9">
-        <h1 className="text-xl text-gray-900 dark:text-gray-100 mb-2">
-          Instructors
-        </h1>
-        <hr className="w-full border-t-2 border-gray-300 dark:border-gray-700" />
-      </div>
+      {Instructors.length > 0 && (
+        <div className="flex flex-col items-center mb-6 mt-9">
+          <h1 className="text-xl text-gray-900 dark:text-gray-100 mb-2">
+            Instructors
+          </h1>
+          <hr className="w-full border-t-2 border-gray-300 dark:border-gray-700" />
+        </div>
+      )}
       <div className="mx-auto">
         {Instructors.length > 0 &&
           Instructors.map((instructor) => (
