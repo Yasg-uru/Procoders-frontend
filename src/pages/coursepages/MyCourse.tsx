@@ -89,7 +89,7 @@ const MyCourse: React.FC = () => {
           Mycourses.map((course, index) => (
             <Card
               key={course._id}
-              className="w-[350px] flex flex-col border-[0.5px] dark:border-white shadow-lg rounded-md "
+              className="w-[350px] h-[500px] flex flex-col border-[0.5px] dark:border-white shadow-lg rounded-md "
             >
               <CardHeader>
                 <img
