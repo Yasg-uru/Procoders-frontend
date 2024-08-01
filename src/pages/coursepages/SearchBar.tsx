@@ -22,7 +22,7 @@ const SearchBar: React.FC = () => {
     setIsNotResultFound(false); // Reset the state on new input
   };
   const handleNavigate = (courseId: string) => {
-    navigate("/detail", { state: { courseId } });
+    navigate(`/detail/${courseId}`);
   };
   useEffect(() => {
     if (debouncedSearchTerm) {

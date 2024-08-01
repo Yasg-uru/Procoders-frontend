@@ -31,8 +31,8 @@ function App() {
         <Route path="/verify/:email" element={<Verify />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password/:token" element={<ResetPassword />} />
-        <Route path="/detail" element={<DetailPage />} />
-        <Route path="/explore" element={<DetailPage />} />
+        <Route path="/detail/:courseId" element={<DetailPage />} />
+        <Route path="/explore/:courseId" element={<DetailPage />} />
         <Route path="/" element={<Homepage />} />
         <Route path="/about" element={<AboutPage/>}/>
         <Route path="/services" element={<ServicesPage/>}/>

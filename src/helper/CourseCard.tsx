@@ -118,7 +118,7 @@ const CourseCard: React.FC<{ data: FilteredCourse }> = ({ data }) => {
         <div className="w-full grid grid-cols-2 gap-2">
           <Button
             onClick={() =>
-              navigate("/explore", { state: { courseId: data._id } })
+              navigate(`/explore/${data._id}` )
             }
             className="bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold py-3 px-6 rounded-lg shadow-lg transition-transform transform hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 dark:focus:ring-purple-300"
           >

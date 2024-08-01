@@ -3,15 +3,15 @@ import { useAppDispatch, useAppSelector } from "@/redux/hook";
 import { EnrolledUser, FilteredCourse } from "@/types/CourseTypes/courseState";
 import { Home } from "lucide-react";
 import React, { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import {  useNavigate, useParams } from "react-router-dom";
 import { CiShare2 } from "react-icons/ci";
 import ModuleComponent from "./ModuleComponent";
 import { useToast } from "@/components/ui/use-toast";
 import { EnrollFree } from "@/redux/slices/EnrollSlice";
 
 const DetailPage: React.FC = () => {
-  const location = useLocation();
-  const { courseId } = location.state;
+  
+  const { courseId } = useParams();
   const navigate = useNavigate();
   const { categoryWiseCourses } = useAppSelector((state) => state.course);
   const [courseData, setCourseData] = useState<FilteredCourse>();
