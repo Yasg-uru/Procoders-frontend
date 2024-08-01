@@ -40,6 +40,7 @@ export interface FilteredCourse {
   learningOutcomes: string[];
   level: string;
   language: string;
+  ProfileUrl:string;
   prerequisites: string[];
   targetAudience: string[];
   learningOutComes: string[];

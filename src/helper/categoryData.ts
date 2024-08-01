@@ -29,14 +29,16 @@ export const CategoryData = [
   },
   {
     category: "Cybersecurity",
-    imageUrl: "https://example.com/cybersecurity.png",
+    imageUrl:
+      "https://cdn.pixabay.com/photo/2017/07/25/11/27/cyber-security-2537786_1280.png",
     description:
       "Protect systems, networks, and programs from digital attacks.",
   },
 
   {
     category: "Game Development",
-    imageUrl: "https://example.com/game-development.png",
+    imageUrl:
+      "https://www.algoworks.com/wp-content/uploads/2020/11/game-development-company.png",
     description:
       "Design, develop, and test interactive games for computers, consoles, and mobile devices.",
   },
