@@ -101,10 +101,7 @@ const DetailPage: React.FC = () => {
           </p>
           <h1 className="font-bold text-3xl">{courseData?.title}</h1>
           <img
-            src={
-              courseData?.thumbnailUrl ||
-              "https://images.shiksha.com/mediadata/ugcDocuments/images/wordpressImages/2022_08_MicrosoftTeams-image-13-2-1.jpg"
-            }
+            src={courseData?.thumbnailUrl}
             alt="Course Thumbnail"
             className="h-[200px] object-cover rounded-md mb-4"
           />
@@ -242,10 +239,7 @@ const DetailPage: React.FC = () => {
         {/* Course Image Section */}
         <div className="flex justify-end items-end">
           <img
-            src={
-              courseData?.thumbnailUrl ||
-              "https://images.shiksha.com/mediadata/ugcDocuments/images/wordpressImages/2022_08_MicrosoftTeams-image-13-2-1.jpg"
-            }
+            src={courseData?.thumbnailUrl}
             alt="Course"
             className="h-[200px] object-cover rounded-md"
           />

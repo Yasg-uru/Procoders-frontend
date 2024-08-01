@@ -71,7 +71,7 @@ const CourseCard: React.FC<{ data: FilteredCourse }> = ({ data }) => {
     <Card className="w-[400px] max-w-sm border-[0.5px] border-gray-300 dark:border-gray-700 rounded-md shadow-md hover:shadow-xl flex flex-col">
       <CardHeader className="flex-grow-0">
         <img
-          src={data.ProfileUrl || "https://images.shiksha.com/mediadata/ugcDocuments/images/wordpressImages/2022_08_MicrosoftTeams-image-13-2-1.jpg"}
+          src={data.thumbnailUrl || "https://images.shiksha.com/mediadata/ugcDocuments/images/wordpressImages/2022_08_MicrosoftTeams-image-13-2-1.jpg"}
           alt="Course"
           className="w-full h-[200px] object-cover rounded-t-md"
         />
