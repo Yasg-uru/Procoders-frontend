@@ -29,9 +29,9 @@ const MyCourse: React.FC = () => {
   const { AllEnrolledCourseProgress } = useAppSelector((state) => state.auth);
   console.log("this is a my courses and all enrolled progress", Mycourses);
   useEffect(() => {
+    setIsLoading(true);
     dispatch(Mycourse())
       .then(() => {
-        setIsLoading(true);
         dispatch(GetAllEnrolledCourseProgress())
           .then(() => {
             toast({
