@@ -221,7 +221,7 @@ import { Filtertype } from "@/types/CourseTypes/FilterTypes";
 import { ArrowRight, Loader2 } from "lucide-react";
 import React, { Fragment, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-// import { useMediaQuery } from "@uidotdev/usehooks";
+import { useMediaQuery } from "@uidotdev/usehooks";
 
 const Homepage: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -230,7 +230,7 @@ const Homepage: React.FC = () => {
   const { categoryWiseCourses } = useAppSelector((state) => state.course);
   const [groupedCourses, setGroupedCourses] = useState<CategoryTypes>({});
   const { isAuthenticated } = useAppSelector((state) => state.auth);
-  // const isMobile = useMediaQuery("(max-width: 600px)");
+  const isTablet = useMediaQuery("(max-width: 1177px)");
   const coursesRef = useRef<HTMLDivElement>(null);
 
   const handleClick = (category: string) => {
@@ -382,16 +382,29 @@ const Homepage: React.FC = () => {
                   }}
                   className="relative w-full mb-20"
                 >
-                  <CarouselContent className="flex space-x-4 justify-center">
-                    {groupedCourses[category].map((course: any) => (
-                      <CarouselItem
-                        key={course._id}
-                        className="flex-none w-1/3 p-2"
-                      >
-                        <CourseCard data={course} />
-                      </CarouselItem>
-                    ))}
-                  </CarouselContent>
+                  {isTablet ? (
+                    <CarouselContent className="flex space-x-4 justify-center">
+                      {groupedCourses[category].map((course: any) => (
+                        <CarouselItem
+                          key={course._id}
+                          className="flex aspect-square items-center justify-center p-6"
+                        >
+                          <CourseCard data={course} />
+                        </CarouselItem>
+                      ))}
+                    </CarouselContent>
+                  ) : (
+                    <CarouselContent className="flex space-x-4 justify-center">
+                      {groupedCourses[category].map((course: any) => (
+                        <CarouselItem
+                          key={course._id}
+                          className="flex-none w-1/3 p-2"
+                        >
+                          <CourseCard data={course} />
+                        </CarouselItem>
+                      ))}
+                    </CarouselContent>
+                  )}
                   {
                     <div className="flex  gap-2 absolute bottom-0 left-1/2 transform -translate-x-1/2 mt-10">
                       <CarouselPrevious className="mt-10" />
