@@ -59,26 +59,26 @@ const MyCourse: React.FC = () => {
   if (isLoading) {
     return <Loader />;
   }
-  if (AllEnrolledCourseProgress.length === 0) {
-    return (
-      <div className="min-h-screen flex flex-col items-center justify-center p-10 bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
-        <div className="flex flex-col items-center justify-center absolute mt-1 bg-white border border-gray-300 rounded shadow-lg w-96 h-auto p-4 dark:bg-gray-800 dark:border-gray-600 dark:shadow-gray-700 z-10">
-          <img
-            className="h-32 w-32"
-            src="https://www.ikbenik-kindercoaching.nl/wp-content/uploads/2019/07/sorry-3905517_1920.png"
-            alt=""
-          />
-          <p className="mx-auto">Sorry, No Course Found!,Please Enroll Now </p>
-          <Button
-            onClick={() => navigate(-1)}
-            className="bg-gradient-to-r m-2 from-purple-600 to-pink-600 text-white font-semibold py-3 px-6 rounded-lg shadow-lg transition-transform transform hover:scale-105 hover:shadow-xl focus:outline-none  focus:ring-purple-500 dark:focus:ring-purple-300"
-          >
-            Go Back
-          </Button>
-        </div>
-      </div>
-    );
-  }
+  // if (AllEnrolledCourseProgress.length === 0) {
+  //   return (
+  //     <div className="min-h-screen flex flex-col items-center justify-center p-10 bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
+  //       <div className="flex flex-col items-center justify-center absolute mt-1 bg-white border border-gray-300 rounded shadow-lg w-96 h-auto p-4 dark:bg-gray-800 dark:border-gray-600 dark:shadow-gray-700 z-10">
+  //         <img
+  //           className="h-32 w-32"
+  //           src="https://www.ikbenik-kindercoaching.nl/wp-content/uploads/2019/07/sorry-3905517_1920.png"
+  //           alt=""
+  //         />
+  //         <p className="mx-auto">Sorry, No Course Found!,Please Enroll Now </p>
+  //         <Button
+  //           onClick={() => navigate(-1)}
+  //           className="bg-gradient-to-r m-2 from-purple-600 to-pink-600 text-white font-semibold py-3 px-6 rounded-lg shadow-lg transition-transform transform hover:scale-105 hover:shadow-xl focus:outline-none  focus:ring-purple-500 dark:focus:ring-purple-300"
+  //         >
+  //           Go Back
+  //         </Button>
+  //       </div>
+  //     </div>
+  //   );
+  // }
   return (
     <div className="min-h-screen flex flex-col p-10 bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
       <h1 className="font-bold text-2xl dark:text-white text-center">
