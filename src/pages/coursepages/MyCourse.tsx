@@ -14,39 +14,51 @@ import {
   // LoadCourseProgress,
   Mycourse,
 } from "@/redux/slices/authSlice";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ProgressBarclasss } from "../courseLecture/CourseContinue";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
+import Loader from "@/helper/Loader";
 const MyCourse: React.FC = () => {
   const { Mycourses } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { toast } = useToast();
+  const [isLoading, setIsLoading] = useState(false);
   const { AllEnrolledCourseProgress } = useAppSelector((state) => state.auth);
-  console.log("this is a my courses and all enrolled progress",Mycourses)
+  console.log("this is a my courses and all enrolled progress", Mycourses);
   useEffect(() => {
-    dispatch(Mycourse()).then(() => {
-      dispatch(GetAllEnrolledCourseProgress())
-        .then(() => {
-          toast({
-            title: "successfully fetched your progress",
+    dispatch(Mycourse())
+      .then(() => {
+        setIsLoading(true);
+        dispatch(GetAllEnrolledCourseProgress())
+          .then(() => {
+            toast({
+              title: "successfully fetched your progress",
+            });
+          })
+          .catch((error) => {
+            toast({
+              title: error,
+              variant: "destructive",
+            });
           });
-        })
-        .catch((error) => {
-          toast({
-            title: error,
-            variant: "destructive",
-          });
+      })
+      .catch((error) => {
+        setIsLoading(false);
+        toast({
+          title: error,
+          variant: "destructive",
         });
-    }).catch((error)=>{
-      toast({
-        title: error,
-        variant: "destructive",
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
-    });
   }, [dispatch]);
+  if (isLoading) {
+    return <Loader />;
+  }
   if (AllEnrolledCourseProgress.length === 0) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center p-10 bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
