@@ -8,6 +8,7 @@ import { CiShare2 } from "react-icons/ci";
 import ModuleComponent from "./ModuleComponent";
 import { useToast } from "@/components/ui/use-toast";
 import { EnrollFree } from "@/redux/slices/EnrollSlice";
+import Loader from "@/helper/Loader";
 
 const DetailPage: React.FC = () => {
   
@@ -88,6 +89,9 @@ const DetailPage: React.FC = () => {
         });
       });
   };
+  if(!courseData){
+    return <Loader/>
+  }
   return (
     <div className="min-h-screen flex flex-col p-10 bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
       <div className="w-full bg-gray-100 dark:bg-gray-900 grid md:grid-cols-2 gap-10 grid-flow-row">
