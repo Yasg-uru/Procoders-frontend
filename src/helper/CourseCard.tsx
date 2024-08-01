@@ -20,11 +20,13 @@ const CourseCard: React.FC<{ data: FilteredCourse }> = ({ data }) => {
   const { toast } = useToast();
   const navigate = useNavigate();
   const { isAuthenticated } = useAppSelector((state) => state.auth);
-
+  const CalculateDiscountedPrice = (price: number, discount: number) => {
+    return Math.floor(price - price * (discount / 100));
+  };
   const handleFreeEnrollment = (courseId: string) => {
     if (!isAuthenticated) {
       navigate("/Login");
-      return ;
+      return;
     }
     dispatch(EnrollFree(courseId))
       .unwrap()
@@ -80,7 +82,21 @@ const CourseCard: React.FC<{ data: FilteredCourse }> = ({ data }) => {
           {data.description.substring(0, 70)}...
         </CardDescription>
       </CardHeader>
-      <CardContent className="flex-grow"></CardContent>
+      <CardContent className="flex-grow">
+        {!data.isPaid ? (
+          <span className="font-bold text-2xl ">Free</span>
+        ) : (
+          <span>
+            <span className="font-bold text-xl">
+              ₹{CalculateDiscountedPrice(data.price, data.discount)}
+            </span>
+            <span className="line-through ml-2">{data.price}</span>{" "}
+            <span className="font-bold text-green-500 text-xl ml-2">
+              {data.discount}% Discount
+            </span>
+          </span>
+        )}
+      </CardContent>
       <CardFooter className="flex flex-col gap-2 p-2 flex-grow-0">
         <div className="w-full flex justify-between text-gray-800 dark:text-gray-200">
           {data.published ? (
