@@ -93,7 +93,7 @@ const MyCourse: React.FC = () => {
             >
               <CardHeader>
                 <img
-                  src="https://images.shiksha.com/mediadata/ugcDocuments/images/wordpressImages/2022_08_MicrosoftTeams-image-13-2-1.jpg"
+                  src={course?.courseId?.thumbnailUrl || "https://images.shiksha.com/mediadata/ugcDocuments/images/wordpressImages/2022_08_MicrosoftTeams-image-13-2-1.jpg"}
                   alt="Course"
                   className="w-full h-[200px] object-cover rounded-t-md"
                 />
