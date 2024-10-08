@@ -1,3 +1,13 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
+import { useAppDispatch, useAppSelector } from "@/redux/hook";
+import {
+  GetAllEnrolledCourseProgress,
+  Mycourse,
+} from "@/redux/slices/authSlice";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -6,137 +16,173 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-// import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/components/ui/use-toast";
-import { useAppDispatch, useAppSelector } from "@/redux/hook";
-import {
-  GetAllEnrolledCourseProgress,
-  // LoadCourseProgress,
-  Mycourse,
-} from "@/redux/slices/authSlice";
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { ProgressBarclasss } from "../courseLecture/CourseContinue";
-import { CircularProgressbar } from "react-circular-progressbar";
+import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
-import Loader from "@/helper/Loader";
+import { Loader2, BookOpen, Clock, Award } from "lucide-react";
+
+const ProgressBarClass = (progress: number): string => {
+  const baseClass = "h-2 rounded-full bg-gradient-to-r";
+  if (progress <= 25) return `${baseClass} from-red-500 to-red-300`;
+  if (progress <= 50) return `${baseClass} from-yellow-500 to-yellow-300`;
+  if (progress <= 75) return `${baseClass} from-blue-500 to-blue-300`;
+  return `${baseClass} from-green-500 to-green-300`;
+};
+
 const MyCourse: React.FC = () => {
-  const { Mycourses } = useAppSelector((state) => state.auth);
+  const { Mycourses, AllEnrolledCourseProgress } = useAppSelector(
+    (state) => state.auth
+  );
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
-  const { AllEnrolledCourseProgress } = useAppSelector((state) => state.auth);
-  console.log("this is a my courses and all enrolled progress", Mycourses);
+
   useEffect(() => {
     setIsLoading(true);
     dispatch(Mycourse())
+      .then(() => dispatch(GetAllEnrolledCourseProgress()))
       .then(() => {
-        dispatch(GetAllEnrolledCourseProgress())
-          .then(() => {
-            toast({
-              title: "successfully fetched your progress",
-            });
-          })
-          .catch((error) => {
-            toast({
-              title: error,
-              variant: "destructive",
-            });
-          });
+        toast({ title: "Successfully fetched your progress" });
       })
       .catch((error) => {
-        setIsLoading(false);
-        toast({
-          title: error,
-          variant: "destructive",
-        });
+        toast({ title: error, variant: "destructive" });
       })
       .finally(() => {
         setIsLoading(false);
       });
-  }, [dispatch]);
+  }, [dispatch, toast]);
+
   if (isLoading) {
-    return <Loader />;
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <Loader2 className="w-10 h-10 animate-spin text-primary" />
+      </div>
+    );
   }
-  // if (AllEnrolledCourseProgress.length === 0) {
-  //   return (
-  //     <div className="min-h-screen flex flex-col items-center justify-center p-10 bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
-  //       <div className="flex flex-col items-center justify-center absolute mt-1 bg-white border border-gray-300 rounded shadow-lg w-96 h-auto p-4 dark:bg-gray-800 dark:border-gray-600 dark:shadow-gray-700 z-10">
-  //         <img
-  //           className="h-32 w-32"
-  //           src="https://www.ikbenik-kindercoaching.nl/wp-content/uploads/2019/07/sorry-3905517_1920.png"
-  //           alt=""
-  //         />
-  //         <p className="mx-auto">Sorry, No Course Found!,Please Enroll Now </p>
-  //         <Button
-  //           onClick={() => navigate(-1)}
-  //           className="bg-gradient-to-r m-2 from-purple-600 to-pink-600 text-white font-semibold py-3 px-6 rounded-lg shadow-lg transition-transform transform hover:scale-105 hover:shadow-xl focus:outline-none  focus:ring-purple-500 dark:focus:ring-purple-300"
-  //         >
-  //           Go Back
-  //         </Button>
-  //       </div>
-  //     </div>
-  //   );
-  // }
+
+  if (Mycourses.length === 0) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center p-10 bg-background text-foreground">
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="flex flex-col items-center justify-center bg-card border border-border rounded-lg shadow-lg w-96 h-auto p-8"
+        >
+          <img
+            className="h-32 w-32 mb-4"
+            src="https://www.ikbenik-kindercoaching.nl/wp-content/uploads/2019/07/sorry-3905517_1920.png"
+            alt="No courses found"
+          />
+          <p className="text-center mb-4">
+            Sorry, no courses found! Please enroll now.
+          </p>
+          <Button
+            onClick={() => navigate(-1)}
+            className="bg-primary text-primary-foreground hover:bg-primary/90"
+          >
+            Go Back
+          </Button>
+        </motion.div>
+      </div>
+    );
+  }
+
   return (
-    <div className="min-h-screen flex flex-col p-10 bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
-      <h1 className="font-bold text-2xl dark:text-white text-center">
-        Your Courses
-      </h1>
-      <div className="flex flex-wrap gap-3 items-center justify-center mt-5">
-        {Mycourses.length > 0 &&
-          Mycourses.map((course, index) => (
-            <Card
-              key={course._id}
-              className="w-[350px] h-[500px] flex flex-col border-[0.5px] dark:border-white shadow-lg rounded-md "
-            >
-              <CardHeader>
-                <img
-                  src={course?.courseId?.thumbnailUrl || "https://images.shiksha.com/mediadata/ugcDocuments/images/wordpressImages/2022_08_MicrosoftTeams-image-13-2-1.jpg"}
-                  alt="Course"
-                  className="w-full h-[200px] object-cover rounded-t-md"
-                />
-                <progress
-                  className={ProgressBarclasss(
-                    AllEnrolledCourseProgress[index]?.overallProgress
-                  )}
-                  value={AllEnrolledCourseProgress[index]?.overallProgress}
-                  max="100"
-                ></progress>
-                <CardTitle className="text-2xl font-bold mt-3">
+    <div className="min-h-screen flex flex-col p-10 dark:bg-black bg-white text-foreground">
+      <h1 className="font-bold text-3xl text-center mb-10">Your Courses</h1>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {Mycourses.map((course, index) => (
+          <motion.div
+            key={course._id}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: index * 0.1 }}
+          >
+            <Card className="h-full flex flex-col overflow-hidden hover:shadow-xl transition-shadow duration-300">
+              <CardHeader className="p-0">
+                <div className="relative">
+                  <img
+                    src={
+                      course?.courseId?.thumbnailUrl ||
+                      "https://images.shiksha.com/mediadata/ugcDocuments/images/wordpressImages/2022_08_MicrosoftTeams-image-13-2-1.jpg"
+                    }
+                    alt={course.courseId.title}
+                    className="w-full h-48 object-cover"
+                  />
+                  <div className="absolute bottom-0 left-0 right-0 h-1">
+                    <div
+                      className={ProgressBarClass(
+                        AllEnrolledCourseProgress[index]?.overallProgress
+                      )}
+                      style={{
+                        width: `${AllEnrolledCourseProgress[index]?.overallProgress}%`,
+                      }}
+                    />
+                  </div>
+                </div>
+                <CardTitle className="text-xl font-bold mt-4 px-6">
                   {course.courseId.title}
                 </CardTitle>
               </CardHeader>
-              <CardContent className="flex-grow">
-                {/* Content here, if needed */}
-                <CircularProgressbar
-                  className="w-16 mx-auto"
-                  value={Math.floor(
-                    AllEnrolledCourseProgress[index]?.overallProgress
-                  )}
-                  text={`${Math.floor(
-                    AllEnrolledCourseProgress[index]?.overallProgress
-                  )}%`}
-                />
+              <CardContent className="flex-grow flex flex-col justify-between p-6">
+                <div className="flex justify-between items-center mb-4">
+                  <div className="flex items-center">
+                    <BookOpen className="w-5 h-5 mr-2 text-muted-foreground" />
+                    <span className="text-sm text-muted-foreground">
+                      {course.courseId.modules.length} Lessons
+                    </span>
+                  </div>
+                  <div className="flex items-center">
+                    <Clock className="w-5 h-5 mr-2 text-muted-foreground" />
+                    <span className="text-sm text-muted-foreground">
+                      {course.courseId.duration}
+                    </span>
+                  </div>
+                </div>
+                <div className="flex items-center justify-center mb-4">
+                  <div className="w-24 h-24">
+                    <CircularProgressbar
+                      value={Math.floor(
+                        AllEnrolledCourseProgress[index]?.overallProgress
+                      )}
+                      text={`${Math.floor(
+                        AllEnrolledCourseProgress[index]?.overallProgress
+                      )}%`}
+                      styles={buildStyles({
+                        textSize: "22px",
+                        pathColor: `rgba(62, 152, 199, ${
+                          AllEnrolledCourseProgress[index]?.overallProgress /
+                          100
+                        })`,
+                        textColor: "#3e98c7",
+                        trailColor: "#d6d6d6",
+                        backgroundColor: "#3e98c7",
+                      })}
+                    />
+                  </div>
+                </div>
                 {AllEnrolledCourseProgress[index]?.CompletionStatus && (
-                  <p className="font-semibold text-md text-green-500 italic">
+                  <div className="flex items-center justify-center text-green-500 font-semibold">
+                    <Award className="w-5 h-5 mr-2" />
                     Completed
-                  </p>
+                  </div>
                 )}
               </CardContent>
-              <CardFooter className="mt-auto">
+              <CardFooter>
                 <Button
                   onClick={() =>
                     navigate(`/continue-course/${course.courseId._id}`)
                   }
-                  className="bg-gradient-to-r from-pink-500 to-purple-500 text-white font-bold py-3 px-6 rounded-md shadow-md hover:scale-105 transition duration-300 w-full m-2"
+                  className="w-full bg-primary text-primary-foreground hover:bg-primary/90"
                 >
-                  Continue
+                  Continue Learning
                 </Button>
               </CardFooter>
             </Card>
-          ))}
+          </motion.div>
+        ))}
       </div>
     </div>
   );

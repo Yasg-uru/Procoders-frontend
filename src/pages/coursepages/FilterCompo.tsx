@@ -1,7 +1,13 @@
 
-// import { useMediaQuery } from "@uidotdev/usehooks";
-import React, { useState } from "react";
-// import { Checkbox } from "@/components/ui/checkbox";
+
+import { useState } from "react";
+import { motion } from "framer-motion";
+import { useAppDispatch } from "@/redux/hook";
+import { FilterCourse } from "@/redux/slices/courseSlice";
+import { useToast } from "@/components/ui/use-toast";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import {
   Drawer,
   DrawerClose,
@@ -11,13 +17,8 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from "@/components/ui/drawer";
-import { Button } from "@/components/ui/button";
 import { Instructor } from "@/types/CourseTypes/courseState";
 import { Filter } from "@/types/CourseTypes/FilterTypes";
-
-import { useAppDispatch } from "@/redux/hook";
-import { FilterCourse } from "@/redux/slices/courseSlice";
-import { useToast } from "@/components/ui/use-toast";
 
 type Props = {
   open: boolean;
@@ -40,7 +41,6 @@ const FilterCompo: React.FC<Props> = ({
   const dispatch = useAppDispatch();
   const { toast } = useToast();
 
-  // const isDesktop = useMediaQuery("(min-width: 768px)");
   const languages = [...new Set(filterData.Languages)];
   const isFree = [...new Set(filterData.isFree)];
   const tags = [...new Set(filterData.tags)];
@@ -55,7 +55,6 @@ const FilterCompo: React.FC<Props> = ({
     category: keyof Filter,
     value: string | boolean
   ) => {
-    console.log("this is a category and values :", category, value);
     setSelectedFilter((prevData) => {
       const newData: Filter = { ...prevData };
 
@@ -76,19 +75,17 @@ const FilterCompo: React.FC<Props> = ({
   };
 
   const handleApplyFilter = () => {
-    console.log("Selected filter data:", selectedFilter);
     dispatch(FilterCourse(selectedFilter))
       .unwrap()
       .then(() => {
-        toast({
-          title: "successfully filtered",
-        });
+        toast({ title: "Successfully filtered" });
         setIsFilterApplied(true);
+        setOpen(false);
       })
       .catch(() => {
         toast({
-          title: "Sorry, No course Found",
-          variant: "default",
+          title: "Sorry, No course found",
+          variant: "destructive",
         });
       });
   };
@@ -97,97 +94,123 @@ const FilterCompo: React.FC<Props> = ({
     <Drawer open={open} onOpenChange={setOpen}>
       <DrawerContent>
         <DrawerHeader className="text-left">
-          <DrawerTitle>Filter</DrawerTitle>
-          <DrawerDescription>Check fields for filtering.</DrawerDescription>
+          <DrawerTitle>Filter Courses</DrawerTitle>
+          <DrawerDescription>Customize your course search</DrawerDescription>
         </DrawerHeader>
-        <div className="px-4">
-          <div className="mb-4">
-            <h3 className="text-md font-semibold mb-2">Instructors</h3>
-            <div className="flex flex-wrap gap-4">
+        <div className="px-4 py-2 overflow-y-auto max-h-[60vh]">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <h3 className="text-lg font-semibold mb-2">Instructors</h3>
+            <div className="space-y-2">
               {filterData.Instructors.map((instructor, index) => (
-                <div key={index} className="flex items-center mb-2">
-                  <input
+                <div key={index} className="flex items-center">
+                  <Checkbox
                     id={`instructor-${index}`}
-                    className="mr-2"
-                    type="checkbox"
-                    onChange={() =>
+                    onCheckedChange={() =>
                       handleCheckBoxChange("instructorId", instructor._id)
                     }
                   />
-                  <label htmlFor={`instructor-${index}`}>
+                  <label
+                    htmlFor={`instructor-${index}`}
+                    className="ml-2 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  >
                     {instructor.username}
                   </label>
                 </div>
               ))}
             </div>
-          </div>
-          <hr />
-          <div className="mb-4">
-            <h3 className="text-md font-semibold mb-2">Languages</h3>
-            <div className="flex flex-wrap gap-4">
-              {languages.length > 0 &&
-                languages.map((language, index) => (
-                  <div key={index} className="flex items-center mb-2">
-                    <input
-                      id={`language-${index}`}
-                      className="mr-2"
-                      type="checkbox"
-                      onChange={() =>
-                        handleCheckBoxChange("language", language)
-                      }
-                    />
-                    <label htmlFor={`language-${index}`}>
-                      {language} ({filterData.Languages.length})
-                    </label>
-                  </div>
-                ))}
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3, delay: 0.1 }}
+            className="mt-6"
+          >
+            <h3 className="text-lg font-semibold mb-2">Languages</h3>
+            <div className="space-y-2">
+              {languages.map((language, index) => (
+                <div key={index} className="flex items-center">
+                  <Checkbox
+                    id={`language-${index}`}
+                    onCheckedChange={() =>
+                      handleCheckBoxChange("language", language)
+                    }
+                  />
+                  <label
+                    htmlFor={`language-${index}`}
+                    className="ml-2 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  >
+                    {language} (
+                    {filterData.Languages.filter((l) => l === language).length})
+                  </label>
+                </div>
+              ))}
             </div>
-          </div>
-          <hr />
-          <div className="mb-4">
-            <h3 className="text-md font-semibold mb-2">Pricing</h3>
-            <div className="flex flex-wrap gap-4">
-              {isFree.length > 0 &&
-                isFree.map((free, index) => (
-                  <div className="flex items-center mb-2 gap-2">
-                    <input
-                      type="radio"
-                      value={free ? "Paid" : "Free"}
-                      id={`pricing-${index}`}
-                      onChange={() => handleCheckBoxChange("isPaid", free)}
-                    />
-                    <label htmlFor={`pricing-${index}`}>
-                      {free ? "Paid" : "Free"} ({filterData.isFree.length})
-                    </label>
-                  </div>
-                ))}
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3, delay: 0.2 }}
+            className="mt-6"
+          >
+            <h3 className="text-lg font-semibold mb-2">Pricing</h3>
+            <RadioGroup
+              onValueChange={(value) =>
+                handleCheckBoxChange("isPaid", value === "true")
+              }
+            >
+              {isFree.map((free, index) => (
+                <div key={index} className="flex items-center space-x-2">
+                  <RadioGroupItem
+                    value={free.toString()}
+                    id={`pricing-${index}`}
+                  />
+                  <label
+                    htmlFor={`pricing-${index}`}
+                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  >
+                    {free ? "Paid" : "Free"} (
+                    {filterData.isFree.filter((f) => f === free).length})
+                  </label>
+                </div>
+              ))}
+            </RadioGroup>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3, delay: 0.3 }}
+            className="mt-6"
+          >
+            <h3 className="text-lg font-semibold mb-2">Tags</h3>
+            <div className="space-y-2">
+              {tags.map((tag, index) => (
+                <div key={index} className="flex items-center">
+                  <Checkbox
+                    id={`tag-${index}`}
+                    onCheckedChange={() =>
+                      handleCheckBoxChange("tags", tag)
+                    }
+                  />
+                  <label
+                    htmlFor={`tag-${index}`}
+                    className="ml-2 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  >
+                    {tag} ({filterData.tags.filter((t) => t === tag).length})
+                  </label>
+                </div>
+              ))}
             </div>
-          </div>
-          <hr />
-          <div className="mb-4">
-            <h3 className="text-md font-semibold mb-2">Tags</h3>
-            <div className="flex flex-wrap gap-4">
-              {tags.length > 0 &&
-                tags.map((tag, index) => (
-                  <div key={index} className="flex items-center mb-2">
-                    <input
-                      id={`tag-${index}`}
-                      type="checkbox"
-                      className="mr-2"
-                      onChange={() => handleCheckBoxChange("tags", tag)}
-                    />
-                    <label htmlFor={`tag-${index}`}>
-                      {tag} ({filterData.tags.length})
-                    </label>
-                  </div>
-                ))}
-            </div>
-          </div>
+          </motion.div>
         </div>
         <DrawerFooter className="pt-2">
-          <Button variant="destructive" onClick={handleApplyFilter}>
-            Submit
-          </Button>
+          <Button onClick={handleApplyFilter}>Apply Filters</Button>
           <DrawerClose asChild>
             <Button variant="outline">Cancel</Button>
           </DrawerClose>

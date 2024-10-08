@@ -293,7 +293,7 @@ const CourseContinue = () => {
     );
   }
   return (
-    <div className=" relative min-h-screen  p-2 bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
+    <div className=" relative min-h-screen  p-2 dark:bg-black bg-white text-gray-800 dark:text-gray-200">
       <ResizablePanelGroup direction="horizontal">
         <ResizablePanel defaultSize={20} minSize={20} maxSize={35}>
           <ScrollArea className="h-[100vh] rounded-md border">

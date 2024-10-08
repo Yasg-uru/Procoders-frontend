@@ -39,7 +39,7 @@ const ContactPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200 flex items-center justify-center">
+    <div className="min-h-screen bg-gray-100 dark:bg-black text-gray-800 dark:text-gray-200 flex items-center justify-center">
       <div className="container mx-auto p-6 md:p-12">
         <h1 className="text-4xl font-bold text-center mb-6 dark:text-white">
           Contact Us

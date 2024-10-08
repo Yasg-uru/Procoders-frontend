@@ -1,39 +1,47 @@
-import { Button } from "@/components/ui/button";
-import { useAppDispatch, useAppSelector } from "@/redux/hook";
-import { EnrolledUser } from "@/types/CourseTypes/courseState";
-import { Home } from "lucide-react";
 import React, { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { CiShare2 } from "react-icons/ci";
-import ModuleComponent from "./ModuleComponent";
-import { useToast } from "@/components/ui/use-toast";
+import { useAppDispatch, useAppSelector } from "@/redux/hook";
 import { EnrollFree } from "@/redux/slices/EnrollSlice";
-import Loader from "@/helper/Loader";
 import { getCourseDetail } from "@/redux/slices/courseSlice";
+import { EnrolledUser } from "@/types/CourseTypes/courseState";
+import { Button } from "@/components/ui/button";
+import { useToast } from "@/components/ui/use-toast";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
+import { Home, Share2, ArrowRight, Calendar, Users, Tag } from "lucide-react";
+import ModuleComponent from "./ModuleComponent";
+import Loader from "@/helper/Loader";
 
 const DetailPage: React.FC = () => {
   const { courseId } = useParams();
   const navigate = useNavigate();
-  const  courseData  = useAppSelector((state) => state.course.courseDetails);
-  // const [courseData, setCourseData] = useState<FilteredCourse>();
   const dispatch = useAppDispatch();
   const { toast } = useToast();
 
-  // useEffect(() => {
-  //   if (categoryWiseCourses.length > 0 && courseId) {
-  //     const filteredCourse = categoryWiseCourses.find(
-  //       (course) => course._id.toString() === courseId.toString()
-  //     );
-  //     if (filteredCourse) {
-  //       setCourseData(filteredCourse);
-  //     }
-  //   }
-  // }, [categoryWiseCourses, courseId]);
+  const courseData = useAppSelector((state) => state.course.courseDetails);
+  const { user_id } = useAppSelector((state) => state.auth);
+
   useEffect(() => {
     if (courseId) {
       dispatch(getCourseDetail({ courseId }));
     }
-  }, [courseId]);
+  }, [courseId, dispatch]);
+
   const CalculateDiscountedPrice = (price: number, discount: number) => {
     return Math.floor(price - price * (discount / 100));
   };
@@ -61,22 +69,14 @@ const DetailPage: React.FC = () => {
     const date = courseData?.startingDate;
     return new Date() > new Date(date ?? Date.now());
   };
-  const { user_id } = useAppSelector((state) => state.auth);
+
   const isEnrolled = (enrolledUsers?: EnrolledUser[]): boolean => {
-    console.log("this is a user is :", user_id);
-    console.log("this is a enrolled course user id :", enrolledUsers);
     if (enrolledUsers) {
-      const Enrolled = enrolledUsers.findIndex(
-        (enrollment) => enrollment.userId === user_id
-      );
-      if (Enrolled === -1) {
-        console.log("this is not enrolled for id :", Enrolled);
-        return false;
-      }
-      return true;
+      return enrolledUsers.some((enrollment) => enrollment.userId === user_id);
     }
     return false;
   };
+
   const handleFreeEnrollment = (courseId: string) => {
     dispatch(EnrollFree(courseId))
       .unwrap()
@@ -85,7 +85,6 @@ const DetailPage: React.FC = () => {
           title: "Successfully enrolled to the course",
         });
       })
-
       .catch((error) => {
         toast({
           title: error,
@@ -93,167 +92,270 @@ const DetailPage: React.FC = () => {
         });
       });
   };
+
   if (!courseData) {
     return <Loader />;
   }
+
   return (
-    <div className="min-h-screen flex flex-col p-10 bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
-      <div className="w-full bg-gray-100 dark:bg-gray-900 grid md:grid-cols-2 gap-10 grid-flow-row">
-        {/* Course Details Section */}
-        <div className="flex flex-col gap-3 p-3">
-          <p className="flex">
-            <Home /> Home {"  "} &gt; {"  "}
-            <span className="font-bold dark:text-white">
-              {courseData?.title}
-            </span>
-          </p>
-          <h1 className="font-bold text-3xl">{courseData?.title}</h1>
-          <img
-            src={courseData?.thumbnailUrl}
-            alt="Course Thumbnail"
-            className="h-[200px] object-cover rounded-md mb-4"
-          />
-          <p className="mb-4">{courseData?.description}</p>
-          <p className="mb-4">
-            {!courseData?.isPaid ? (
-              <span className="font-bold text-2xl ">Free</span>
-            ) : (
-              <span>
-                <span className="font-bold text-xl">
-                  ₹
-                  {CalculateDiscountedPrice(
-                    courseData.price,
-                    courseData.discount
+    <div className="min-h-screen p-6 bg-white dark:bg-black text-gray-900 dark:text-gray-100">
+      <div className="max-w-7xl mx-auto">
+        <div className="flex items-center mb-6 text-sm text-gray-600 dark:text-gray-400">
+          <Home className="w-4 h-4 mr-2" />
+          <span>Home</span>
+          <ArrowRight className="w-4 h-4 mx-2" />
+          <span className="font-semibold text-gray-900 dark:text-gray-100">
+            {courseData?.title}
+          </span>
+        </div>
+
+        <div className="grid md:grid-cols-3 gap-8">
+          <div className="md:col-span-2">
+            <Card className="mb-8 bg-white dark:bg-gray-800">
+              <CardHeader>
+                <CardTitle className="text-3xl font-bold text-gray-900 dark:text-white">
+                  {courseData?.title}
+                </CardTitle>
+                <CardDescription className="text-gray-600 dark:text-gray-300">
+                  {courseData?.description}
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <img
+                  src={courseData?.thumbnailUrl}
+                  alt="Course Thumbnail"
+                  className="w-full h-64 object-cover rounded-lg mb-6"
+                />
+                <div className="flex items-center justify-between mb-6">
+                  <div>
+                    {!courseData?.isPaid ? (
+                      <span className="text-3xl font-bold text-green-600 dark:text-green-400">
+                        Free
+                      </span>
+                    ) : (
+                      <div>
+                        <span className="text-3xl font-bold text-green-600 dark:text-green-400">
+                          ₹
+                          {CalculateDiscountedPrice(
+                            courseData.price,
+                            courseData.discount
+                          )}
+                        </span>
+                        <span className="text-lg text-gray-500 dark:text-gray-400 line-through ml-2">
+                          ₹{courseData?.price}
+                        </span>
+                        <Badge className="ml-2 bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100">
+                          {courseData?.discount}% OFF
+                        </Badge>
+                      </div>
+                    )}
+                  </div>
+                  <div className="flex items-center">
+                    <Calendar className="w-5 h-5 mr-2 text-gray-500 dark:text-gray-400" />
+                    <span className="text-sm text-gray-600 dark:text-gray-300">
+                      {isStarted()
+                        ? "Classes started! Enroll Now!"
+                        : "Classes Starting Soon! Enroll Now!"}
+                    </span>
+                  </div>
+                </div>
+                <div className="flex gap-4">
+                  {courseData?.isPaid ? (
+                    !isEnrolled(courseData?.enrolledUsers) ? (
+                      <Button
+                        onClick={() => navigate(`/checkout/${courseData?._id}`)}
+                        className="flex-1"
+                      >
+                        Buy Now
+                      </Button>
+                    ) : new Date(courseData?.startingDate) <= new Date() ? (
+                      <Button
+                        onClick={() =>
+                          navigate(`/continue-course/${courseData?._id}`, {
+                            state: { price: courseData?.price },
+                          })
+                        }
+                        className="flex-1"
+                      >
+                        Continue
+                      </Button>
+                    ) : (
+                      <Button className="flex-1" disabled>
+                        Starting Soon
+                      </Button>
+                    )
+                  ) : !isEnrolled(courseData?.enrolledUsers) ? (
+                    <Button
+                      onClick={() =>
+                        courseData?._id
+                          ? handleFreeEnrollment(courseData?._id)
+                          : null
+                      }
+                      className="flex-1"
+                    >
+                      Enroll Free
+                    </Button>
+                  ) : new Date(
+                      courseData?.startingDate ? courseData?.startingDate : 0
+                    ) <= new Date() ? (
+                    <Button
+                      onClick={() =>
+                        navigate(`/continue-course/${courseData?._id}`, {
+                          state: { price: courseData?.price },
+                        })
+                      }
+                      className="flex-1"
+                    >
+                      Continue
+                    </Button>
+                  ) : (
+                    <Button className="flex-1" disabled>
+                      Starting Soon
+                    </Button>
                   )}
-                </span>
-                <span className="line-through ml-2">{courseData?.price}</span>{" "}
-                <span className="font-bold text-green-500 text-xl ml-2">
-                  {courseData?.discount}% Discount
-                </span>
-              </span>
-            )}
-          </p>
-          <p className="font-bold text-green-500 mb-4">
-            {isStarted()
-              ? "Classes started! Enroll Now!"
-              : "Classes Starting Soon! Enroll Now!"}
-          </p>
-          <div className="flex gap-3 mb-6">
-            {/* <Button className="bg-gradient-to-r from-pink-500 to-purple-500 text-white font-bold py-3 px-12 rounded-md shadow-md hover:scale-105 transition duration-300">
-              Buy Now
-            </Button> */}
-            {courseData?.isPaid ? (
-              !isEnrolled(courseData?.enrolledUsers) ? (
-                <Button
-                  onClick={() => navigate(`/checkout/${courseData?._id}`)}
-                  className="bg-gradient-to-r from-pink-500 to-purple-500 text-white font-bold py-3 px-12 rounded-md shadow-md hover:scale-105 transition duration-300"
-                >
-                  Buy Now
-                </Button>
-              ) : new Date(courseData?.startingDate) <= new Date() ? (
-                <Button
-                  onClick={() =>
-                    navigate(`/continue-course/${courseData?._id}`, {
-                      state: { price: courseData?.price },
-                    })
-                  }
-                  className="bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold py-3 px-6 rounded-lg shadow-lg transition-transform transform hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 dark:focus:ring-purple-300"
-                >
-                  Continue
-                </Button>
-              ) : (
-                <Button className="bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold py-3 px-6 rounded-lg shadow-lg transition-transform transform hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 dark:focus:ring-purple-300">
-                  Starting Soon
-                </Button>
-              )
-            ) : !isEnrolled(courseData?.enrolledUsers) ? (
-              <Button
-                onClick={() =>
-                  courseData?._id ? handleFreeEnrollment(courseData?._id) : null
-                }
-                className="bg-gradient-to-r from-pink-500 to-purple-500 text-white font-bold py-3 px-12 rounded-md shadow-md hover:scale-105 transition duration-300"
-              >
-                Enroll Free
-              </Button>
-            ) : new Date(
-                courseData?.startingDate ? courseData?.startingDate : 0
-              ) <= new Date() ? (
-              <Button
-                onClick={() =>
-                  navigate(`/continue-course/${courseData?._id}`, {
-                    state: { price: courseData?.price },
-                  })
-                }
-                className="bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold py-3 px-6 rounded-lg shadow-lg transition-transform transform hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 dark:focus:ring-purple-300"
-              >
-                Continue
-              </Button>
-            ) : (
-              <Button className="bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold py-3 px-6 rounded-lg shadow-lg transition-transform transform hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 dark:focus:ring-purple-300">
-                Starting Soon
-              </Button>
-            )}
-            <Button
-              className="bg-gradient-to-r from-pink-500 to-purple-500 text-white font-bold py-3 px-12 rounded-md shadow-md hover:scale-105 transition duration-300"
-              onClick={handleShare}
-            >
-              Share <CiShare2 size={26} />
-            </Button>
+                  <Button
+                    variant="outline"
+                    onClick={handleShare}
+                    className="flex items-center"
+                  >
+                    <Share2 className="w-5 h-5 mr-2" />
+                    Share
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Tabs defaultValue="details" className="mb-8">
+              <TabsList className="grid w-full grid-cols-4 bg-gray-100 dark:bg-gray-800">
+                <TabsTrigger value="details" className="data-[state=active]:bg-white dark:data-[state=active]:bg-gray-700">Course Details</TabsTrigger>
+                <TabsTrigger value="syllabus" className="data-[state=active]:bg-white dark:data-[state=active]:bg-gray-700">Syllabus</TabsTrigger>
+                <TabsTrigger value="instructor" className="data-[state=active]:bg-white dark:data-[state=active]:bg-gray-700">Instructor</TabsTrigger>
+                <TabsTrigger value="reviews" className="data-[state=active]:bg-white dark:data-[state=active]:bg-gray-700">Reviews</TabsTrigger>
+              </TabsList>
+              <TabsContent value="details">
+                <Card className="bg-white dark:bg-gray-800">
+                  <CardHeader>
+                    <CardTitle className="text-gray-900 dark:text-white">Course Details</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <Accordion type="single" collapsible>
+                      <AccordionItem value="prerequisites">
+                        <AccordionTrigger className="text-gray-900 dark:text-white">Prerequisites</AccordionTrigger>
+                        <AccordionContent className="text-gray-600 dark:text-gray-300">
+                          <ul className="list-disc pl-5">
+                            {courseData?.prerequisites?.map((item, index) => (
+                              <li key={index}>{item}</li>
+                            ))}
+                          </ul>
+                        </AccordionContent>
+                      </AccordionItem>
+                      <AccordionItem value="target-audience">
+                        <AccordionTrigger className="text-gray-900 dark:text-white">Target Audience</AccordionTrigger>
+                        <AccordionContent className="text-gray-600 dark:text-gray-300">
+                          <ul className="list-disc pl-5">
+                            {courseData?.targetAudience?.map((item, index) => (
+                              <li key={index}>{item}</li>
+                            ))}
+                          </ul>
+                        </AccordionContent>
+                      </AccordionItem>
+                      <AccordionItem value="learning-outcomes">
+                        <AccordionTrigger className="text-gray-900 dark:text-white">Learning Outcomes</AccordionTrigger>
+                        <AccordionContent className="text-gray-600 dark:text-gray-300">
+                          <ul className="list-disc pl-5">
+                            {courseData?.learningOutcomes?.map(
+                              (item, index) => (
+                                <li key={index}>{item}</li>
+                              )
+                            )}
+                          </ul>
+                        </AccordionContent>
+                      </AccordionItem>
+                    </Accordion>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+              <TabsContent value="syllabus">
+                <Card className="bg-white dark:bg-gray-800">
+                  <CardHeader>
+                    <CardTitle className="text-gray-900 dark:text-white">Syllabus</CardTitle>
+                  </CardHeader>
+                  <CardContent className="text-gray-600 dark:text-gray-300">
+                    <p>{courseData?.syllabus}</p>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+              <TabsContent value="instructor">
+                <Card className="bg-white dark:bg-gray-800">
+                  <CardHeader>
+                    <CardTitle className="text-gray-900 dark:text-white">Instructor</CardTitle>
+                  </CardHeader>
+                  <CardContent className="text-gray-600 dark:text-gray-300">
+                    <p>Instructor details to be added</p>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+              <TabsContent value="reviews">
+                <Card className="bg-white dark:bg-gray-800">
+                  <CardHeader>
+                    <CardTitle className="text-gray-900 dark:text-white">Reviews</CardTitle>
+                  </CardHeader>
+                  <CardContent className="text-gray-600 dark:text-gray-300">
+                    <p>Course reviews to be added</p>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+            </Tabs>
+
+            {courseData?._id && <ModuleComponent courseId={courseData?._id}  />}
           </div>
 
-          {/* Additional Course Details */}
-          <div className="bg-gray-200 dark:bg-gray-800 p-4 rounded-md mb-4">
-            <h2 className="font-bold text-xl mb-2">Prerequisites</h2>
-            <ul className="list-disc pl-5">
-              {courseData?.prerequisites?.map((item, index) => (
-                <li key={index}>{item}</li>
-              ))}
-            </ul>
+          <div>
+            <Card className="sticky top-6 bg-white dark:bg-gray-800">
+              <CardHeader>
+                <CardTitle className="text-gray-900 dark:text-white">Course Information</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div className="flex items-center text-gray-600 dark:text-gray-300">
+                    <Users className="w-5 h-5 mr-2 text-gray-500 dark:text-gray-400" />
+                    <span>
+                      {courseData?.enrolledUsers?.length || 0} students enrolled
+                    </span>
+                  </div>
+                  <Separator className="bg-gray-200 dark:bg-gray-700" />
+                  <div className="flex items-center text-gray-600 dark:text-gray-300">
+                    <Calendar className="w-5 h-5 mr-2 text-gray-500 dark:text-gray-400" />
+                    <span>
+                      Starts on:{" "}
+                      {new Date(courseData?.startingDate).toLocaleDateString()}
+                    </span>
+                  </div>
+                  <Separator className="bg-gray-200 dark:bg-gray-700" />
+                  <div>
+                    <h3 className="font-semibold mb-2 text-gray-900 dark:text-white">Tags</h3>
+                    <div className="flex flex-wrap gap-2">
+                      {courseData?.tags.map((tag, index) => (
+                        <Badge key={index} variant="secondary" className="bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-gray-200">
+                          <Tag className="w-3 h-3 mr-1" />
+                          {tag}
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+              <CardFooter>
+                <Button className="w-full" onClick={handleShare}>
+                  
+                  <Share2 className="w-4 h-4 mr-2" />
+                  Share this course
+                </Button>
+              </CardFooter>
+            </Card>
           </div>
-          <div className="bg-gray-200 dark:bg-gray-800 p-4 rounded-md mb-4">
-            <h2 className="font-bold text-xl mb-2">Target Audience</h2>
-            <ul className="list-disc pl-5">
-              {courseData?.targetAudience?.map((item, index) => (
-                <li key={index}>{item}</li>
-              ))}
-            </ul>
-          </div>
-          <div className="bg-gray-200 dark:bg-gray-800 p-4 rounded-md mb-4">
-            <h2 className="font-bold text-xl mb-2">Learning Outcomes</h2>
-            <ul className="list-disc pl-5">
-              {courseData?.learningOutcomes?.map((item, index) => (
-                <li key={index}>{item}</li>
-              ))}
-            </ul>
-          </div>
-          <div className="bg-gray-200 dark:bg-gray-800 p-4 rounded-md mb-4">
-            <h2 className="font-bold text-xl mb-2">Syllabus</h2>
-            <p>{courseData?.syllabus}</p>
-          </div>
-          <div className="bg-gray-200 dark:bg-gray-800 p-4 rounded-md mb-4">
-            <h2 className="font-bold text-xl mb-2">Tags</h2>
-            <div className="flex flex-wrap gap-2">
-              {courseData?.tags.map((tag, index) => (
-                <span
-                  key={index}
-                  className="bg-gray-300 dark:bg-gray-700 text-gray-800 dark:text-gray-200 py-1 px-3 rounded-full text-sm"
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
-          </div>
-        </div>
-        {/* Course Image Section */}
-        <div className="flex justify-end items-end">
-          <img
-            src={courseData?.thumbnailUrl}
-            alt="Course"
-            className="h-[200px] object-cover rounded-md"
-          />
         </div>
       </div>
-      {courseData?._id && <ModuleComponent courseId={courseData?._id} />}
     </div>
   );
 };
