@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useMediaQuery } from '@uidotdev/usehooks';
+// import { useMediaQuery } from '@uidotdev/usehooks';
 import { useParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import {
@@ -22,13 +22,13 @@ import { Input } from '@/components/ui/input';
 import { Slider } from '@/components/ui/slider';
 import { Toggle } from '@/components/ui/toggle';
 import { useToast } from '@/components/ui/use-toast';
-import { FilteredCourse, Instructor } from '@/types/CourseTypes/courseState';
+import { FilteredCourse } from '@/types/CourseTypes/courseState';
 import { Users, Briefcase, Award, Search, SlidersHorizontal } from 'lucide-react';
 
 const CourseCategory: React.FC<{ courses: FilteredCourse[] }> = ({ courses }) => {
   const { category } = useParams<{ category: string }>();
   const { toast } = useToast();
-  const isMobile = useMediaQuery('(max-width: 768px)');
+  // const isMobile = useMediaQuery('(max-width: 768px)');
   const [filteredCourses, setFilteredCourses] = useState<FilteredCourse[]>(courses);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedLevel, setSelectedLevel] = useState<string>('');
@@ -156,7 +156,7 @@ const CourseCategory: React.FC<{ courses: FilteredCourse[] }> = ({ courses }) =>
                   max={1000}
                   step={10}
                   value={priceRange}
-                  onValueChange={setPriceRange}
+                  onValueChange={(value: [number, number]) => setPriceRange(value)}
                 />
                 <span className="tailwind.config.jstext-sm tailwind.config.jsmt-2">
                   ${priceRange[0]} - ${priceRange[1]}
