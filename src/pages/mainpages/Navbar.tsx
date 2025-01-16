@@ -3,9 +3,9 @@ import {
   Menu,
   X,
   CreditCard,
-  LifeBuoy,
+
   LogOut,
-  Settings,
+
   User,
   Loader2,
 } from "lucide-react";
@@ -248,17 +248,10 @@ function UserDropdown({
             <span onClick={() => navigate("/mycourse")}>My Courses</span>
             <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
           </DropdownMenuItem>
-          <DropdownMenuItem>
-            <Settings className="mr-2 h-4 w-4" />
-            <span>Settings</span>
-            <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
-          </DropdownMenuItem>
+         
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>
-          <LifeBuoy className="mr-2 h-4 w-4" />
-          <span>Support</span>
-        </DropdownMenuItem>
+      
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={onLogout}>
           <LogOut className="mr-2 h-4 w-4" />
