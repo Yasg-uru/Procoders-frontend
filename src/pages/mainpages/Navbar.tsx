@@ -48,7 +48,7 @@ export function Navbar() {
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center">
             <div className="flex-shrink-0">
-              <img className="h-8 w-8" src="/procoders.jpg" alt="Logo" />
+              <img className="h-12 w-12" src="https://cdn3d.iconscout.com/3d/premium/thumb/web-development-5374063-4496032.png" alt="Logo" />
             </div>
             <div className="hidden md:block">
               <div className="ml-10 flex items-center space-x-4">
