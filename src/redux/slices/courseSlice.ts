@@ -6,6 +6,7 @@ import {
 } from "@/types/CourseTypes/courseState";
 import { Filter, Filtertype } from "@/types/CourseTypes/FilterTypes";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { axiosError } from "./authSlice";
 
 function SaveFilteredData(data: FilteredCourse[]): void {
   sessionStorage.setItem("Filtered", JSON.stringify(data));
@@ -47,7 +48,12 @@ export const searchCourses = createAsyncThunk(
       );
       return response.data;
     } catch (error: any) {
-      return rejectWithValue(error.response.data.error || "Error Get courses");
+      const err: axiosError = error as axiosError;
+
+      if (err.response && err.response.data && err.response.data.error) {
+        return rejectWithValue(err.response.data.error);
+      }
+      return rejectWithValue("unknown error");
     }
   }
 );
@@ -61,7 +67,12 @@ export const FilterCourses = createAsyncThunk(
       });
       return response.data;
     } catch (error: any) {
-      return rejectWithValue(error.response.data.error || "Error Get courses");
+      const err: axiosError = error as axiosError;
+
+      if (err.response && err.response.data && err.response.data.error) {
+        return rejectWithValue(err.response.data.error);
+      }
+      return rejectWithValue("unknown error");
     }
   }
 );
@@ -75,20 +86,30 @@ export const FilterCourse = createAsyncThunk(
       });
       return response.data;
     } catch (error: any) {
-      return rejectWithValue(error.response.data.error || "Error Get courses");
+      const err: axiosError = error as axiosError;
+
+      if (err.response && err.response.data && err.response.data.error) {
+        return rejectWithValue(err.response.data.error);
+      }
+      return rejectWithValue("unknown error");
     }
   }
 );
 export const Getallcourses = createAsyncThunk(
   "course/getallcourse",
-  async () => {
+  async (_,{rejectWithValue}) => {
     try {
       const response = await axiosInstance.get("/course/filter", {
         withCredentials: true,
       });
       return response.data;
     } catch (error: any) {
-      throw error;
+      const err: axiosError = error as axiosError;
+
+      if (err.response && err.response.data && err.response.data.error) {
+        return rejectWithValue(err.response.data.error);
+      }
+      return rejectWithValue("unknown error");
     }
   }
 );
@@ -109,7 +130,12 @@ export const createNote = createAsyncThunk(
       );
       return response.data;
     } catch (error: any) {
-      return rejectWithValue(error.response.data.error || "Error Created Note");
+      const err: axiosError = error as axiosError;
+
+      if (err.response && err.response.data && err.response.data.error) {
+        return rejectWithValue(err.response.data.error);
+      }
+      return rejectWithValue("unknown error");
     }
   }
 );
@@ -128,7 +154,12 @@ export const deletenote = createAsyncThunk(
       );
       return response.data;
     } catch (error: any) {
-      return rejectWithValue(error.response.data.error || "Error Delete Note");
+      const err: axiosError = error as axiosError;
+
+      if (err.response && err.response.data && err.response.data.error) {
+        return rejectWithValue(err.response.data.error);
+      }
+      return rejectWithValue("unknown error");
     }
   }
 );
@@ -147,7 +178,12 @@ export const getNotes = createAsyncThunk(
       );
       return response.data;
     } catch (error: any) {
-      return rejectWithValue(error.response.data.error || "Error in get notes");
+      const err: axiosError = error as axiosError;
+
+      if (err.response && err.response.data && err.response.data.error) {
+        return rejectWithValue(err.response.data.error);
+      }
+      return rejectWithValue("unknown error");
     }
   }
 );
@@ -168,7 +204,12 @@ export const RateCourse = createAsyncThunk(
       );
       return response.data;
     } catch (error: any) {
-      return rejectWithValue(error.response.data.error || "Error Rate course");
+      const err: axiosError = error as axiosError;
+
+      if (err.response && err.response.data && err.response.data.error) {
+        return rejectWithValue(err.response.data.error);
+      }
+      return rejectWithValue("unknown error");
     }
   }
 );
@@ -185,9 +226,12 @@ export const getAllCourseQuizes = createAsyncThunk(
       );
       return response.data;
     } catch (error: any) {
-      return rejectWithValue(
-        error.response.data.error || "Error in get all course quizes"
-      );
+      const err: axiosError = error as axiosError;
+
+      if (err.response && err.response.data && err.response.data.error) {
+        return rejectWithValue(err.response.data.error);
+      }
+      return rejectWithValue("unknown error");
     }
   }
 );
@@ -201,7 +245,12 @@ export const getCourseDetail = createAsyncThunk(
       });
       return response.data;
     } catch (error: any) {
-      return rejectWithValue(error.response.data.error || "unkown error");
+      const err: axiosError = error as axiosError;
+
+      if (err.response && err.response.data && err.response.data.error) {
+        return rejectWithValue(err.response.data.error);
+      }
+      return rejectWithValue("unknown error");
     }
   }
 );

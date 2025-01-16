@@ -16,4 +16,6 @@ export interface Filter {
   instructorId?: string[] | undefined;
   tags?: string[] | undefined;
   language: string[] | undefined;
+  category:string;
+  
 }

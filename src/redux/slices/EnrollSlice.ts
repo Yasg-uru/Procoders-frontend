@@ -1,5 +1,6 @@
 import axiosInstance from "@/helper/axiosInstance";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { axiosError } from "./authSlice";
 
 const initialState = {};
 export const EnrollFree = createAsyncThunk(
@@ -15,15 +16,19 @@ export const EnrollFree = createAsyncThunk(
       );
       return response.data;
     } catch (error: any) {
-      console.log("this is a free enroll error :", error.response.data.error);
-      return rejectWithValue(error.response.data.error || "Unknown error");
+      const err: axiosError = error as axiosError;
+
+      if (err.response && err.response.data && err.response.data.error) {
+        return rejectWithValue(err.response.data.error);
+      }
+      return rejectWithValue("unknown error");
     }
   }
 );
 
 export const verifyPayment = createAsyncThunk(
   "enrollment/verify",
-  async (formdata) => {
+  async (formdata,{rejectWithValue}) => {
     try {
       const response = await axiosInstance.post(
         "/payment/verify-payment",
@@ -34,7 +39,12 @@ export const verifyPayment = createAsyncThunk(
       );
       return response.data;
     } catch (error) {
-      throw error;
+      const err: axiosError = error as axiosError;
+
+      if (err.response && err.response.data && err.response.data.error) {
+        return rejectWithValue(err.response.data.error);
+      }
+      return rejectWithValue("unknown error");
     }
   }
 );

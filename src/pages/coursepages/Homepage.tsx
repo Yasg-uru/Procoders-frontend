@@ -39,7 +39,7 @@ const Homepage: React.FC = () => {
         toast({
           title: "Successfully filtered course by category",
         });
-        navigate("/course-category", { state: filterData });
+        navigate(`/course-category/${category}`, { state: filterData });
       })
       .catch((error) => {
         toast({

@@ -7,6 +7,7 @@ import { SignUpSchema } from "@/schema/authschema/signUpFormSchema";
 import { VerifyFormSchema } from "@/pages/authpages/OtpVerify";
 import { ForgotPasswordSchema } from "@/schema/authschema/ForgotPasswordFormSchema";
 import { ResetPasswordSchema } from "@/schema/authschema/ResetpasswordFormSchema";
+import { AxiosError } from "axios";
 const saveData = (
   token: string,
   username: string,
@@ -66,6 +67,7 @@ const initialState: authState = {
   },
   AllEnrolledCourseProgress: [],
 };
+export type axiosError = AxiosError<{ error: string }>;
 export const registerUser = createAsyncThunk(
   "auth/registerUser",
   async (formData: z.infer<typeof SignUpSchema>, { rejectWithValue }) => {
@@ -76,8 +78,12 @@ export const registerUser = createAsyncThunk(
 
       return response.data;
     } catch (error: any) {
-      console.log("Error Registering user", error);
-      return rejectWithValue(error.response.data.error || "Unkown Error");
+      const err: axiosError = error as axiosError;
+
+      if (err.response && err.response.data && err.response.data.error) {
+        return rejectWithValue(err.response.data.error);
+      }
+      return rejectWithValue("unknown error");
     }
   }
 );
@@ -92,8 +98,12 @@ export const userLogin = createAsyncThunk(
 
       return response.data;
     } catch (error: any) {
-      console.log("error in user login", error);
-      return rejectWithValue(error.response.data.error || "Unkown Error");
+      const err: axiosError = error as axiosError;
+
+      if (err.response && err.response.data && err.response.data.error) {
+        return rejectWithValue(err.response.data.error);
+      }
+      return rejectWithValue("unknown error");
     }
   }
 );
@@ -106,8 +116,12 @@ export const verifyUser = createAsyncThunk(
       });
       return response.data;
     } catch (error: any) {
-      console.log("Error Verifying user", error);
-      return rejectWithValue(error.response.data.error || "Unkown Error");
+      const err: axiosError = error as axiosError;
+
+      if (err.response && err.response.data && err.response.data.error) {
+        return rejectWithValue(err.response.data.error);
+      }
+      return rejectWithValue("unknown error");
     }
   }
 );
@@ -127,22 +141,35 @@ export const forgotpassword = createAsyncThunk(
       );
       return response.data;
     } catch (error: any) {
-      return rejectWithValue(error.response.data.error || "Unkown Error");
+      const err: axiosError = error as axiosError;
+
+      if (err.response && err.response.data && err.response.data.error) {
+        return rejectWithValue(err.response.data.error);
+      }
+      return rejectWithValue("unknown error");
     }
   }
 );
-export const Logout = createAsyncThunk("auth/Logout", async () => {
-  try {
-    const response = await axiosInstance.post(
-      "/user/logout",
-      {},
-      { withCredentials: true }
-    );
-    return response.data;
-  } catch (error: any) {
-    throw error;
+export const Logout = createAsyncThunk(
+  "auth/Logout",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.post(
+        "/user/logout",
+        {},
+        { withCredentials: true }
+      );
+      return response.data;
+    } catch (error: any) {
+      const err: axiosError = error as axiosError;
+
+      if (err.response && err.response.data && err.response.data.error) {
+        return rejectWithValue(err.response.data.error);
+      }
+      return rejectWithValue("unknown error");
+    }
   }
-});
+);
 export const resetPassword = createAsyncThunk(
   "auth/reset-password",
   async (
@@ -163,20 +190,33 @@ export const resetPassword = createAsyncThunk(
       );
       return response.data;
     } catch (error: any) {
-      return rejectWithValue(error.response.data.error || "Unkown Error");
+      const err: axiosError = error as axiosError;
+
+      if (err.response && err.response.data && err.response.data.error) {
+        return rejectWithValue(err.response.data.error);
+      }
+      return rejectWithValue("unknown error");
     }
   }
 );
-export const Mycourse = createAsyncThunk("auth/mycourses", async () => {
-  try {
-    const response = await axiosInstance.get("/course/enrolled", {
-      withCredentials: true,
-    });
-    return response.data;
-  } catch (error: any) {
-    throw error;
+export const Mycourse = createAsyncThunk(
+  "auth/mycourses",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.get("/course/enrolled", {
+        withCredentials: true,
+      });
+      return response.data;
+    } catch (error: any) {
+      const err: axiosError = error as axiosError;
+
+      if (err.response && err.response.data && err.response.data.error) {
+        return rejectWithValue(err.response.data.error);
+      }
+      return rejectWithValue("unknown error");
+    }
   }
-});
+);
 export const completelesson = createAsyncThunk(
   "auth/completlesson",
   async (
@@ -198,7 +238,12 @@ export const completelesson = createAsyncThunk(
       );
       return response.data;
     } catch (error: any) {
-      return rejectWithValue(error.response.data.error || "Unkown Error");
+      const err: axiosError = error as axiosError;
+
+      if (err.response && err.response.data && err.response.data.error) {
+        return rejectWithValue(err.response.data.error);
+      }
+      return rejectWithValue("unknown error");
     }
   }
 );
@@ -215,20 +260,30 @@ export const LoadCourseProgress = createAsyncThunk(
       );
       return response.data;
     } catch (error: any) {
-      return rejectWithValue(error.response.data.error || "Unkown Error");
+      const err: axiosError = error as axiosError;
+
+      if (err.response && err.response.data && err.response.data.error) {
+        return rejectWithValue(err.response.data.error);
+      }
+      return rejectWithValue("unknown error");
     }
   }
 );
 export const GetAllEnrolledCourseProgress = createAsyncThunk(
   "auth/allcourseprogress",
-  async () => {
+  async (_, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.get("/user/enrolled/progress", {
         withCredentials: true,
       });
       return response.data;
     } catch (error: any) {
-      throw error;
+      const err: axiosError = error as axiosError;
+
+      if (err.response && err.response.data && err.response.data.error) {
+        return rejectWithValue(err.response.data.error);
+      }
+      return rejectWithValue("unknown error");
     }
   }
 );

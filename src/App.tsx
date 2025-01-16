@@ -37,7 +37,7 @@ function App() {
         <Route path="/about" element={<AboutPage/>}/>
         <Route path="/services" element={<ServicesPage/>}/>
         <Route path="/contact" element={<ContactPage/>}/>
-        <Route path="/course-category" element={<CourseCategory />} />
+        <Route path="/course-category/:category" element={<CourseCategory />} />
         <Route
           element={
             <RequireAuth allowedRoles={["student", "admin", "instructor"]} />

@@ -2,6 +2,7 @@ import axiosInstance from "@/helper/axiosInstance";
 import { userAnswer } from "@/pages/courseLecture/Quiz";
 import { module, moduleState } from "@/types/ModuleTypes/ModuleState";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { axiosError } from "./authSlice";
 function LoadData(): module[] {
   const data = sessionStorage.getItem("module");
   if (data) {
@@ -31,7 +32,12 @@ export const GetModules = createAsyncThunk(
       });
       return response.data;
     } catch (error: any) {
-      return rejectWithValue(error.response.data.error || "Unkown Error");
+      const err: axiosError = error as axiosError;
+
+      if (err.response && err.response.data && err.response.data.error) {
+        return rejectWithValue(err.response.data.error);
+      }
+      return rejectWithValue("unknown error");
     }
   }
 );
@@ -47,7 +53,12 @@ export const GetfullAccessModule = createAsyncThunk(
       );
       return response.data;
     } catch (error: any) {
-      return rejectWithValue(error.response.data.error || "Unkown Error");
+      const err: axiosError = error as axiosError;
+
+      if (err.response && err.response.data && err.response.data.error) {
+        return rejectWithValue(err.response.data.error);
+      }
+      return rejectWithValue("unknown error");
     }
   }
 );
@@ -73,7 +84,12 @@ export const getQuizResults = createAsyncThunk(
       );
       return response.data;
     } catch (error: any) {
-      return rejectWithValue(error.response.data.error || "Unkown Error");
+      const err: axiosError = error as axiosError;
+
+      if (err.response && err.response.data && err.response.data.error) {
+        return rejectWithValue(err.response.data.error);
+      }
+      return rejectWithValue("unknown error");
     }
   }
 );
