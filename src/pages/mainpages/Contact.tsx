@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -13,6 +13,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import axiosInstance from "@/helper/axiosInstance";
+import { useToast } from "@/hooks/use-toast";
 
 // Define the Zod schema for validation
 const contactFormSchema = z.object({
@@ -26,6 +28,8 @@ const contactFormSchema = z.object({
 type ContactFormInputs = z.infer<typeof contactFormSchema>;
 
 const ContactPage: React.FC = () => {
+  const { toast } = useToast();
+
   const {
     register,
     handleSubmit,
@@ -33,9 +37,38 @@ const ContactPage: React.FC = () => {
   } = useForm<ContactFormInputs>({
     resolver: zodResolver(contactFormSchema),
   });
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const onSubmit: SubmitHandler<ContactFormInputs> = (data) => {
-    console.log(data);
+  const onSubmit: SubmitHandler<ContactFormInputs> = async (data) => {
+    setIsLoading(true); // Start loading
+    try {
+      const response = await axiosInstance.post("/course/send-contact", data, {
+        withCredentials: true,
+      });
+
+      toast({
+        title: "Success!",
+        description: response.data.message,
+
+        duration: 3000,
+      });
+    } catch (error: any) {
+      console.error("❌ Contact form submission error:", error);
+
+      // Extract error message properly
+      const errorMessage =
+        error.response?.data?.error ||
+        "Something went wrong. Please try again.";
+
+      toast({
+        title: "Error!",
+        description: errorMessage,
+
+        duration: 3000,
+      });
+    } finally {
+      setIsLoading(false); // Stop loading
+    }
   };
 
   return (
@@ -134,7 +167,7 @@ const ContactPage: React.FC = () => {
                   type="submit"
                   className="bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold py-2 px-4 rounded-lg shadow-lg transform transition-transform hover:scale-105 hover:shadow-2xl focus:outline-none focus:ring-2 focus:ring-purple-300"
                 >
-                  Send Message
+                 {isLoading ?"Sending....":" Send Message"}
                 </Button>
               </CardFooter>
             </form>

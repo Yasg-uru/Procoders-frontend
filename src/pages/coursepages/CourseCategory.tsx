@@ -21,7 +21,7 @@ import {
 import { useToast } from '@/components/ui/use-toast';
 import CourseCard from '@/helper/CourseCard';
 import FilterCompo from './FilterCompo';
-import { FilteredCourse, Instructor } from '@/types/CourseTypes/courseState';
+import { FilteredCourse } from '@/types/CourseTypes/courseState';
 import { FaFilter } from 'react-icons/fa';
 import { FcClearFilters } from 'react-icons/fc';
 import { Users, Briefcase, Award } from 'lucide-react';
@@ -110,16 +110,16 @@ const CourseCategory: React.FC = () => {
     toast({ title: "Filter applied" });
   };
 
-  const resetFilters = () => {
-    setActiveFilters({
-      level: null,
-      isPaid: null,
-      instructorId: [],
-      language: [],
-      tags: [],
-    });
-    toast({ title: "Filters reset" });
-  };
+  // const resetFilters = () => {
+  //   setActiveFilters({
+  //     level: null,
+  //     isPaid: null,
+  //     instructorId: [],
+  //     language: [],
+  //     tags: [],
+  //   });
+  //   toast({ title: "Filters reset" });
+  // };
 
   return (
     <div className="min-h-screen bg-background text-foreground">
